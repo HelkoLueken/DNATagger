@@ -34,17 +34,37 @@ namespace DNATagger
 
 
 
+        public void updateScrollbars() {
+            int maxBases = 0;
+            foreach (DNASequence seq in sequences) {
+                if (seq.getLength() > maxBases) maxBases = seq.getLength();
+            }
+            int newBound = maxBases - ((canvasMain.Width - 100) / (int)font.Size);
+            if (newBound > 0) scrollbarCanvasX.Maximum = newBound;
+        }
+
+
+
         #region Graphische Darstellungen
-        private void drawSequences(Graphics canvas)
+        private void drawSequences()
         {
-            int atSequence = 0;
+            Graphics canvas = canvasMain.CreateGraphics();
             int X = 50;
             int Y = 100;
+            int letterWidth = (int)font.Size;
+            int offset = scrollbarCanvasX.Value * letterWidth;
+
             foreach (DNASequence seq in sequences)
             {
-                canvas.DrawString(seq.getHeader() + " : ", font, brush, X, Y + atSequence*20);
-                canvas.DrawString(seq.getSequence(), font, brush, X + 10 + (int)canvas.MeasureString(seq.getHeader() + " : \t", font).Width, Y + atSequence * 20);
-                atSequence++;
+                canvas.DrawString(seq.getHeader() + " : ", font, brush, X, Y);
+                Y += 20;
+                canvas.FillRectangle(Brushes.LightBlue, X - letterWidth / 2 - offset, Y, (seq.getLength() + 1) * letterWidth, font.Height);
+                canvas.DrawRectangle(Pens.Black, X - letterWidth / 2 - offset, Y, (seq.getLength() + 1) * letterWidth, font.Height);
+                for (int i = 1; i <= seq.getLength(); i++)
+                {
+                    canvas.DrawString(seq.getBase(i).ToString(), font, brush, X + (i-1) * letterWidth - offset, Y);
+                }
+                Y += 40;
             }
         }
         #endregion
@@ -64,6 +84,7 @@ namespace DNATagger
         {
             this.sequences.Add(new DNASequence(">Testsequenz\nACGT"));
             refreshEditor();
+            updateScrollbars();
         }
 
 
@@ -75,20 +96,40 @@ namespace DNATagger
             List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
             sequences.AddRange(readSeqs);
             refreshEditor();
+            updateScrollbars();
         }
 
-
-
-        private void OnScroll(object sender, ScrollEventArgs e)
-        {
-            canvasMain.Invalidate();
-        }
 
 
         private void OnDrawCanvas(object sender, PaintEventArgs e)
         {
-            drawSequences(e.Graphics);
+            drawSequences();
         }
         #endregion
+
+
+
+        private void OnClickCanvas(object sender, MouseEventArgs e)
+        {
+            Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
+        }
+
+        private void OnResize(object sender, EventArgs e)
+        {
+            refreshEditor();
+            updateScrollbars();
+        }
+
+        private void OnScroll(object sender, EventArgs e)
+        {
+            //drawSequences();
+            //refreshEditor();
+        }
+
+        private void OnScroll(object sender, ScrollEventArgs e)
+        {
+            drawSequences();
+            refreshEditor();
+        }
     }
 }

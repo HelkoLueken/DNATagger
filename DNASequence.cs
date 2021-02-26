@@ -8,7 +8,8 @@ namespace DNATagger
 {
     class DNASequence
     {
-        private String baseSequence;
+        private char[] sense;
+        private char[] antisense;
         private String header;
 
 
@@ -20,12 +21,12 @@ namespace DNATagger
             if (fastaParts.Length == 2)
             {
                 this.header = fastaParts[0];
-                this.baseSequence = fastaParts[1];
+                this.sense = fastaParts[1].ToCharArray();
             }
             else
             {
                 this.header = "Unnamed DNA Sequence";
-                this.baseSequence = fasta;
+                this.sense = fasta.ToCharArray();
             }
         }
 
@@ -37,8 +38,18 @@ namespace DNATagger
 
 
 
-        public String getSequence() {
-            return this.baseSequence;
+        public char getBase(int pos) {
+            if (pos <= 0 || pos > this.sense.Length) {
+                Console.WriteLine("Error: Baseindex out of Bounds");
+                return '?';
+            }
+            return this.sense[pos - 1];
+        }
+
+
+
+        public int getLength() {
+            return this.sense.Length;
         }
 
 

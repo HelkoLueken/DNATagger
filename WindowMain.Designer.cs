@@ -43,10 +43,11 @@ namespace DNATagger
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.canvasMain = new System.Windows.Forms.Panel();
-            this.vScrollBar1 = new System.Windows.Forms.VScrollBar();
-            this.hScrollBar1 = new System.Windows.Forms.HScrollBar();
+            this.scrollbarCanvasY = new System.Windows.Forms.VScrollBar();
+            this.scrollbarCanvasX = new System.Windows.Forms.HScrollBar();
+            this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
-            this.canvasMain.SuspendLayout();
+            this.groupBoxCanvas.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -156,36 +157,51 @@ namespace DNATagger
             | System.Windows.Forms.AnchorStyles.Right)));
             this.canvasMain.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.canvasMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.canvasMain.Controls.Add(this.vScrollBar1);
-            this.canvasMain.Controls.Add(this.hScrollBar1);
-            this.canvasMain.Location = new System.Drawing.Point(12, 108);
+            this.canvasMain.Location = new System.Drawing.Point(23, 36);
             this.canvasMain.Name = "canvasMain";
-            this.canvasMain.Size = new System.Drawing.Size(1240, 865);
+            this.canvasMain.Size = new System.Drawing.Size(1238, 820);
             this.canvasMain.TabIndex = 1;
-            this.canvasMain.Scroll += new System.Windows.Forms.ScrollEventHandler(this.OnScroll);
             this.canvasMain.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDrawCanvas);
+            this.canvasMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
             // 
-            // vScrollBar1
+            // scrollbarCanvasY
             // 
-            this.vScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.scrollbarCanvasY.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.vScrollBar1.LargeChange = 1;
-            this.vScrollBar1.Location = new System.Drawing.Point(0, 17);
-            this.vScrollBar1.Maximum = 0;
-            this.vScrollBar1.Name = "vScrollBar1";
-            this.vScrollBar1.Size = new System.Drawing.Size(17, 844);
-            this.vScrollBar1.TabIndex = 1;
+            this.scrollbarCanvasY.LargeChange = 1;
+            this.scrollbarCanvasY.Location = new System.Drawing.Point(3, 34);
+            this.scrollbarCanvasY.Maximum = 0;
+            this.scrollbarCanvasY.Name = "scrollbarCanvasY";
+            this.scrollbarCanvasY.Size = new System.Drawing.Size(17, 822);
+            this.scrollbarCanvasY.TabIndex = 1;
             // 
-            // hScrollBar1
+            // scrollbarCanvasX
             // 
-            this.hScrollBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.scrollbarCanvasX.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.hScrollBar1.LargeChange = 1;
-            this.hScrollBar1.Location = new System.Drawing.Point(17, 0);
-            this.hScrollBar1.Maximum = 0;
-            this.hScrollBar1.Name = "hScrollBar1";
-            this.hScrollBar1.Size = new System.Drawing.Size(1219, 17);
-            this.hScrollBar1.TabIndex = 0;
+            this.scrollbarCanvasX.LargeChange = 1;
+            this.scrollbarCanvasX.Location = new System.Drawing.Point(23, 16);
+            this.scrollbarCanvasX.Maximum = 0;
+            this.scrollbarCanvasX.Name = "scrollbarCanvasX";
+            this.scrollbarCanvasX.Size = new System.Drawing.Size(1238, 17);
+            this.scrollbarCanvasX.TabIndex = 0;
+            this.scrollbarCanvasX.Scroll += new System.Windows.Forms.ScrollEventHandler(this.OnScroll);
+            this.scrollbarCanvasX.ValueChanged += new System.EventHandler(this.OnScroll);
+            // 
+            // groupBoxCanvas
+            // 
+            this.groupBoxCanvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxCanvas.Controls.Add(this.scrollbarCanvasX);
+            this.groupBoxCanvas.Controls.Add(this.canvasMain);
+            this.groupBoxCanvas.Controls.Add(this.scrollbarCanvasY);
+            this.groupBoxCanvas.Location = new System.Drawing.Point(0, 127);
+            this.groupBoxCanvas.Name = "groupBoxCanvas";
+            this.groupBoxCanvas.Size = new System.Drawing.Size(1264, 859);
+            this.groupBoxCanvas.TabIndex = 2;
+            this.groupBoxCanvas.TabStop = false;
+            this.groupBoxCanvas.Text = "Sequence Viewer";
             // 
             // WindowMain
             // 
@@ -193,14 +209,15 @@ namespace DNATagger
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1264, 985);
-            this.Controls.Add(this.canvasMain);
+            this.Controls.Add(this.groupBoxCanvas);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "WindowMain";
             this.Text = "DNATagger";
+            this.SizeChanged += new System.EventHandler(this.OnResize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.canvasMain.ResumeLayout(false);
+            this.groupBoxCanvas.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -222,8 +239,9 @@ namespace DNATagger
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Panel canvasMain;
-        private System.Windows.Forms.VScrollBar vScrollBar1;
-        private System.Windows.Forms.HScrollBar hScrollBar1;
+        private System.Windows.Forms.VScrollBar scrollbarCanvasY;
+        private System.Windows.Forms.HScrollBar scrollbarCanvasX;
+        private System.Windows.Forms.GroupBox groupBoxCanvas;
     }
 }
 
