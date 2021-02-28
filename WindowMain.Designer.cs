@@ -41,6 +41,8 @@ namespace DNATagger
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showAntisenseStrandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showNucleotideLettersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.canvasMain = new System.Windows.Forms.Panel();
             this.scrollbarCanvasY = new System.Windows.Forms.VScrollBar();
@@ -142,9 +144,30 @@ namespace DNATagger
             // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showAntisenseStrandToolStripMenuItem,
+            this.showNucleotideLettersToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // showAntisenseStrandToolStripMenuItem
+            // 
+            this.showAntisenseStrandToolStripMenuItem.CheckOnClick = true;
+            this.showAntisenseStrandToolStripMenuItem.Name = "showAntisenseStrandToolStripMenuItem";
+            this.showAntisenseStrandToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.showAntisenseStrandToolStripMenuItem.Text = "Show Antisense Strand";
+            this.showAntisenseStrandToolStripMenuItem.Click += new System.EventHandler(this.OnChangeViewOptions);
+            // 
+            // showNucleotideLettersToolStripMenuItem
+            // 
+            this.showNucleotideLettersToolStripMenuItem.Checked = true;
+            this.showNucleotideLettersToolStripMenuItem.CheckOnClick = true;
+            this.showNucleotideLettersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showNucleotideLettersToolStripMenuItem.Name = "showNucleotideLettersToolStripMenuItem";
+            this.showNucleotideLettersToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.showNucleotideLettersToolStripMenuItem.Text = "Show Nucleotide Letters";
+            this.showNucleotideLettersToolStripMenuItem.Click += new System.EventHandler(this.OnChangeViewOptions);
             // 
             // openFileDialog
             // 
@@ -159,7 +182,7 @@ namespace DNATagger
             this.canvasMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.canvasMain.Location = new System.Drawing.Point(23, 36);
             this.canvasMain.Name = "canvasMain";
-            this.canvasMain.Size = new System.Drawing.Size(1238, 820);
+            this.canvasMain.Size = new System.Drawing.Size(1238, 756);
             this.canvasMain.TabIndex = 1;
             this.canvasMain.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDrawCanvas);
             this.canvasMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
@@ -172,7 +195,7 @@ namespace DNATagger
             this.scrollbarCanvasY.Location = new System.Drawing.Point(3, 34);
             this.scrollbarCanvasY.Maximum = 0;
             this.scrollbarCanvasY.Name = "scrollbarCanvasY";
-            this.scrollbarCanvasY.Size = new System.Drawing.Size(17, 822);
+            this.scrollbarCanvasY.Size = new System.Drawing.Size(17, 758);
             this.scrollbarCanvasY.TabIndex = 1;
             // 
             // scrollbarCanvasX
@@ -196,9 +219,9 @@ namespace DNATagger
             this.groupBoxCanvas.Controls.Add(this.scrollbarCanvasX);
             this.groupBoxCanvas.Controls.Add(this.canvasMain);
             this.groupBoxCanvas.Controls.Add(this.scrollbarCanvasY);
-            this.groupBoxCanvas.Location = new System.Drawing.Point(0, 127);
+            this.groupBoxCanvas.Location = new System.Drawing.Point(0, 190);
             this.groupBoxCanvas.Name = "groupBoxCanvas";
-            this.groupBoxCanvas.Size = new System.Drawing.Size(1264, 859);
+            this.groupBoxCanvas.Size = new System.Drawing.Size(1264, 795);
             this.groupBoxCanvas.TabIndex = 2;
             this.groupBoxCanvas.TabStop = false;
             this.groupBoxCanvas.Text = "Sequence Viewer";
@@ -242,6 +265,8 @@ namespace DNATagger
         private System.Windows.Forms.VScrollBar scrollbarCanvasY;
         private System.Windows.Forms.HScrollBar scrollbarCanvasX;
         private System.Windows.Forms.GroupBox groupBoxCanvas;
+        private System.Windows.Forms.ToolStripMenuItem showAntisenseStrandToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem showNucleotideLettersToolStripMenuItem;
     }
 }
 

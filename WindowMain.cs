@@ -13,9 +13,12 @@ namespace DNATagger
 {
     public partial class WindowMain : Form
     {
-        List<DNASequence> sequences = new List<DNASequence>();
-        Font font = new Font("Consolas", 14);
+        List<SequenceTrack> tracks = new List<SequenceTrack>();
+        static Font font = new Font("Consolas", 14);
+        static int letterWidth = (int)font.Size;
+        static int descriptorWidth;
         Brush brush = Brushes.Black;
+        static Graphics canvas;
 
 
 
@@ -24,6 +27,8 @@ namespace DNATagger
         public WindowMain()
         {
             InitializeComponent();
+            canvas = canvasMain.CreateGraphics();
+            descriptorWidth = (int)canvas.MeasureString("Antisense", font).Width + 2 * letterWidth;
         }
 
 
@@ -35,38 +40,95 @@ namespace DNATagger
 
 
         public void updateScrollbars() {
-            int maxBases = 0;
-            foreach (DNASequence seq in sequences) {
-                if (seq.getLength() > maxBases) maxBases = seq.getLength();
-            }
-            int newBound = maxBases - ((canvasMain.Width - 100) / (int)font.Size);
+            int newBound = 4 + maxTrackLength() - ((canvasMain.Width - (int)canvas.MeasureString("Antisense", font).Width) / letterWidth);
             if (newBound > 0) scrollbarCanvasX.Maximum = newBound;
         }
 
 
 
-        #region Graphische Darstellungen
-        private void drawSequences()
-        {
-            Graphics canvas = canvasMain.CreateGraphics();
-            int X = 50;
-            int Y = 100;
-            int letterWidth = (int)font.Size;
-            int offset = scrollbarCanvasX.Value * letterWidth;
-
-            foreach (DNASequence seq in sequences)
+        public int maxTrackLength() {
+            int max = 0;
+            foreach (SequenceTrack track in tracks)
             {
-                canvas.DrawString(seq.getHeader() + " : ", font, brush, X, Y);
-                Y += 20;
-                canvas.FillRectangle(Brushes.LightBlue, X - letterWidth / 2 - offset, Y, (seq.getLength() + 1) * letterWidth, font.Height);
-                canvas.DrawRectangle(Pens.Black, X - letterWidth / 2 - offset, Y, (seq.getLength() + 1) * letterWidth, font.Height);
-                for (int i = 1; i <= seq.getLength(); i++)
-                {
-                    canvas.DrawString(seq.getBase(i).ToString(), font, brush, X + (i-1) * letterWidth - offset, Y);
-                }
-                Y += 40;
+                if (track.getLength() > max) max = track.getLength();
+            }
+            return max;
+        }
+
+
+
+        #region Graphische Darstellungen
+        private void drawTracks(){
+            int y = 10;
+            int scrollOffset = scrollbarCanvasX.Value * (int)font.Size;
+
+            foreach (SequenceTrack track in tracks){
+                drawTrack(track, y);
+                y += font.Height * track.getTagRows() + 4*font.Height;
+                if (showAntisenseStrandToolStripMenuItem.Checked) y += font.Height;
             }
         }
+
+
+
+        private void drawTrack(SequenceTrack track, int y){
+            foreach (DNASequence seq in track.getSequences()) {
+                drawSequence(seq, y + font.Height);
+                if (showAntisenseStrandToolStripMenuItem.Checked) drawSequenceAntiSense(seq, y + font.Height*2);
+            }
+
+            this.drawBar(Brushes.Blue, -(int)font.Size/2, y, (int)canvas.MeasureString(track.getHeader(), font).Width + 2 * letterWidth);
+            canvas.DrawString(track.getHeader(), font, Brushes.White, letterWidth, y);
+            this.drawBar(Brushes.LightBlue, -letterWidth/2, y + font.Height, descriptorWidth);
+            canvas.DrawString("Sense", font, Brushes.Black, letterWidth, y + font.Height);
+            if (showAntisenseStrandToolStripMenuItem.Checked) {
+                this.drawBar(Brushes.LightBlue, -letterWidth / 2, y + 2*font.Height, descriptorWidth);
+                canvas.DrawString("Antisense", font, Brushes.Black, letterWidth, y + 2*font.Height);
+            }
+        }
+
+
+
+        private void drawSequence(DNASequence seq, int y){
+            int x = (seq.getOffsetTrack() - scrollbarCanvasX.Value) * letterWidth - letterWidth/2 + descriptorWidth;
+            drawBar(seq.color, x, y, (int)(seq.getLengthTotal() + 0.5) * letterWidth);
+            if (showNucleotideLettersToolStripMenuItem.Checked){
+                for (int i = 1; i <= seq.getLengthTotal(); i++) {
+                    canvas.DrawString(seq.getBase(i + seq.getOffSetSense()).ToString(), font, Brushes.Black, x, y);
+                    x += letterWidth;
+                }
+            }
+        }
+
+
+
+        private void drawSequenceAntiSense(DNASequence seq, int y) {
+            int x = (seq.getOffsetTrack() - scrollbarCanvasX.Value) * letterWidth - letterWidth / 2 + descriptorWidth;
+            drawBar(seq.color, x, y, (int)(seq.getLengthTotal() + 0.5) * letterWidth);
+            if (showNucleotideLettersToolStripMenuItem.Checked) {
+                for (int i = 1; i <= seq.getLengthTotal(); i++) {
+                    canvas.DrawString(seq.getBaseAntisense(i + seq.getOffSetAntisense()).ToString(), font, Brushes.Black, x, y);
+                    x += letterWidth;
+                }
+            }
+        }
+
+
+
+        public void drawBar(Brush brush, int x, int y, int len){
+            int letterWidth = (int)font.Size;
+            if (x > canvasMain.Width) return;
+            if (x + len < -4) return;
+            int beginVisible = x;
+            if (x < -4) beginVisible = -4;
+            int endVisible = x + len;
+            if (endVisible > canvasMain.Width) endVisible = canvasMain.Width + 4;
+            int lengthVisible = endVisible - beginVisible;
+
+            canvas.FillRectangle(brush, beginVisible, y, lengthVisible, font.Height);
+            canvas.DrawRectangle(Pens.Black, beginVisible, y, lengthVisible, font.Height);
+        }
+
         #endregion
 
 
@@ -82,7 +144,7 @@ namespace DNATagger
 
         private void OnAddTestSequence(object sender, EventArgs e)
         {
-            this.sequences.Add(new DNASequence(">Testsequenz\nACGT"));
+            this.tracks.Add(new SequenceTrack(new DNASequence(">Testsequenz\nACGT", src : "System Test")));
             refreshEditor();
             updateScrollbars();
         }
@@ -94,7 +156,7 @@ namespace DNATagger
             openFileDialog.Filter = "Fasta File|*.fasta";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
             List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
-            sequences.AddRange(readSeqs);
+            this.tracks.Add(new SequenceTrack(readSeqs));
             refreshEditor();
             updateScrollbars();
         }
@@ -103,9 +165,8 @@ namespace DNATagger
 
         private void OnDrawCanvas(object sender, PaintEventArgs e)
         {
-            drawSequences();
+            drawTracks();
         }
-        #endregion
 
 
 
@@ -116,6 +177,8 @@ namespace DNATagger
 
         private void OnResize(object sender, EventArgs e)
         {
+            canvas.Dispose();
+            canvas = canvasMain.CreateGraphics();
             refreshEditor();
             updateScrollbars();
         }
@@ -128,8 +191,16 @@ namespace DNATagger
 
         private void OnScroll(object sender, ScrollEventArgs e)
         {
-            drawSequences();
+            drawTracks();
             refreshEditor();
         }
+
+
+
+        private void OnChangeViewOptions(object sender, EventArgs e) {
+            refreshEditor();
+        }
+
+        #endregion
     }
 }

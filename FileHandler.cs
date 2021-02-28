@@ -66,14 +66,14 @@ namespace DNATagger
                         {
                             if (fastaBlock.Length > 0)
                             {
-                                output.Add(new DNASequence(fastaBlock.ToString()));
+                                output.Add(new DNASequence(fastaBlock.ToString(), src : path));
                                 fastaBlock.Clear();
                             }
                             fastaBlock.Append(line + "\n");
                         }
                         else fastaBlock.Append(line);
                     }
-                    output.Add(new DNASequence(fastaBlock.ToString()));
+                    output.Add(new DNASequence(fastaBlock.ToString(), src : path));
                 }
             }
             closeFile();
