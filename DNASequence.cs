@@ -17,6 +17,12 @@ namespace DNATagger
         private int offSetAntiSense = 0;
         public Brush color = Brushes.Beige;
         private int offset = 0;
+        private List<SequenceTag> tags = new List<SequenceTag>();
+        private int screenTop;
+        private int screenBottom;
+        private int screenStart;
+        private int screenEnd;
+        private SequenceTrack track;
 
 
 
@@ -63,6 +69,39 @@ namespace DNATagger
             }
         }
 
+
+
+        public void addTag(String label, int start, int end, Brush color) {
+            this.tags.Add(new SequenceTag(label, start, end, color));
+        }
+
+
+
+        public void setScreenPosition(int start, int top, int end, int bottom){
+            this.screenStart = start;
+            this.screenTop = top;
+            this.screenEnd = end;
+            this.screenBottom = bottom;
+        }
+
+
+
+        public void setTrack(SequenceTrack track){
+            this.track = track;
+        }
+
+
+
+        public SequenceTrack getTrack() {
+            return this.track;
+        }
+
+
+
+        public bool isOnSequence(int x , int y){
+            if (x < this.screenStart || x > this.screenEnd || y < this.screenTop || y > this.screenBottom) return false;
+            return true;
+        }
 
 
 
@@ -154,6 +193,12 @@ namespace DNATagger
 
         public static Boolean isValidDNASequence(String seq) {
             return true;
+        }
+
+
+
+        public override String ToString() {
+            return this.header;
         }
     }
 }

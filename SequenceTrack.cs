@@ -11,6 +11,8 @@ namespace DNATagger
     {
         private List<DNASequence> sequences = new List<DNASequence>();
         private String header = "Sequence Track";
+        private int screenTop = 0;
+        private int screenHeight = 0;
 
 
 
@@ -31,7 +33,24 @@ namespace DNATagger
 
         public void addSequence(DNASequence seq){
             seq.setOffset(this.getLength());
+            seq.setTrack(this);
             this.sequences.Add(seq);
+        }
+
+
+
+        public void setScreenPosition(int y, int height){
+            this.screenTop = y;
+            this.screenHeight = height;
+        }
+
+
+        /**Returns true if the given y coordinate is over this track on the editor screen
+         * 
+         */
+        public bool isOnTrack(int y){
+            if (y < this.screenTop || y > this.screenTop + this.screenHeight) return false;
+            return true;
         }
 
 
@@ -60,6 +79,12 @@ namespace DNATagger
 
 
 
+        public int getScreenHeight(){
+            return this.screenHeight;
+        }
+
+
+
         public int getLength() {
             int len = 0;
             foreach (DNASequence seq in sequences) {
@@ -76,6 +101,12 @@ namespace DNATagger
                 if (seq.getTagRows() >= max) max = seq.getTagRows();
             }
             return max;
+        }
+
+
+
+        public override String ToString(){
+            return this.header;
         }
     }
 }

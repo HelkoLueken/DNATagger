@@ -46,9 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bar.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="DNASequence.cs" />
     <Compile Include="FileHandler.cs" />
+    <Compile Include="SequenceTag.cs" />
     <Compile Include="SequenceTrack.cs" />
     <Compile Include="WindowMain.cs">
       <SubType>Form</SubType>

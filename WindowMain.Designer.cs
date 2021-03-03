@@ -48,8 +48,15 @@ namespace DNATagger
             this.scrollbarCanvasY = new System.Windows.Forms.VScrollBar();
             this.scrollbarCanvasX = new System.Windows.Forms.HScrollBar();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
+            this.trackSelector = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.sequenceSelector = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -226,12 +233,79 @@ namespace DNATagger
             this.groupBoxCanvas.TabStop = false;
             this.groupBoxCanvas.Text = "Sequence Viewer";
             // 
+            // trackSelector
+            // 
+            this.trackSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackSelector.FormattingEnabled = true;
+            this.trackSelector.Location = new System.Drawing.Point(6, 23);
+            this.trackSelector.Name = "trackSelector";
+            this.trackSelector.Size = new System.Drawing.Size(291, 21);
+            this.trackSelector.TabIndex = 4;
+            this.trackSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.sequenceSelector);
+            this.groupBox1.Controls.Add(this.trackSelector);
+            this.groupBox1.Location = new System.Drawing.Point(12, 27);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(301, 88);
+            this.groupBox1.TabIndex = 5;
+            this.groupBox1.TabStop = false;
+            // 
+            // sequenceSelector
+            // 
+            this.sequenceSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sequenceSelector.FormattingEnabled = true;
+            this.sequenceSelector.Location = new System.Drawing.Point(6, 61);
+            this.sequenceSelector.Name = "sequenceSelector";
+            this.sequenceSelector.Size = new System.Drawing.Size(291, 21);
+            this.sequenceSelector.TabIndex = 4;
+            this.sequenceSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(80, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Selected Track";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(101, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Selected Sequence";
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.Location = new System.Drawing.Point(351, 50);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(83, 23);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Delete Track";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.OnDeleteTrack);
+            // 
             // WindowMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
             this.ClientSize = new System.Drawing.Size(1264, 985);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxCanvas);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -241,6 +315,8 @@ namespace DNATagger
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.groupBoxCanvas.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,6 +343,12 @@ namespace DNATagger
         private System.Windows.Forms.GroupBox groupBoxCanvas;
         private System.Windows.Forms.ToolStripMenuItem showAntisenseStrandToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showNucleotideLettersToolStripMenuItem;
+        private System.Windows.Forms.ComboBox trackSelector;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.ComboBox sequenceSelector;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

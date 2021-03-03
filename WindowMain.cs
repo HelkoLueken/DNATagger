@@ -18,23 +18,18 @@ namespace DNATagger
         static int letterWidth = (int)font.Size;
         static int descriptorWidth;
         Brush brush = Brushes.Black;
+        Pen marker = new Pen(Color.Yellow, 3);
         static Graphics canvas;
 
 
 
 
-
+        #region Datenverwaltung
         public WindowMain()
         {
             InitializeComponent();
             canvas = canvasMain.CreateGraphics();
             descriptorWidth = (int)canvas.MeasureString("Antisense", font).Width + 2 * letterWidth;
-        }
-
-
-
-        public void refreshEditor() {
-            canvasMain.Invalidate();
         }
 
 
@@ -57,21 +52,45 @@ namespace DNATagger
 
 
 
+        private void addTrack(SequenceTrack track){
+            this.tracks.Add(track);
+            this.trackSelector.Items.Add(track);
+        }
+
+
+
+        private void dropTrack(SequenceTrack track){
+            this.trackSelector.Items.Remove(track);
+            tracks.Remove(track);
+            refreshEditor();
+        }
+
+        #endregion
+
         #region Graphische Darstellungen
+
+        public void refreshEditor() {
+            canvasMain.Invalidate();
+        }
+
+
+
         private void drawTracks(){
             int y = 10;
             int scrollOffset = scrollbarCanvasX.Value * (int)font.Size;
 
             foreach (SequenceTrack track in tracks){
+                track.setScreenPosition(y, track.getTagRows() * font.Height + 2 * font.Height);
+                if (showAntisenseStrandToolStripMenuItem.Checked) track.setScreenPosition(y, track.getScreenHeight() + font.Height);
                 drawTrack(track, y);
-                y += font.Height * track.getTagRows() + 4*font.Height;
-                if (showAntisenseStrandToolStripMenuItem.Checked) y += font.Height;
+                y += track.getScreenHeight() + 2*font.Height;
             }
         }
 
 
 
         private void drawTrack(SequenceTrack track, int y){
+            canvas.FillRectangle(Brushes.DimGray, 0, y, canvasMain.Width, track.getScreenHeight());
             foreach (DNASequence seq in track.getSequences()) {
                 drawSequence(seq, y + font.Height);
                 if (showAntisenseStrandToolStripMenuItem.Checked) drawSequenceAntiSense(seq, y + font.Height*2);
@@ -85,6 +104,7 @@ namespace DNATagger
                 this.drawBar(Brushes.LightBlue, -letterWidth / 2, y + 2*font.Height, descriptorWidth);
                 canvas.DrawString("Antisense", font, Brushes.Black, letterWidth, y + 2*font.Height);
             }
+            if (track == this.trackSelector.SelectedItem) canvas.DrawRectangle(marker, 0, y, canvasMain.Width, track.getScreenHeight());
         }
 
 
@@ -144,7 +164,7 @@ namespace DNATagger
 
         private void OnAddTestSequence(object sender, EventArgs e)
         {
-            this.tracks.Add(new SequenceTrack(new DNASequence(">Testsequenz\nACGT", src : "System Test")));
+            addTrack(new SequenceTrack(new DNASequence(">Testsequenz\nACGT", src : "System Test")));
             refreshEditor();
             updateScrollbars();
         }
@@ -156,7 +176,7 @@ namespace DNATagger
             openFileDialog.Filter = "Fasta File|*.fasta";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
             List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
-            this.tracks.Add(new SequenceTrack(readSeqs));
+            addTrack(new SequenceTrack(readSeqs));
             refreshEditor();
             updateScrollbars();
         }
@@ -173,7 +193,13 @@ namespace DNATagger
         private void OnClickCanvas(object sender, MouseEventArgs e)
         {
             Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
+            foreach (SequenceTrack track in tracks){
+                if (track.isOnTrack(e.Y)) trackSelector.SelectedItem = track;
+            }
+            refreshEditor();
         }
+
+
 
         private void OnResize(object sender, EventArgs e)
         {
@@ -183,11 +209,15 @@ namespace DNATagger
             updateScrollbars();
         }
 
+
+
         private void OnScroll(object sender, EventArgs e)
         {
             //drawSequences();
             //refreshEditor();
         }
+
+
 
         private void OnScroll(object sender, ScrollEventArgs e)
         {
@@ -201,6 +231,14 @@ namespace DNATagger
             refreshEditor();
         }
 
+
+
+        private void OnDeleteTrack(object sender, EventArgs e) {
+            if (MessageBox.Show("Are you sure you want to delete this track and all contained nucleotide sequences?", "Delete Track", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                dropTrack((SequenceTrack)trackSelector.SelectedItem);
+        }
+
         #endregion
+
     }
 }
