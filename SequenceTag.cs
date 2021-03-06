@@ -10,7 +10,7 @@ namespace DNATagger {
         public String label = "Undefinied Region";
         private int start = 0;
         private int end = 0;
-        public Brush color;
+        public Bar bar;
 
 
 
@@ -19,7 +19,7 @@ namespace DNATagger {
             this.label = label;
             this.start = start;
             this.end = end;
-            this.color = color;
+            this.bar = new Bar (color);
         }
 
 

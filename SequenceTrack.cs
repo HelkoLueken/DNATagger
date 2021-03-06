@@ -11,6 +11,12 @@ namespace DNATagger
     {
         private List<DNASequence> sequences = new List<DNASequence>();
         private String header = "Sequence Track";
+        public Bar headerBar = new Bar(Brushes.Blue);
+        public Bar backgroundBar = new Bar(Brushes.DimGray);
+        public Bar senseHeaderBar = new Bar(Brushes.LightBlue);
+        public Bar antisenseHeaderBar = new Bar(Brushes.LightBlue);
+
+        //Zum Ausmustern
         private int screenTop = 0;
         private int screenHeight = 0;
 
@@ -32,9 +38,19 @@ namespace DNATagger
 
 
         public void addSequence(DNASequence seq){
-            seq.setOffset(this.getLength());
+            seq.setOffsetTrack(this.getLength());
             seq.setTrack(this);
             this.sequences.Add(seq);
+        }
+
+
+
+        public void draw(System.Windows.Forms.Panel canvas) {
+            backgroundBar.draw(canvas);
+            //foreach (DNASequence seq in sequences) seq.draw(canvas);
+            headerBar.draw(canvas);
+            senseHeaderBar.draw(canvas);
+            antisenseHeaderBar.draw(canvas);
         }
 
 

@@ -44,15 +44,17 @@ namespace DNATagger
             this.showAntisenseStrandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showNucleotideLettersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.canvasMain = new System.Windows.Forms.Panel();
+            this.canvasPanel = new System.Windows.Forms.Panel();
             this.scrollbarCanvasY = new System.Windows.Forms.VScrollBar();
             this.scrollbarCanvasX = new System.Windows.Forms.HScrollBar();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.trackSelector = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.sequenceSelector = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.tagSelector = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.sequenceSelector = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
@@ -162,7 +164,7 @@ namespace DNATagger
             // 
             this.showAntisenseStrandToolStripMenuItem.CheckOnClick = true;
             this.showAntisenseStrandToolStripMenuItem.Name = "showAntisenseStrandToolStripMenuItem";
-            this.showAntisenseStrandToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
+            this.showAntisenseStrandToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.showAntisenseStrandToolStripMenuItem.Text = "Show Antisense Strand";
             this.showAntisenseStrandToolStripMenuItem.Click += new System.EventHandler(this.OnChangeViewOptions);
             // 
@@ -172,27 +174,27 @@ namespace DNATagger
             this.showNucleotideLettersToolStripMenuItem.CheckOnClick = true;
             this.showNucleotideLettersToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showNucleotideLettersToolStripMenuItem.Name = "showNucleotideLettersToolStripMenuItem";
-            this.showNucleotideLettersToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
-            this.showNucleotideLettersToolStripMenuItem.Text = "Show Nucleotide Letters";
+            this.showNucleotideLettersToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.showNucleotideLettersToolStripMenuItem.Text = "Show Letters when zoomed in";
             this.showNucleotideLettersToolStripMenuItem.Click += new System.EventHandler(this.OnChangeViewOptions);
             // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
-            // canvasMain
+            // canvasPanel
             // 
-            this.canvasMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.canvasPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.canvasMain.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.canvasMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.canvasMain.Location = new System.Drawing.Point(23, 36);
-            this.canvasMain.Name = "canvasMain";
-            this.canvasMain.Size = new System.Drawing.Size(1238, 756);
-            this.canvasMain.TabIndex = 1;
-            this.canvasMain.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDrawCanvas);
-            this.canvasMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
+            this.canvasPanel.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.canvasPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.canvasPanel.Location = new System.Drawing.Point(23, 36);
+            this.canvasPanel.Name = "canvasPanel";
+            this.canvasPanel.Size = new System.Drawing.Size(1238, 756);
+            this.canvasPanel.TabIndex = 1;
+            this.canvasPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDrawCanvas);
+            this.canvasPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
             // 
             // scrollbarCanvasY
             // 
@@ -224,7 +226,7 @@ namespace DNATagger
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCanvas.Controls.Add(this.scrollbarCanvasX);
-            this.groupBoxCanvas.Controls.Add(this.canvasMain);
+            this.groupBoxCanvas.Controls.Add(this.canvasPanel);
             this.groupBoxCanvas.Controls.Add(this.scrollbarCanvasY);
             this.groupBoxCanvas.Location = new System.Drawing.Point(0, 190);
             this.groupBoxCanvas.Name = "groupBoxCanvas";
@@ -247,15 +249,57 @@ namespace DNATagger
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.tagSelector);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.sequenceSelector);
             this.groupBox1.Controls.Add(this.trackSelector);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(301, 88);
+            this.groupBox1.Size = new System.Drawing.Size(301, 135);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
+            // 
+            // tagSelector
+            // 
+            this.tagSelector.AutoSize = true;
+            this.tagSelector.Location = new System.Drawing.Point(8, 85);
+            this.tagSelector.Name = "tagSelector";
+            this.tagSelector.Size = new System.Drawing.Size(71, 13);
+            this.tagSelector.TabIndex = 5;
+            this.tagSelector.Text = "Selected Tag";
+            this.tagSelector.Click += new System.EventHandler(this.label3_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 45);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(101, 13);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Selected Sequence";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 7);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(80, 13);
+            this.label1.TabIndex = 5;
+            this.label1.Text = "Selected Track";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(6, 101);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(291, 21);
+            this.comboBox1.TabIndex = 4;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
             // 
             // sequenceSelector
             // 
@@ -268,24 +312,6 @@ namespace DNATagger
             this.sequenceSelector.Size = new System.Drawing.Size(291, 21);
             this.sequenceSelector.TabIndex = 4;
             this.sequenceSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 7);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(80, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Selected Track";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 45);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(101, 13);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Selected Sequence";
             // 
             // button1
             // 
@@ -308,6 +334,7 @@ namespace DNATagger
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxCanvas);
             this.Controls.Add(this.menuStrip1);
+            this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "WindowMain";
             this.Text = "DNATagger";
@@ -337,7 +364,7 @@ namespace DNATagger
         private System.Windows.Forms.ToolStripMenuItem loadFastaFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Panel canvasMain;
+        private System.Windows.Forms.Panel canvasPanel;
         private System.Windows.Forms.VScrollBar scrollbarCanvasY;
         private System.Windows.Forms.HScrollBar scrollbarCanvasX;
         private System.Windows.Forms.GroupBox groupBoxCanvas;
@@ -349,6 +376,8 @@ namespace DNATagger
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label tagSelector;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

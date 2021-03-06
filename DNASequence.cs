@@ -9,20 +9,25 @@ namespace DNATagger
 {
     class DNASequence
     {
-        private char[] sense;
-        private char[] antisense;
         private String header;
         private String src;
+        private char[] sense;
+        private char[] antisense;
+        public Bar senseBar = new Bar(Brushes.Beige);
+        public Bar antisenseBar = new Bar(Brushes.Beige);
         private int offSetSense = 0;
         private int offSetAntiSense = 0;
-        public Brush color = Brushes.Beige;
-        private int offset = 0;
+        private int offsetTrack = 0;
         private List<SequenceTag> tags = new List<SequenceTag>();
+        private SequenceTrack track;
+
+        //Zum Ausmustern
         private int screenTop;
         private int screenBottom;
         private int screenStart;
         private int screenEnd;
-        private SequenceTrack track;
+        public Brush color = Brushes.Beige;
+
 
 
 
@@ -77,6 +82,11 @@ namespace DNATagger
 
 
 
+        public void draw(System.Windows.Forms.Panel canvas) { 
+            //do stuff
+        }
+
+
         public void setScreenPosition(int start, int top, int end, int bottom){
             this.screenStart = start;
             this.screenTop = top;
@@ -105,8 +115,8 @@ namespace DNATagger
 
 
 
-        public void setOffset(int to){
-            this.offset = to;
+        public void setOffsetTrack(int to){
+            this.offsetTrack = to;
         }
 
 
@@ -178,7 +188,7 @@ namespace DNATagger
 
 
         public int getOffsetTrack(){
-            return this.offset;
+            return this.offsetTrack;
         }
 
 

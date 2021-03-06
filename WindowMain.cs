@@ -28,14 +28,14 @@ namespace DNATagger
         public WindowMain()
         {
             InitializeComponent();
-            canvas = canvasMain.CreateGraphics();
+            canvas = canvasPanel.CreateGraphics();
             descriptorWidth = (int)canvas.MeasureString("Antisense", font).Width + 2 * letterWidth;
         }
 
 
 
         public void updateScrollbars() {
-            int newBound = 4 + maxTrackLength() - ((canvasMain.Width - (int)canvas.MeasureString("Antisense", font).Width) / letterWidth);
+            int newBound = 4 + maxTrackLength() - ((canvasPanel.Width - (int)canvas.MeasureString("Antisense", font).Width) / letterWidth);
             if (newBound > 0) scrollbarCanvasX.Maximum = newBound;
         }
 
@@ -70,12 +70,17 @@ namespace DNATagger
         #region Graphische Darstellungen
 
         public void refreshEditor() {
-            canvasMain.Invalidate();
+            canvasPanel.Invalidate();
         }
 
 
 
         private void drawTracks(){
+            calculateBarPositions();
+            foreach (SequenceTrack track in tracks) {
+                track.draw(canvasPanel);
+            }
+            /*
             int y = 10;
             int scrollOffset = scrollbarCanvasX.Value * (int)font.Size;
 
@@ -84,13 +89,35 @@ namespace DNATagger
                 if (showAntisenseStrandToolStripMenuItem.Checked) track.setScreenPosition(y, track.getScreenHeight() + font.Height);
                 drawTrack(track, y);
                 y += track.getScreenHeight() + 2*font.Height;
+            } */
+        }
+
+
+
+        private void calculateBarPositions(){
+            int y = 10;
+            int scrollOffset = scrollbarCanvasX.Value * (int)font.Size;
+            int descriptorWidth = (int)canvas.MeasureString("Antisense", font).Width + 2 * letterWidth;
+            foreach (SequenceTrack track in tracks) {
+                track.headerBar.setPosition(0, y, (int)canvas.MeasureString(track.getHeader(), font).Width + 2 * letterWidth, font.Height);
+                track.senseHeaderBar.setPosition(0, y + font.Height, descriptorWidth, font.Height);
+                if (showAntisenseStrandToolStripMenuItem.Checked){
+                    track.antisenseHeaderBar.setPosition(0, y + 2* font.Height, descriptorWidth, font.Height);
+                    track.backgroundBar.setPosition(0, y, canvasPanel.Width, font.Height*3);
+                    y += font.Height * 5;
+                }
+                else{
+                    track.antisenseHeaderBar.hide();
+                    track.backgroundBar.setPosition(0, y, canvasPanel.Width, font.Height * 2);
+                    y += font.Height * 4;
+                }
             }
         }
 
 
 
         private void drawTrack(SequenceTrack track, int y){
-            canvas.FillRectangle(Brushes.DimGray, 0, y, canvasMain.Width, track.getScreenHeight());
+            canvas.FillRectangle(Brushes.DimGray, 0, y, canvasPanel.Width, track.getScreenHeight());
             foreach (DNASequence seq in track.getSequences()) {
                 drawSequence(seq, y + font.Height);
                 if (showAntisenseStrandToolStripMenuItem.Checked) drawSequenceAntiSense(seq, y + font.Height*2);
@@ -104,7 +131,7 @@ namespace DNATagger
                 this.drawBar(Brushes.LightBlue, -letterWidth / 2, y + 2*font.Height, descriptorWidth);
                 canvas.DrawString("Antisense", font, Brushes.Black, letterWidth, y + 2*font.Height);
             }
-            if (track == this.trackSelector.SelectedItem) canvas.DrawRectangle(marker, 0, y, canvasMain.Width, track.getScreenHeight());
+            if (track == this.trackSelector.SelectedItem) canvas.DrawRectangle(marker, 0, y, canvasPanel.Width, track.getScreenHeight());
         }
 
 
@@ -137,12 +164,12 @@ namespace DNATagger
 
         public void drawBar(Brush brush, int x, int y, int len){
             int letterWidth = (int)font.Size;
-            if (x > canvasMain.Width) return;
+            if (x > canvasPanel.Width) return;
             if (x + len < -4) return;
             int beginVisible = x;
             if (x < -4) beginVisible = -4;
             int endVisible = x + len;
-            if (endVisible > canvasMain.Width) endVisible = canvasMain.Width + 4;
+            if (endVisible > canvasPanel.Width) endVisible = canvasPanel.Width + 4;
             int lengthVisible = endVisible - beginVisible;
 
             canvas.FillRectangle(brush, beginVisible, y, lengthVisible, font.Height);
@@ -204,7 +231,7 @@ namespace DNATagger
         private void OnResize(object sender, EventArgs e)
         {
             canvas.Dispose();
-            canvas = canvasMain.CreateGraphics();
+            canvas = canvasPanel.CreateGraphics();
             refreshEditor();
             updateScrollbars();
         }
@@ -240,5 +267,8 @@ namespace DNATagger
 
         #endregion
 
+        private void label3_Click(object sender, EventArgs e) {
+
+        }
     }
 }
