@@ -107,5 +107,11 @@ namespace DNATagger {
         public void hide(){
             this.hidden = true;
         }
+
+
+
+        public bool isHidden(){
+            return hidden;
+        }
     }
 }

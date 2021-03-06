@@ -16,10 +16,10 @@ namespace DNATagger
         List<SequenceTrack> tracks = new List<SequenceTrack>();
         static Font font = new Font("Consolas", 14);
         static int letterWidth = (int)font.Size;
-        static int descriptorWidth;
         Brush brush = Brushes.Black;
         Pen marker = new Pen(Color.Yellow, 3);
         static Graphics canvas;
+        private int zoom;
 
 
 
@@ -29,7 +29,6 @@ namespace DNATagger
         {
             InitializeComponent();
             canvas = canvasPanel.CreateGraphics();
-            descriptorWidth = (int)canvas.MeasureString("Antisense", font).Width + 2 * letterWidth;
         }
 
 
@@ -71,6 +70,7 @@ namespace DNATagger
 
         public void refreshEditor() {
             canvasPanel.Invalidate();
+            canvasPanel.scr
         }
 
 
@@ -78,7 +78,7 @@ namespace DNATagger
         private void drawTracks(){
             calculateBarPositions();
             foreach (SequenceTrack track in tracks) {
-                track.draw(canvasPanel);
+                track.draw(canvasPanel, font, (showNucleotideLettersToolStripMenuItem.Checked && zoom == 1));
             }
             /*
             int y = 10;
@@ -101,6 +101,13 @@ namespace DNATagger
             foreach (SequenceTrack track in tracks) {
                 track.headerBar.setPosition(0, y, (int)canvas.MeasureString(track.getHeader(), font).Width + 2 * letterWidth, font.Height);
                 track.senseHeaderBar.setPosition(0, y + font.Height, descriptorWidth, font.Height);
+                int x = descriptorWidth;
+                foreach (DNASequence seq in track.getSequences()){
+                    seq.senseBar.setPosition(x + letterWidth * (seq.getOffSetSense() - scrollbarCanvasX.Value), y + font.Height, letterWidth * seq.getLengthSense(), font.Height);
+                    if (showAntisenseStrandToolStripMenuItem.Checked) seq.antisenseBar.setPosition(x + letterWidth * (seq.getOffSetSense() - scrollbarCanvasX.Value), y + 2 * font.Height, letterWidth * seq.getLengthAntisense(), font.Height);
+                    else seq.antisenseBar.hide();
+                    x += seq.getLengthTotal() * letterWidth;
+                }
                 if (showAntisenseStrandToolStripMenuItem.Checked){
                     track.antisenseHeaderBar.setPosition(0, y + 2* font.Height, descriptorWidth, font.Height);
                     track.backgroundBar.setPosition(0, y, canvasPanel.Width, font.Height*3);
@@ -115,7 +122,7 @@ namespace DNATagger
         }
 
 
-
+        /*
         private void drawTrack(SequenceTrack track, int y){
             canvas.FillRectangle(Brushes.DimGray, 0, y, canvasPanel.Width, track.getScreenHeight());
             foreach (DNASequence seq in track.getSequences()) {
@@ -174,7 +181,7 @@ namespace DNATagger
 
             canvas.FillRectangle(brush, beginVisible, y, lengthVisible, font.Height);
             canvas.DrawRectangle(Pens.Black, beginVisible, y, lengthVisible, font.Height);
-        }
+        } */
 
         #endregion
 

@@ -56,7 +56,9 @@ namespace DNATagger
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
+            this.canvasPanel.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -189,6 +191,7 @@ namespace DNATagger
             | System.Windows.Forms.AnchorStyles.Right)));
             this.canvasPanel.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.canvasPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.canvasPanel.Controls.Add(this.textBox1);
             this.canvasPanel.Location = new System.Drawing.Point(23, 36);
             this.canvasPanel.Name = "canvasPanel";
             this.canvasPanel.Size = new System.Drawing.Size(1238, 756);
@@ -324,6 +327,13 @@ namespace DNATagger
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.OnDeleteTrack);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(923, 160);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.TabIndex = 0;
+            // 
             // WindowMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -341,6 +351,8 @@ namespace DNATagger
             this.SizeChanged += new System.EventHandler(this.OnResize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.canvasPanel.ResumeLayout(false);
+            this.canvasPanel.PerformLayout();
             this.groupBoxCanvas.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -378,6 +390,7 @@ namespace DNATagger
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label tagSelector;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

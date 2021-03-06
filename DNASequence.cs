@@ -82,8 +82,10 @@ namespace DNATagger
 
 
 
-        public void draw(System.Windows.Forms.Panel canvas) { 
-            //do stuff
+        public void draw(System.Windows.Forms.Panel canvas, Font font, bool showLetters) {
+            senseBar.draw(canvas);
+            antisenseBar.draw(canvas);
+            foreach (SequenceTag tag in tags) tag.bar.draw(canvas);
         }
 
 

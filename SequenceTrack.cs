@@ -45,12 +45,17 @@ namespace DNATagger
 
 
 
-        public void draw(System.Windows.Forms.Panel canvas) {
+        public void draw(System.Windows.Forms.Panel canvas, Font font, bool showLetters) {
+            Graphics cxt = canvas.CreateGraphics();
             backgroundBar.draw(canvas);
-            //foreach (DNASequence seq in sequences) seq.draw(canvas);
+            foreach (DNASequence seq in sequences) seq.draw(canvas, font, showLetters);
             headerBar.draw(canvas);
             senseHeaderBar.draw(canvas);
             antisenseHeaderBar.draw(canvas);
+            cxt.DrawString(this.header, font, Brushes.White, headerBar.getStartPos() + font.Size/2, headerBar.getTopPos());
+            cxt.DrawString("Sense", font, Brushes.Black, senseHeaderBar.getStartPos() + font.Size / 2, senseHeaderBar.getTopPos());
+            if (!antisenseHeaderBar.isHidden()) cxt.DrawString("Antiense", font, Brushes.Black, antisenseHeaderBar.getStartPos() + font.Size / 2, antisenseHeaderBar.getTopPos());
+            cxt.Dispose();
         }
 
 
