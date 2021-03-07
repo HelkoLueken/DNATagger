@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 
 namespace DNATagger {
-    class SequenceTag {
+    class SequenceTagAlt {
         public String label = "Undefinied Region";
         private int start = 0;
         private int end = 0;
@@ -15,7 +15,7 @@ namespace DNATagger {
 
 
 
-        public SequenceTag(String label, int start, int end, Brush color){
+        public SequenceTagAlt(String label, int start, int end, Brush color){
             this.label = label;
             this.start = start;
             this.end = end;

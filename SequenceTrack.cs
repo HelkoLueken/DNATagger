@@ -1,89 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
+using System.Windows.Forms;
 
-namespace DNATagger
-{
-    class SequenceTrack
-    {
+namespace DNATagger {
+    public partial class SequenceTrack : UserControl {
+
         private List<DNASequence> sequences = new List<DNASequence>();
-        private String header = "Sequence Track";
-        public Bar headerBar = new Bar(Brushes.Blue);
-        public Bar backgroundBar = new Bar(Brushes.DimGray);
-        public Bar senseHeaderBar = new Bar(Brushes.LightBlue);
-        public Bar antisenseHeaderBar = new Bar(Brushes.LightBlue);
-
-        //Zum Ausmustern
-        private int screenTop = 0;
-        private int screenHeight = 0;
+        private String header{ 
+            get{ return this.headerLabel.Text; }
+            set{ this.headerLabel.Text = value; }
+        }
 
 
 
 
         public SequenceTrack(List<DNASequence> seqs) {
-            foreach(DNASequence seq in seqs){
+            InitializeComponent();
+            foreach (DNASequence seq in seqs) {
                 addSequence(seq);
             }
-            this.header = seqs.ElementAt(0).getSource();
+            this.header = seqs.ElementAt(0).src;
         }
 
         public SequenceTrack(DNASequence seq) {
+            InitializeComponent();
             addSequence(seq);
-            this.header = seq.getHeader();
+            this.header = seq.header;
         }
 
 
 
-        public void addSequence(DNASequence seq){
-            seq.setOffsetTrack(this.getLength());
-            seq.setTrack(this);
+        public void addSequence(DNASequence seq) {
+            seq.track = this;
+            seq.Location = new Point(getEndPosition(), this.Location.Y + this.Font.Height);
             this.sequences.Add(seq);
+            this.Controls.Add(seq);
         }
 
 
 
-        public void draw(System.Windows.Forms.Panel canvas, Font font, bool showLetters) {
-            Graphics cxt = canvas.CreateGraphics();
-            backgroundBar.draw(canvas);
-            foreach (DNASequence seq in sequences) seq.draw(canvas, font, showLetters);
-            headerBar.draw(canvas);
-            senseHeaderBar.draw(canvas);
-            antisenseHeaderBar.draw(canvas);
-            cxt.DrawString(this.header, font, Brushes.White, headerBar.getStartPos() + font.Size/2, headerBar.getTopPos());
-            cxt.DrawString("Sense", font, Brushes.Black, senseHeaderBar.getStartPos() + font.Size / 2, senseHeaderBar.getTopPos());
-            if (!antisenseHeaderBar.isHidden()) cxt.DrawString("Antiense", font, Brushes.Black, antisenseHeaderBar.getStartPos() + font.Size / 2, antisenseHeaderBar.getTopPos());
-            cxt.Dispose();
-        }
-
-
-
-        public void setScreenPosition(int y, int height){
-            this.screenTop = y;
-            this.screenHeight = height;
-        }
-
-
-        /**Returns true if the given y coordinate is over this track on the editor screen
-         * 
-         */
-        public bool isOnTrack(int y){
-            if (y < this.screenTop || y > this.screenTop + this.screenHeight) return false;
-            return true;
-        }
-
-
-
-        public void setHeader(String to) {
-            this.header = to;
-        }
-
-
-
-        public String getHeader() {
-            return this.header;
+        public int getEndPosition(){
+            if (sequences.Count() == 0) return antisenseLabel.Location.X + antisenseLabel.Width;
+            else return sequences.Last().Location.X + sequences.Last().Width;
         }
 
 
@@ -100,12 +64,6 @@ namespace DNATagger
 
 
 
-        public int getScreenHeight(){
-            return this.screenHeight;
-        }
-
-
-
         public int getLength() {
             int len = 0;
             foreach (DNASequence seq in sequences) {
@@ -116,17 +74,7 @@ namespace DNATagger
 
 
 
-        public int getTagRows(){
-            int max = 0;
-            foreach(DNASequence seq in sequences){
-                if (seq.getTagRows() >= max) max = seq.getTagRows();
-            }
-            return max;
-        }
-
-
-
-        public override String ToString(){
+        public override String ToString() {
             return this.header;
         }
     }

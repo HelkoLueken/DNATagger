@@ -1,60 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
+using System.Windows.Forms;
 
-namespace DNATagger
-{
-    class DNASequence
-    {
-        private String header;
-        private String src;
+namespace DNATagger {
+    public partial class DNASequence : UserControl {
+
         private char[] sense;
         private char[] antisense;
-        public Bar senseBar = new Bar(Brushes.Beige);
-        public Bar antisenseBar = new Bar(Brushes.Beige);
-        private int offSetSense = 0;
-        private int offSetAntiSense = 0;
-        private int offsetTrack = 0;
-        private List<SequenceTag> tags = new List<SequenceTag>();
-        private SequenceTrack track;
+        private int offsetSense = 0;
+        private int offsetAntisense = 0;
+        //private List<SequenceTag> = new List<SequenceTag>();
 
-        //Zum Ausmustern
-        private int screenTop;
-        private int screenBottom;
-        private int screenStart;
-        private int screenEnd;
-        public Brush color = Brushes.Beige;
+        public SequenceTrack track{ 
+            get{ return this.track; }
+            set{ this.track = value; }
+        }
 
 
+        public String header {
+            get { return this.header; }
+            set { this.header = value; }
+        }
 
+        public String src{ 
+            get{ return this.src; }
+            set{ this.src = value; }
+        }
 
 
 
         public DNASequence(String fasta, String src = "unknown") {
+            InitializeComponent();
             String[] fastaParts = fasta.Split('\n');
-            if (fastaParts.Length == 2)
-            {
+            if (fastaParts.Length == 2) {
                 this.header = fastaParts[0];
                 this.sense = fastaParts[1].ToCharArray();
             }
-            else
-            {
+            else {
                 this.header = "Unnamed DNA Sequence";
                 this.sense = fasta.ToCharArray();
             }
             this.src = src;
             this.createAntisense();
+            this.Width = (int)this.Font.Size * this.getLengthTotal();
         }
 
 
 
         private void createAntisense() {
             this.antisense = new char[this.sense.Length];
-            for (int i = 0; i < this.sense.Length; i++)
-            {
+            for (int i = 0; i < this.sense.Length; i++) {
                 if (this.sense[i] == 'A') this.antisense[i] = 'T';
                 if (this.sense[i] == 'C') this.antisense[i] = 'G';
                 if (this.sense[i] == 'G') this.antisense[i] = 'C';
@@ -76,65 +77,6 @@ namespace DNATagger
 
 
 
-        public void addTag(String label, int start, int end, Brush color) {
-            this.tags.Add(new SequenceTag(label, start, end, color));
-        }
-
-
-
-        public void draw(System.Windows.Forms.Panel canvas, Font font, bool showLetters) {
-            senseBar.draw(canvas);
-            antisenseBar.draw(canvas);
-            foreach (SequenceTag tag in tags) tag.bar.draw(canvas);
-        }
-
-
-        public void setScreenPosition(int start, int top, int end, int bottom){
-            this.screenStart = start;
-            this.screenTop = top;
-            this.screenEnd = end;
-            this.screenBottom = bottom;
-        }
-
-
-
-        public void setTrack(SequenceTrack track){
-            this.track = track;
-        }
-
-
-
-        public SequenceTrack getTrack() {
-            return this.track;
-        }
-
-
-
-        public bool isOnSequence(int x , int y){
-            if (x < this.screenStart || x > this.screenEnd || y < this.screenTop || y > this.screenBottom) return false;
-            return true;
-        }
-
-
-
-        public void setOffsetTrack(int to){
-            this.offsetTrack = to;
-        }
-
-
-
-        public String getSource() {
-            return this.src;
-        }
-
-
-
-        public String getHeader() {
-            return this.header;
-        }
-
-
-
         public char getBase(int pos) {
             if (pos <= 0 || pos > this.sense.Length) {
                 Console.WriteLine("Error: Baseindex out of Bounds");
@@ -146,12 +88,17 @@ namespace DNATagger
 
 
         public char getBaseAntisense(int pos) {
-            if (pos <= 0 || pos > this.sense.Length)
-            {
+            if (pos <= 0 || pos > this.sense.Length) {
                 Console.WriteLine("Error: Baseindex out of Bounds");
                 return ' ';
             }
             return this.antisense[pos - 1];
+        }
+
+
+
+        public override String ToString() {
+            return this.header;
         }
 
 
@@ -169,11 +116,36 @@ namespace DNATagger
 
 
         public int getLengthTotal() {
-            int up = this.sense.Length + this.offSetSense;
-            int lo = this.antisense.Length + this.offSetAntiSense;
+            int up = this.sense.Length + this.offsetSense;
+            int lo = this.antisense.Length + this.offsetAntisense;
             if (up >= lo) return up;
             else return lo;
         }
+    }
+}
+/*class DNASequenceAlt
+    {
+
+
+
+        public void addTag(String label, int start, int end, Brush color) {
+            this.tags.Add(new SequenceTagAlt(label, start, end, color));
+        }
+
+
+
+
+        public void setOffsetTrack(int to){
+            this.offsetTrack = to;
+        }
+
+
+
+        
+
+
+
+        
 
 
 
@@ -209,8 +181,5 @@ namespace DNATagger
 
 
 
-        public override String ToString() {
-            return this.header;
-        }
-    }
-}
+        
+    }*/
