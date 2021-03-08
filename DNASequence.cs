@@ -15,22 +15,24 @@ namespace DNATagger {
         private char[] antisense;
         private int offsetSense = 0;
         private int offsetAntisense = 0;
+        private String _src;
+        private SequenceTrack _track;
         //private List<SequenceTag> = new List<SequenceTag>();
 
         public SequenceTrack track{ 
-            get{ return this.track; }
-            set{ this.track = value; }
+            get{ return _track; }
+            set{ _track = value; }
         }
 
 
         public String header {
-            get { return this.header; }
-            set { this.header = value; }
+            get { return this.Name; }
+            set { this.Name = value; }
         }
 
         public String src{ 
-            get{ return this.src; }
-            set{ this.src = value; }
+            get{ return _src; }
+            set{ _src = value; }
         }
 
 
@@ -39,16 +41,17 @@ namespace DNATagger {
             InitializeComponent();
             String[] fastaParts = fasta.Split('\n');
             if (fastaParts.Length == 2) {
-                this.header = fastaParts[0];
-                this.sense = fastaParts[1].ToCharArray();
+                header = fastaParts[0];
+                sense = fastaParts[1].ToCharArray();
             }
             else {
-                this.header = "Unnamed DNA Sequence";
-                this.sense = fasta.ToCharArray();
+                header = "Unnamed DNA Sequence";
+                sense = fasta.ToCharArray();
             }
             this.src = src;
-            this.createAntisense();
-            this.Width = (int)this.Font.Size * this.getLengthTotal();
+            createAntisense();
+            Width = this.Font.Height * this.getLengthTotal();
+            addLetterLabels();
         }
 
 
@@ -72,6 +75,19 @@ namespace DNATagger {
                 if (this.sense[i] == 'H') this.antisense[i] = 'T';
                 if (this.sense[i] == 'N') this.antisense[i] = 'N';
                 if (this.antisense[i] == 0) this.antisense[i] = '?';
+            }
+        }
+
+
+
+        public void addLetterLabels(){
+            for (int i = 0; i < sense.Length; i++){
+                Label label = new Label();
+                label.Font = Font;
+                label.Text = sense[i].ToString();
+                label.Location = new Point(Font.Height*i, 0);
+                label.AutoSize = true;
+                Controls.Add(label);
             }
         }
 
@@ -120,6 +136,10 @@ namespace DNATagger {
             int lo = this.antisense.Length + this.offsetAntisense;
             if (up >= lo) return up;
             else return lo;
+        }
+
+        private void OnClick(object sender, MouseEventArgs e) {
+            
         }
     }
 }

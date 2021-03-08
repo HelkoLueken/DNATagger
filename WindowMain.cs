@@ -13,12 +13,7 @@ namespace DNATagger
 {
     public partial class WindowMain : Form
     {
-        List<SequenceTrackAlt> tracks = new List<SequenceTrackAlt>();
-        static Font font = new Font("Consolas", 14);
-        static int letterWidth = (int)font.Size;
-        Brush brush = Brushes.Black;
-        Pen marker = new Pen(Color.Yellow, 3);
-        static Graphics canvas;
+        List<SequenceTrack> tracks = new List<SequenceTrack>();
         private int zoom;
 
 
@@ -28,21 +23,13 @@ namespace DNATagger
         public WindowMain()
         {
             InitializeComponent();
-            canvas = canvasPanel.CreateGraphics();
-        }
-
-
-
-        public void updateScrollbars() {
-            int newBound = 4 + maxTrackLength() - ((canvasPanel.Width - (int)canvas.MeasureString("Antisense", font).Width) / letterWidth);
-            if (newBound > 0) scrollbarCanvasX.Maximum = newBound;
         }
 
 
 
         public int maxTrackLength() {
             int max = 0;
-            foreach (SequenceTrackAlt track in tracks)
+            foreach (SequenceTrack track in tracks)
             {
                 if (track.getLength() > max) max = track.getLength();
             }
@@ -51,14 +38,16 @@ namespace DNATagger
 
 
 
-        private void addTrack(SequenceTrackAlt track){
+        private void addTrack(SequenceTrack track){
+            if (tracks.Count > 0) track.Location = new Point(0, tracks.Last().Location.Y + tracks.Last().Height + track.Font.Height * 2);
             this.tracks.Add(track);
             this.trackSelector.Items.Add(track);
+            canvasPanel.Controls.Add(track);
         }
 
 
 
-        private void dropTrack(SequenceTrackAlt track){
+        private void dropTrack(SequenceTrack track){
             this.trackSelector.Items.Remove(track);
             tracks.Remove(track);
             refreshEditor();
@@ -70,11 +59,12 @@ namespace DNATagger
 
         public void refreshEditor() {
             canvasPanel.Invalidate();
+            foreach (Control ctrl in canvasPanel.Controls) ctrl.Invalidate();
         }
 
 
 
-        private void drawTracks(){
+        /*private void drawTracks(){
             calculateBarPositions();
             foreach (SequenceTrackAlt track in tracks) {
                 track.draw(canvasPanel, font, (showNucleotideLettersToolStripMenuItem.Checked && zoom == 1));
@@ -88,11 +78,11 @@ namespace DNATagger
                 if (showAntisenseStrandToolStripMenuItem.Checked) track.setScreenPosition(y, track.getScreenHeight() + font.Height);
                 drawTrack(track, y);
                 y += track.getScreenHeight() + 2*font.Height;
-            } */
-        }
+            } 
+        }*/
 
 
-
+        /*
         private void calculateBarPositions(){
             int y = 10;
             int scrollOffset = scrollbarCanvasX.Value * (int)font.Size;
@@ -118,7 +108,7 @@ namespace DNATagger
                     y += font.Height * 4;
                 }
             }
-        }
+        }*/
 
 
         /*
@@ -197,9 +187,8 @@ namespace DNATagger
 
         private void OnAddTestSequence(object sender, EventArgs e)
         {
-            addTrack(new SequenceTrackAlt(new DNASequenceAlt(">Testsequenz\nACGT", src : "System Test")));
+            addTrack(new SequenceTrack(new DNASequence(">Testsequenz\nACGT", src : "System Test")));
             refreshEditor();
-            updateScrollbars();
         }
 
 
@@ -208,17 +197,16 @@ namespace DNATagger
         {
             openFileDialog.Filter = "Fasta File|*.fasta";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            List<DNASequenceAlt> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
-            addTrack(new SequenceTrackAlt(readSeqs));
+            List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
+            addTrack(new SequenceTrack(readSeqs));
             refreshEditor();
-            updateScrollbars();
         }
 
 
 
         private void OnDrawCanvas(object sender, PaintEventArgs e)
         {
-            drawTracks();
+            //drawTracks();
         }
 
 
@@ -226,8 +214,8 @@ namespace DNATagger
         private void OnClickCanvas(object sender, MouseEventArgs e)
         {
             Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
-            foreach (SequenceTrackAlt track in tracks){
-                if (track.isOnTrack(e.Y)) trackSelector.SelectedItem = track;
+            foreach (SequenceTrack track in tracks){
+                //if (track.isOnTrack(e.Y)) trackSelector.SelectedItem = track;
             }
             refreshEditor();
         }
@@ -236,25 +224,6 @@ namespace DNATagger
 
         private void OnResize(object sender, EventArgs e)
         {
-            canvas.Dispose();
-            canvas = canvasPanel.CreateGraphics();
-            refreshEditor();
-            updateScrollbars();
-        }
-
-
-
-        private void OnScroll(object sender, EventArgs e)
-        {
-            //drawSequences();
-            //refreshEditor();
-        }
-
-
-
-        private void OnScroll(object sender, ScrollEventArgs e)
-        {
-            drawTracks();
             refreshEditor();
         }
 
@@ -268,17 +237,9 @@ namespace DNATagger
 
         private void OnDeleteTrack(object sender, EventArgs e) {
             if (MessageBox.Show("Are you sure you want to delete this track and all contained nucleotide sequences?", "Delete Track", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                dropTrack((SequenceTrackAlt)trackSelector.SelectedItem);
+                dropTrack((SequenceTrack)trackSelector.SelectedItem);
         }
 
         #endregion
-
-        private void label3_Click(object sender, EventArgs e) {
-
-        }
-
-        private void WindowMain_Load(object sender, EventArgs e) {
-            Controls.Add(new TextBar("sample text"));
-        }
     }
 }

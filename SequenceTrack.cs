@@ -38,16 +38,17 @@ namespace DNATagger {
 
         public void addSequence(DNASequence seq) {
             seq.track = this;
-            seq.Location = new Point(getEndPosition(), this.Location.Y + this.Font.Height);
+            seq.Location = new Point(getEndPosition(), 0);
             this.sequences.Add(seq);
-            this.Controls.Add(seq);
+            this.barContainer.Controls.Add(seq);
         }
 
 
 
         public int getEndPosition(){
-            if (sequences.Count() == 0) return antisenseLabel.Location.X + antisenseLabel.Width;
-            else return sequences.Last().Location.X + sequences.Last().Width;
+            int pos = 0;
+            foreach (DNASequence seq in sequences) pos += seq.Width;
+            return pos;
         }
 
 
@@ -76,6 +77,11 @@ namespace DNATagger {
 
         public override String ToString() {
             return this.header;
+        }
+
+        private void OnDraw(object sender, PaintEventArgs e) {
+            Width = Parent.Width;
+            barContainer.Width = Width;
         }
     }
 }
