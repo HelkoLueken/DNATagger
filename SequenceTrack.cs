@@ -45,6 +45,25 @@ namespace DNATagger {
 
 
 
+        public void adjustToZoom(int zoom){
+            int lastEnd = 0;
+            foreach (DNASequence seq in sequences){
+                seq.adjustToZoom(zoom);
+                seq.Location = new Point(lastEnd, 0);
+                lastEnd = seq.Location.X + seq.Width;
+            }
+
+
+            /*for (int i = sequences.Count() - 1; i > 0; i--){
+                sequences.ElementAt(i).adjustToZoom(zoom);
+                if (i >= sequences.Count() - 1) sequences.ElementAt(i).Location = new Point(0, 0);
+                else sequences.ElementAt(i).Location = new Point(sequences.ElementAt(i+1).Location.X + sequences.ElementAt(i+1).Width, 0);
+                
+            }*/
+        }
+
+
+
         public int getEndPosition(){
             int pos = 0;
             foreach (DNASequence seq in sequences) pos += seq.Width;
@@ -81,7 +100,7 @@ namespace DNATagger {
 
         private void OnDraw(object sender, PaintEventArgs e) {
             Width = Parent.Width;
-            barContainer.Width = Width;
+            barContainer.Width = Width - antisenseLabel.Width;
         }
     }
 }

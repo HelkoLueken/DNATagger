@@ -54,9 +54,13 @@ namespace DNATagger
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.zoomRegler = new System.Windows.Forms.TrackBar();
+            this.groupBoxZoom = new System.Windows.Forms.GroupBox();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).BeginInit();
+            this.groupBoxZoom.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainWindowMenuStrip
@@ -162,7 +166,9 @@ namespace DNATagger
             // 
             // showAntisenseStrandToolStripMenuItem
             // 
+            this.showAntisenseStrandToolStripMenuItem.Checked = true;
             this.showAntisenseStrandToolStripMenuItem.CheckOnClick = true;
+            this.showAntisenseStrandToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showAntisenseStrandToolStripMenuItem.Name = "showAntisenseStrandToolStripMenuItem";
             this.showAntisenseStrandToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
             this.showAntisenseStrandToolStripMenuItem.Text = "Show Antisense Strand";
@@ -176,7 +182,7 @@ namespace DNATagger
             this.showNucleotideLettersToolStripMenuItem.Name = "showNucleotideLettersToolStripMenuItem";
             this.showNucleotideLettersToolStripMenuItem.Size = new System.Drawing.Size(263, 22);
             this.showNucleotideLettersToolStripMenuItem.Text = "Show Letters when zoomed in";
-            this.showNucleotideLettersToolStripMenuItem.Click += new System.EventHandler(this.OnChangeViewOptions);
+            this.showNucleotideLettersToolStripMenuItem.Click += new System.EventHandler(this.OnSwitchLetterVisibility);
             // 
             // openFileDialog
             // 
@@ -194,7 +200,6 @@ namespace DNATagger
             this.canvasPanel.Name = "canvasPanel";
             this.canvasPanel.Size = new System.Drawing.Size(1439, 483);
             this.canvasPanel.TabIndex = 1;
-            this.canvasPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDrawCanvas);
             this.canvasPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
             // 
             // groupBoxCanvas
@@ -298,12 +303,34 @@ namespace DNATagger
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.OnDeleteTrack);
             // 
+            // zoomRegler
+            // 
+            this.zoomRegler.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.zoomRegler.Location = new System.Drawing.Point(6, 22);
+            this.zoomRegler.Minimum = 1;
+            this.zoomRegler.Name = "zoomRegler";
+            this.zoomRegler.Size = new System.Drawing.Size(269, 45);
+            this.zoomRegler.TabIndex = 7;
+            this.zoomRegler.Value = 1;
+            this.zoomRegler.ValueChanged += new System.EventHandler(this.OnChangeZoom);
+            // 
+            // groupBoxZoom
+            // 
+            this.groupBoxZoom.Controls.Add(this.zoomRegler);
+            this.groupBoxZoom.Location = new System.Drawing.Point(1185, 139);
+            this.groupBoxZoom.Name = "groupBoxZoom";
+            this.groupBoxZoom.Size = new System.Drawing.Size(278, 71);
+            this.groupBoxZoom.TabIndex = 8;
+            this.groupBoxZoom.TabStop = false;
+            this.groupBoxZoom.Text = "Zoom";
+            // 
             // WindowMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1475, 723);
+            this.Controls.Add(this.groupBoxZoom);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxCanvas);
@@ -319,6 +346,9 @@ namespace DNATagger
             this.groupBoxCanvas.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).EndInit();
+            this.groupBoxZoom.ResumeLayout(false);
+            this.groupBoxZoom.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -351,6 +381,8 @@ namespace DNATagger
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label tagSelector;
         private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TrackBar zoomRegler;
+        private System.Windows.Forms.GroupBox groupBoxZoom;
     }
 }
 

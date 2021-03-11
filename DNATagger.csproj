@@ -54,16 +54,13 @@
     <Compile Include="DNASequence.Designer.cs">
       <DependentUpon>DNASequence.cs</DependentUpon>
     </Compile>
-    <Compile Include="DNASequenceAlt.cs" />
     <Compile Include="FileHandler.cs" />
-    <Compile Include="SequenceTagAlt.cs" />
     <Compile Include="SequenceTrack.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="SequenceTrack.Designer.cs">
       <DependentUpon>SequenceTrack.cs</DependentUpon>
     </Compile>
-    <Compile Include="SequenceTrackAlt.cs" />
     <Compile Include="TextBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
