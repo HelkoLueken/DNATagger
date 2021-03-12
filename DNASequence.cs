@@ -11,15 +11,13 @@ using System.Windows.Forms;
 namespace DNATagger {
     public partial class DNASequence : UserControl {
 
-        private static int letterWidth = 24;
+        private static int letterWidth = 24; //Pixelbreite pro Basenlänge
         private char[] sense;
         private char[] antisense;
         private int offsetSense = 0;
         private int offsetAntisense = 0;
         private String _src;
         private SequenceTrack _track;
-        private Panel senseBar;
-        private Panel antisenseBar;
         private bool ShowLetters = true;
         //private List<SequenceTag> = new List<SequenceTag>();
 
@@ -31,7 +29,10 @@ namespace DNATagger {
 
         public String header {
             get { return this.Name; }
-            set { this.Name = value; }
+            set {
+                this.Name = value;
+                headerLabel.Text = value;
+            }
         }
 
         public String src{ 
@@ -59,7 +60,7 @@ namespace DNATagger {
             }
             this.src = src;
             createAntisense();
-            createBars();
+            Width = this.getLengthTotal() * letterWidth;
         }
 
 
@@ -88,52 +89,8 @@ namespace DNATagger {
 
 
 
-        public void createBars(){
-            senseBar = new Panel();
-            senseBar.BackColor = Color.Beige;
-            Console.WriteLine(getLengthSense());
-            senseBar.Width = letterWidth * getLengthSense();
-            senseBar.Height = Font.Height;
-            senseBar.Location = new Point(offsetSense*letterWidth, 0);
-            antisenseBar = new Panel();
-            antisenseBar.BackColor = Color.Beige;
-            antisenseBar.Width = letterWidth * getLengthAntisense();
-            antisenseBar.Height = Font.Height;
-            antisenseBar.Location = new Point(offsetAntisense* letterWidth, Font.Height);
-            Controls.Add(senseBar);
-            Controls.Add(antisenseBar);
-        }
-
-
-
-        /*public void addLetterLabels(){
-            for (int i = 0; i < sense.Length; i++){
-                Label label = new Label();
-                label.Font = Font;
-                label.Text = sense[i].ToString();
-                label.Location = new Point(letterWidth * i, 0);
-                label.AutoSize = true;
-                label.BackColor = Color.Beige;
-                senseBar.Controls.Add(label);
-            }
-            for (int i = 0; i < antisense.Length; i++) {
-                Label label = new Label();
-                label.Font = Font;
-                label.Text = antisense[i].ToString();
-                label.Location = new Point(letterWidth * i, 0);
-                label.AutoSize = true;
-                label.BackColor = Color.Beige;
-                antisenseBar.Controls.Add(label);
-            }
-        }*/
-
-
-
         public void adjustToZoom(int zoom){
-            senseBar.Location = new Point(offsetSense*letterWidth/zoom, 0);
-            senseBar.Width = letterWidth * getLengthSense() / zoom;
-            antisenseBar.Location = new Point(offsetAntisense*letterWidth, Font.Height);
-            antisenseBar.Width = letterWidth * getLengthAntisense() / zoom;
+            Width = letterWidth * getLengthSense() / zoom;
         }
 
 
@@ -185,43 +142,9 @@ namespace DNATagger {
         }
 
         private void OnClick(object sender, MouseEventArgs e) {
-            
-        }
-
-        private void OnDraw(object sender, PaintEventArgs e) {
-            if (senseBar.Width == getLengthSense()*letterWidth && showLetters){
-                Graphics cxt = senseBar.CreateGraphics();
-                for (int i = 0; i < sense.Length; i++) {
-                    if (i * letterWidth < Parent.AutoScrollOffset.X || i * letterWidth > Parent.AutoScrollOffset.X +  Parent.Width) continue;
-                    cxt.DrawString(sense[i].ToString(), Font, Brushes.Black, i*letterWidth, 0);
-                }
-                cxt = antisenseBar.CreateGraphics();
-                for (int i = 0; i < antisense.Length; i++) {
-                    if (i * letterWidth < Parent.AutoScrollOffset.X || i * letterWidth > Parent.Location.X + Parent.Width) continue;
-                    cxt.DrawString(antisense[i].ToString(), Font, Brushes.Black, i * letterWidth, 0);
-                }
-                cxt.Dispose();
-            }
+            SequenceTrack trk = (SequenceTrack)Parent.Parent;
+            trk.select();
         }
     }
 }
-/*class DNASequenceAlt
-    {
-        public void addTag(String label, int start, int end, Brush color) {
-            this.tags.Add(new SequenceTagAlt(label, start, end, color));
-        }
 
-
-
-        public int getTagRows(){ // Hier muss noch erweitert werden für Tags!!!!
-            int h = 0;
-
-            return h;
-        }
-
-
-
-        public static Boolean isValidDNASequence(String seq) {
-            return true;
-        }
-    }*/

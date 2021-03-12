@@ -61,11 +61,11 @@
     <Compile Include="SequenceTrack.Designer.cs">
       <DependentUpon>SequenceTrack.cs</DependentUpon>
     </Compile>
-    <Compile Include="TextBar.cs">
+    <Compile Include="TrackMarker.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="TextBar.Designer.cs">
-      <DependentUpon>TextBar.cs</DependentUpon>
+    <Compile Include="TrackMarker.Designer.cs">
+      <DependentUpon>TrackMarker.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowMain.cs">
       <SubType>Form</SubType>
@@ -90,8 +90,8 @@
     <EmbeddedResource Include="SequenceTrack.resx">
       <DependentUpon>SequenceTrack.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TextBar.resx">
-      <DependentUpon>TextBar.cs</DependentUpon>
+    <EmbeddedResource Include="TrackMarker.resx">
+      <DependentUpon>TrackMarker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WindowMain.resx">
       <DependentUpon>WindowMain.cs</DependentUpon>

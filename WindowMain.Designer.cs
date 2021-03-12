@@ -44,18 +44,19 @@ namespace DNATagger
             this.showAntisenseStrandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showNucleotideLettersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.canvasPanel = new System.Windows.Forms.Panel();
+            this.panelEditor = new System.Windows.Forms.Panel();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.trackSelector = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.tagSelector = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.zoomRegler = new System.Windows.Forms.TrackBar();
             this.groupBoxZoom = new System.Windows.Forms.GroupBox();
+            this.panelSequenceViewer = new System.Windows.Forms.Panel();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -188,63 +189,75 @@ namespace DNATagger
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
-            // canvasPanel
+            // panelEditor
             // 
-            this.canvasPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.panelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.canvasPanel.AutoScroll = true;
-            this.canvasPanel.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.canvasPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.canvasPanel.Location = new System.Drawing.Point(6, 22);
-            this.canvasPanel.Name = "canvasPanel";
-            this.canvasPanel.Size = new System.Drawing.Size(1439, 483);
-            this.canvasPanel.TabIndex = 1;
-            this.canvasPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
+            this.panelEditor.AutoScroll = true;
+            this.panelEditor.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelEditor.Location = new System.Drawing.Point(6, 22);
+            this.panelEditor.Name = "panelEditor";
+            this.panelEditor.Size = new System.Drawing.Size(1439, 455);
+            this.panelEditor.TabIndex = 1;
+            this.panelEditor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
             // 
             // groupBoxCanvas
             // 
             this.groupBoxCanvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxCanvas.Controls.Add(this.canvasPanel);
-            this.groupBoxCanvas.Location = new System.Drawing.Point(14, 203);
+            this.groupBoxCanvas.Controls.Add(this.panelEditor);
+            this.groupBoxCanvas.Location = new System.Drawing.Point(14, 231);
             this.groupBoxCanvas.Name = "groupBoxCanvas";
-            this.groupBoxCanvas.Size = new System.Drawing.Size(1449, 508);
+            this.groupBoxCanvas.Size = new System.Drawing.Size(1449, 480);
             this.groupBoxCanvas.TabIndex = 2;
             this.groupBoxCanvas.TabStop = false;
-            this.groupBoxCanvas.Text = "Sequence Viewer";
+            this.groupBoxCanvas.Text = "Editor";
             // 
             // trackSelector
             // 
             this.trackSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackSelector.FormattingEnabled = true;
+            this.trackSelector.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.trackSelector.Location = new System.Drawing.Point(7, 27);
             this.trackSelector.Name = "trackSelector";
-            this.trackSelector.Size = new System.Drawing.Size(339, 23);
+            this.trackSelector.Size = new System.Drawing.Size(230, 23);
             this.trackSelector.TabIndex = 4;
             this.trackSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.tagSelector);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.sequenceSelector);
             this.groupBox1.Controls.Add(this.trackSelector);
-            this.groupBox1.Location = new System.Drawing.Point(14, 31);
+            this.groupBox1.Location = new System.Drawing.Point(14, 139);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(351, 155);
+            this.groupBox1.Size = new System.Drawing.Size(1165, 86);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.Location = new System.Drawing.Point(140, 56);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(97, 27);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Delete Track";
+            this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.OnDeleteTrack);
             // 
             // tagSelector
             // 
             this.tagSelector.AutoSize = true;
-            this.tagSelector.Location = new System.Drawing.Point(9, 98);
+            this.tagSelector.Location = new System.Drawing.Point(476, 8);
             this.tagSelector.Name = "tagSelector";
             this.tagSelector.Size = new System.Drawing.Size(91, 15);
             this.tagSelector.TabIndex = 5;
@@ -253,7 +266,7 @@ namespace DNATagger
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 52);
+            this.label2.Location = new System.Drawing.Point(240, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(126, 15);
             this.label2.TabIndex = 5;
@@ -273,10 +286,9 @@ namespace DNATagger
             this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(7, 117);
+            this.comboBox1.Location = new System.Drawing.Point(479, 27);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(339, 23);
+            this.comboBox1.Size = new System.Drawing.Size(230, 23);
             this.comboBox1.TabIndex = 4;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
             // 
@@ -285,23 +297,11 @@ namespace DNATagger
             this.sequenceSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sequenceSelector.FormattingEnabled = true;
-            this.sequenceSelector.Location = new System.Drawing.Point(7, 70);
+            this.sequenceSelector.Location = new System.Drawing.Point(243, 27);
             this.sequenceSelector.Name = "sequenceSelector";
-            this.sequenceSelector.Size = new System.Drawing.Size(339, 23);
+            this.sequenceSelector.Size = new System.Drawing.Size(230, 23);
             this.sequenceSelector.TabIndex = 4;
             this.sequenceSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(409, 58);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(97, 27);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Delete Track";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.OnDeleteTrack);
             // 
             // zoomRegler
             // 
@@ -324,14 +324,23 @@ namespace DNATagger
             this.groupBoxZoom.TabStop = false;
             this.groupBoxZoom.Text = "Zoom";
             // 
+            // panelSequenceViewer
+            // 
+            this.panelSequenceViewer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panelSequenceViewer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelSequenceViewer.Location = new System.Drawing.Point(20, 33);
+            this.panelSequenceViewer.Name = "panelSequenceViewer";
+            this.panelSequenceViewer.Size = new System.Drawing.Size(1439, 100);
+            this.panelSequenceViewer.TabIndex = 10;
+            // 
             // WindowMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1475, 723);
+            this.Controls.Add(this.panelSequenceViewer);
             this.Controls.Add(this.groupBoxZoom);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxCanvas);
             this.Controls.Add(this.mainWindowMenuStrip);
@@ -369,7 +378,7 @@ namespace DNATagger
         private System.Windows.Forms.ToolStripMenuItem loadFastaFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Panel canvasPanel;
+        private System.Windows.Forms.Panel panelEditor;
         private System.Windows.Forms.GroupBox groupBoxCanvas;
         private System.Windows.Forms.ToolStripMenuItem showAntisenseStrandToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showNucleotideLettersToolStripMenuItem;
@@ -383,6 +392,7 @@ namespace DNATagger
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TrackBar zoomRegler;
         private System.Windows.Forms.GroupBox groupBoxZoom;
+        private System.Windows.Forms.Panel panelSequenceViewer;
     }
 }
 

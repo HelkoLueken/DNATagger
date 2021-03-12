@@ -37,11 +37,10 @@ namespace DNATagger
 
 
         private void addTrack(SequenceTrack track){
-            if (tracks.Count > 0) track.Location = new Point(0, tracks.Last().Location.Y + tracks.Last().Height + track.Font.Height * 2);
             this.tracks.Add(track);
+            panelEditor.Controls.Add(track);
             this.trackSelector.Items.Add(track);
-            canvasPanel.Controls.Add(track);
-            if (!showNucleotideLettersToolStripMenuItem.Checked) hideLetters();
+            arrangeTracks();
         }
 
 
@@ -49,7 +48,14 @@ namespace DNATagger
         private void dropTrack(SequenceTrack track){
             this.trackSelector.Items.Remove(track);
             tracks.Remove(track);
+            panelEditor.Controls.Remove(track);
             refreshEditor();
+        }
+
+
+
+        public void select(SequenceTrack track){
+            trackSelector.SelectedItem = track;
         }
 
         #endregion
@@ -59,8 +65,19 @@ namespace DNATagger
         #region Graphische Darstellungen
 
         public void refreshEditor() {
-            canvasPanel.Invalidate();
-            foreach (Control ctrl in canvasPanel.Controls) ctrl.Invalidate();
+            arrangeTracks();
+            panelEditor.Invalidate();
+            foreach (Control ctrl in panelEditor.Controls) ctrl.Invalidate();
+        }
+
+
+
+        public void arrangeTracks(){
+            int y = 0;
+            foreach (SequenceTrack track in tracks){
+                track.Location = new Point(0, y);
+                y += track.Height + track.Font.Height * 2;
+            }
         }
 
 
@@ -109,7 +126,7 @@ namespace DNATagger
         {
             Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
             foreach (SequenceTrack track in tracks){
-                //if (track.isOnTrack(e.Y)) trackSelector.SelectedItem = track;
+                
             }
             refreshEditor();
         }
