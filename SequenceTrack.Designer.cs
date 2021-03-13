@@ -28,7 +28,10 @@ namespace DNATagger {
             this.barContainer = new System.Windows.Forms.Panel();
             this.sequenceLabel = new System.Windows.Forms.Label();
             this.tagLabel = new System.Windows.Forms.Label();
-            this.trackMarker = new DNATagger.TrackMarker();
+            this.positionLabel = new System.Windows.Forms.Label();
+            this.markerPrim = new System.Windows.Forms.Panel();
+            this.markerSek = new System.Windows.Forms.Panel();
+            this.markerBetween = new System.Windows.Forms.Panel();
             this.barContainer.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,8 +55,10 @@ namespace DNATagger {
             | System.Windows.Forms.AnchorStyles.Right)));
             this.barContainer.AutoScroll = true;
             this.barContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.barContainer.Controls.Add(this.trackMarker);
-            this.barContainer.Location = new System.Drawing.Point(92, 24);
+            this.barContainer.Controls.Add(this.markerBetween);
+            this.barContainer.Controls.Add(this.markerSek);
+            this.barContainer.Controls.Add(this.markerPrim);
+            this.barContainer.Location = new System.Drawing.Point(92, 48);
             this.barContainer.Name = "barContainer";
             this.barContainer.Size = new System.Drawing.Size(985, 66);
             this.barContainer.TabIndex = 2;
@@ -67,7 +72,7 @@ namespace DNATagger {
             this.sequenceLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.sequenceLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequenceLabel.ForeColor = System.Drawing.Color.Black;
-            this.sequenceLabel.Location = new System.Drawing.Point(0, 24);
+            this.sequenceLabel.Location = new System.Drawing.Point(0, 48);
             this.sequenceLabel.Name = "sequenceLabel";
             this.sequenceLabel.Size = new System.Drawing.Size(92, 24);
             this.sequenceLabel.TabIndex = 0;
@@ -82,22 +87,59 @@ namespace DNATagger {
             this.tagLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.tagLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tagLabel.ForeColor = System.Drawing.Color.Black;
-            this.tagLabel.Location = new System.Drawing.Point(0, 48);
+            this.tagLabel.Location = new System.Drawing.Point(0, 72);
             this.tagLabel.Name = "tagLabel";
-            this.tagLabel.Size = new System.Drawing.Size(92, 40);
+            this.tagLabel.Size = new System.Drawing.Size(92, 44);
             this.tagLabel.TabIndex = 0;
             this.tagLabel.Text = "Tags";
             this.tagLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
             // 
-            // trackMarker
+            // positionLabel
             // 
-            this.trackMarker.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.trackMarker.BackColor = System.Drawing.Color.Transparent;
-            this.trackMarker.Location = new System.Drawing.Point(0, 3);
-            this.trackMarker.Name = "trackMarker";
-            this.trackMarker.Size = new System.Drawing.Size(102, 61);
-            this.trackMarker.TabIndex = 0;
-            this.trackMarker.Visible = false;
+            this.positionLabel.AutoSize = true;
+            this.positionLabel.BackColor = System.Drawing.Color.LightBlue;
+            this.positionLabel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.positionLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.positionLabel.ForeColor = System.Drawing.Color.Black;
+            this.positionLabel.Location = new System.Drawing.Point(0, 24);
+            this.positionLabel.Name = "positionLabel";
+            this.positionLabel.Size = new System.Drawing.Size(92, 24);
+            this.positionLabel.TabIndex = 0;
+            this.positionLabel.Text = "Position";
+            this.positionLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
+            // 
+            // markerPrim
+            // 
+            this.markerPrim.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.markerPrim.BackColor = System.Drawing.Color.Gold;
+            this.markerPrim.Location = new System.Drawing.Point(0, 0);
+            this.markerPrim.Margin = new System.Windows.Forms.Padding(0);
+            this.markerPrim.Name = "markerPrim";
+            this.markerPrim.Size = new System.Drawing.Size(6, 66);
+            this.markerPrim.TabIndex = 0;
+            this.markerPrim.Visible = false;
+            // 
+            // markerSek
+            // 
+            this.markerSek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.markerSek.BackColor = System.Drawing.Color.Gold;
+            this.markerSek.Location = new System.Drawing.Point(52, 0);
+            this.markerSek.Margin = new System.Windows.Forms.Padding(0);
+            this.markerSek.Name = "markerSek";
+            this.markerSek.Size = new System.Drawing.Size(6, 68);
+            this.markerSek.TabIndex = 0;
+            this.markerSek.Visible = false;
+            // 
+            // markerBetween
+            // 
+            this.markerBetween.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.markerBetween.BackColor = System.Drawing.Color.Gold;
+            this.markerBetween.Location = new System.Drawing.Point(6, 0);
+            this.markerBetween.Margin = new System.Windows.Forms.Padding(0);
+            this.markerBetween.Name = "markerBetween";
+            this.markerBetween.Size = new System.Drawing.Size(40, 2);
+            this.markerBetween.TabIndex = 0;
+            this.markerBetween.Visible = false;
             // 
             // SequenceTrack
             // 
@@ -107,11 +149,12 @@ namespace DNATagger {
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Controls.Add(this.barContainer);
             this.Controls.Add(this.tagLabel);
+            this.Controls.Add(this.positionLabel);
             this.Controls.Add(this.sequenceLabel);
             this.Controls.Add(this.headerLabel);
             this.Location = new System.Drawing.Point(0, 20);
             this.Name = "SequenceTrack";
-            this.Size = new System.Drawing.Size(1080, 92);
+            this.Size = new System.Drawing.Size(1080, 114);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDraw);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
@@ -127,6 +170,9 @@ namespace DNATagger {
         private System.Windows.Forms.Panel barContainer;
         private System.Windows.Forms.Label sequenceLabel;
         private System.Windows.Forms.Label tagLabel;
-        private TrackMarker trackMarker;
+        private System.Windows.Forms.Label positionLabel;
+        private System.Windows.Forms.Panel markerSek;
+        private System.Windows.Forms.Panel markerPrim;
+        private System.Windows.Forms.Panel markerBetween;
     }
 }

@@ -112,32 +112,39 @@ namespace DNATagger {
                 track.BackColor = Color.DimGray;
                 track.headerLabel.BackColor = Color.Blue;
                 track.headerLabel.ForeColor = Color.White;
-                track.trackMarker.Visible = false;
+                track.markerPrim.Visible = false;
+                track.markerSek.Visible = false;
+                track.markerBetween.Visible = false;
             }
             this.BackColor = Color.LightGray;
             headerLabel.BackColor = Color.Yellow;
             headerLabel.ForeColor = Color.Black;
-            trackMarker.Visible = true;
+            markerPrim.Visible = true;
+            markerSek.Visible = true;
+            markerBetween.Visible = true;
         }
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
             select();
-            trackMarker.Width = 6;
-            trackMarker.Location = new Point(e.X,0);
+            markerSek.Visible = false;
+            markerBetween.Visible = false;
+            markerPrim.Location = new Point(e.X,0);
         }
+
+
 
         private void OnMouseUp(object sender, MouseEventArgs e) {
             if (BackColor == Color.DimGray) return; //Wenn nicht auch auf diesem Track die Maus runtergedrücktwurde, dieser Track also ausgewählt ist
-            
-            if (e.X < trackMarker.Location.X){
-                int oldPos = trackMarker.Location.X;
-                trackMarker.Location = new Point(e.X, 0);
-                trackMarker.Width = oldPos - e.X + 3;
-            }
+            if (e.X > markerPrim.Location.X) markerSek.Location = new Point(e.X, 0);
             else{
-                trackMarker.Width = e.X - trackMarker.Location.X + 3;
+                markerSek.Location = new Point(markerPrim.Location.X, 0);
+                markerPrim.Location = new Point(e.X, 0);
             }
-            trackMarker.Invalidate();
+            markerBetween.Location = new Point(markerPrim.Location.X, 0);
+            markerBetween.Width = markerSek.Location.X - markerPrim.Location.X;
+            markerSek.Visible = true;
+            markerBetween.Visible = true;
+            Invalidate();
         }
     }
 }
