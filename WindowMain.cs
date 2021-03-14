@@ -15,6 +15,11 @@ namespace DNATagger
     {
         List<SequenceTrack> tracks = new List<SequenceTrack>();
 
+        public int zoom{ 
+            get{ return (int)Math.Pow(3, zoomRegler.Value - 1); }
+            set{ zoomRegler.Value = value; }
+        }
+
 
 
         #region Datenverwaltung
@@ -37,6 +42,7 @@ namespace DNATagger
 
 
         private void addTrack(SequenceTrack track){
+            track.window = this;
             this.tracks.Add(track);
             panelEditor.Controls.Add(track);
             this.trackSelector.Items.Add(track);
@@ -83,17 +89,13 @@ namespace DNATagger
 
 
         public void hideLetters(){ 
-            foreach (SequenceTrack track in tracks){
-                foreach (DNASequence seq in track.getSequences()) seq.showLetters = false;
-            }
+
         }
 
 
 
         public void showLetters() {
-            foreach (SequenceTrack track in tracks) {
-                foreach (DNASequence seq in track.getSequences()) seq.showLetters = true; ;
-            }
+
         }
 
 
@@ -164,10 +166,16 @@ namespace DNATagger
         private void OnChangeZoom(object sender, EventArgs e) {
             if (zoomRegler.Value == 1 && showNucleotideLettersToolStripMenuItem.Checked) showLetters();
             else hideLetters();
-            foreach (SequenceTrack track in tracks) track.adjustToZoom((int)Math.Pow(3, zoomRegler.Value -1));
+            foreach (SequenceTrack track in tracks) track.adjustToZoom();
             refreshEditor();
         }
 
         #endregion
+
+        private void OnAddTag(object sender, EventArgs e) {
+            if (trackSelector.SelectedItem == null) return;
+            SequenceTrack track = (SequenceTrack)trackSelector.SelectedItem;
+            track.addTag("TestTag", 0, 100, Color.Green);
+        }
     }
 }

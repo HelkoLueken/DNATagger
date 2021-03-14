@@ -1,6 +1,6 @@
 ﻿
 namespace DNATagger {
-    partial class DNASequence {
+    partial class SequenceTag {
         /// <summary> 
         /// Erforderliche Designervariable.
         /// </summary>
@@ -32,23 +32,21 @@ namespace DNATagger {
             this.headerLabel.AutoSize = true;
             this.headerLabel.Location = new System.Drawing.Point(0, 0);
             this.headerLabel.Name = "headerLabel";
-            this.headerLabel.Size = new System.Drawing.Size(120, 22);
+            this.headerLabel.Size = new System.Drawing.Size(70, 22);
             this.headerLabel.TabIndex = 0;
-            this.headerLabel.Text = "headerLabel";
+            this.headerLabel.Text = "header";
             this.headerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
             // 
-            // DNASequence
+            // SequenceTag
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.BackColor = System.Drawing.Color.Beige;
-            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.BackColor = System.Drawing.Color.YellowGreen;
             this.Controls.Add(this.headerLabel);
             this.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "DNASequence";
-            this.Size = new System.Drawing.Size(200, 24);
+            this.Name = "SequenceTag";
+            this.Size = new System.Drawing.Size(100, 24);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -18,8 +18,6 @@ namespace DNATagger {
         private int offsetAntisense = 0;
         private String _src;
         private SequenceTrack _track;
-        private bool ShowLetters = true;
-        //private List<SequenceTag> = new List<SequenceTag>();
 
         public SequenceTrack track{ 
             get{ return _track; }
@@ -38,11 +36,6 @@ namespace DNATagger {
         public String src{ 
             get{ return _src; }
             set{ _src = value; }
-        }
-
-        public bool showLetters{ 
-            get{ return ShowLetters; }
-            set { ShowLetters = value; }
         }
 
 
@@ -85,12 +78,6 @@ namespace DNATagger {
                 if (this.sense[i] == 'N') this.antisense[i] = 'N';
                 if (this.antisense[i] == 0) this.antisense[i] = '?';
             }
-        }
-
-
-
-        public void adjustToZoom(int zoom){
-            Width = letterWidth * getLengthSense() / zoom;
         }
 
 
@@ -142,8 +129,7 @@ namespace DNATagger {
         }
 
         private void OnClick(object sender, MouseEventArgs e) {
-            SequenceTrack trk = (SequenceTrack)Parent.Parent;
-            trk.select();
+            track.select();
         }
     }
 }
