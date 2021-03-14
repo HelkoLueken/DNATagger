@@ -43,6 +43,7 @@ namespace DNATagger {
             this.headerLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.headerLabel.ForeColor = System.Drawing.Color.White;
             this.headerLabel.Location = new System.Drawing.Point(0, 0);
+            this.headerLabel.Margin = new System.Windows.Forms.Padding(0);
             this.headerLabel.Name = "headerLabel";
             this.headerLabel.Size = new System.Drawing.Size(72, 24);
             this.headerLabel.TabIndex = 0;
@@ -64,8 +65,8 @@ namespace DNATagger {
             this.barContainer.Size = new System.Drawing.Size(990, 66);
             this.barContainer.TabIndex = 2;
             this.barContainer.SizeChanged += new System.EventHandler(this.OnChangeBarContainerSize);
-            this.barContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
-            this.barContainer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
+            this.barContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverBarContainer);
+            this.barContainer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverBarContainer);
             // 
             // markerBetween
             // 
@@ -108,6 +109,7 @@ namespace DNATagger {
             this.sequenceLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sequenceLabel.ForeColor = System.Drawing.Color.Black;
             this.sequenceLabel.Location = new System.Drawing.Point(0, 48);
+            this.sequenceLabel.Margin = new System.Windows.Forms.Padding(0);
             this.sequenceLabel.Name = "sequenceLabel";
             this.sequenceLabel.Size = new System.Drawing.Size(92, 24);
             this.sequenceLabel.TabIndex = 0;
@@ -123,6 +125,7 @@ namespace DNATagger {
             this.tagLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tagLabel.ForeColor = System.Drawing.Color.Black;
             this.tagLabel.Location = new System.Drawing.Point(0, 72);
+            this.tagLabel.Margin = new System.Windows.Forms.Padding(0);
             this.tagLabel.Name = "tagLabel";
             this.tagLabel.Size = new System.Drawing.Size(92, 44);
             this.tagLabel.TabIndex = 0;
@@ -137,6 +140,7 @@ namespace DNATagger {
             this.positionLabel.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.positionLabel.ForeColor = System.Drawing.Color.Black;
             this.positionLabel.Location = new System.Drawing.Point(0, 24);
+            this.positionLabel.Margin = new System.Windows.Forms.Padding(0);
             this.positionLabel.Name = "positionLabel";
             this.positionLabel.Size = new System.Drawing.Size(92, 24);
             this.positionLabel.TabIndex = 0;
@@ -159,8 +163,8 @@ namespace DNATagger {
             this.Name = "SequenceTrack";
             this.Size = new System.Drawing.Size(1080, 114);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDraw);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverBG);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverBG);
             this.barContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -131,6 +131,14 @@ namespace DNATagger {
         private void OnClick(object sender, MouseEventArgs e) {
             track.select();
         }
+
+        private void OnMouseDown(object sender, MouseEventArgs e) {
+            track.setFirstMarker(e.X + Location.X);
+        }
+
+        private void OnMouseUp(object sender, MouseEventArgs e) {
+            track.setSecondMarker(e.X + Location.X);
+        }
     }
 }
 

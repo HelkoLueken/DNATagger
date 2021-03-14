@@ -63,5 +63,15 @@ namespace DNATagger {
             if (track == null) return;
             track.select();
         }
+
+
+
+        private void OnMouseDown(object sender, MouseEventArgs e) {
+            track.setFirstMarker(e.X + Location.X);
+        }
+
+        private void OnMouseUp(object sender, MouseEventArgs e) {
+            track.setSecondMarker(e.X + Location.X);
+        }
     }
 }

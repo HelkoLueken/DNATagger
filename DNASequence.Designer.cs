@@ -31,11 +31,14 @@ namespace DNATagger {
             // 
             this.headerLabel.AutoSize = true;
             this.headerLabel.Location = new System.Drawing.Point(0, 0);
+            this.headerLabel.Margin = new System.Windows.Forms.Padding(0);
             this.headerLabel.Name = "headerLabel";
             this.headerLabel.Size = new System.Drawing.Size(120, 22);
             this.headerLabel.TabIndex = 0;
             this.headerLabel.Text = "headerLabel";
             this.headerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
+            this.headerLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            this.headerLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             // 
             // DNASequence
             // 
@@ -49,7 +52,8 @@ namespace DNATagger {
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "DNASequence";
             this.Size = new System.Drawing.Size(200, 24);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             this.ResumeLayout(false);
             this.PerformLayout();
 

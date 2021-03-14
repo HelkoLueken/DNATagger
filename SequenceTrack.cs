@@ -123,7 +123,7 @@ namespace DNATagger {
 
 
         private void OnDraw(object sender, PaintEventArgs e) {
-            Width = Parent.Width;
+            Width = Parent.Width - 4;
         }
 
 
@@ -152,34 +152,24 @@ namespace DNATagger {
             markerBetween.Visible = true;
         }
 
-        private void OnMouseDown(object sender, MouseEventArgs e) {
-            setFirstMarker(this.PointToScreen(e.Location));
-        }
 
 
 
-        public void setFirstMarker(Point pos){
+        public void setFirstMarker(int xPos){
             select();
             markerSek.Visible = false;
             markerBetween.Visible = false;
-            markerPrim.Location = new Point(barContainer.PointToClient(pos).X, 0);
+            markerPrim.Location = new Point(xPos, 0);
         }
 
 
 
-        private void OnMouseUp(object sender, MouseEventArgs e) {
+        public void setSecondMarker(int xPos){
             if (BackColor == Color.DimGray) return; //Wenn nicht auch auf diesem Track die Maus runtergedrücktwurde, dieser Track also ausgewählt ist
-            setSecondMarker(e.Location);
-        }
-
-
-
-        public void setSecondMarker(Point pos){
-            int x = barContainer.PointToClient(pos).X;
-            if (x > markerPrim.Location.X) markerSek.Location = new Point(x, 0);
+            if (xPos > markerPrim.Location.X) markerSek.Location = new Point(xPos, 0);
             else {
                 markerSek.Location = new Point(markerPrim.Location.X, 0);
-                markerPrim.Location = new Point(x, 0);
+                markerPrim.Location = new Point(xPos, 0);
             }
             markerBetween.Location = new Point(markerPrim.Location.X, 0);
             markerBetween.Width = markerSek.Location.X - markerPrim.Location.X;
@@ -192,6 +182,22 @@ namespace DNATagger {
 
         private void OnChangeBarContainerSize(object sender, EventArgs e) {
             arrangeBars();
+        }
+
+        private void OnMouseUpOverBG(object sender, MouseEventArgs e) {
+            setSecondMarker(e.X - barContainer.Location.X);
+        }
+
+        private void OnMouseDownOverBG(object sender, MouseEventArgs e) {
+            setFirstMarker(e.X - barContainer.Location.X);
+        }
+
+        private void OnMouseDownOverBarContainer(object sender, MouseEventArgs e) {
+            setFirstMarker(e.X);
+        }
+
+        private void OnMouseUpOverBarContainer(object sender, MouseEventArgs e) {
+            setSecondMarker(e.X);
         }
     }
 }
