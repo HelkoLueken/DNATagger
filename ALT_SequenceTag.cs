@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DNATagger {
-    public partial class SequenceTag : UserControl {
-        private SequenceTrack _track;
+    public partial class ALT_SequenceTag : UserControl {
+        private DNASequence _track;
         private int startPos;
         private int endPos;
 
-        public SequenceTrack track {
+        public DNASequence track {
             get { return _track; }
             set { _track = value; }
         }
@@ -37,7 +37,7 @@ namespace DNATagger {
 
 
 
-        public SequenceTag(String header, int fromPos, int toPos, Color color) {
+        public ALT_SequenceTag(String header, int fromPos, int toPos, Color color) {
             InitializeComponent();
             this.header = header;
             this.startPos = fromPos;

@@ -13,16 +13,14 @@ namespace DNATagger
 {
     public partial class WindowMain : Form
     {
-        List<SequenceTrack> tracks = new List<SequenceTrack>();
-
-        public int zoom{ 
-            get{ return (int)Math.Pow(3, zoomRegler.Value - 1); }
-            set{ zoomRegler.Value = value; }
-        }
-
-
-
         #region Datenverwaltung
+
+        List<DNASequence> tracks = new List<DNASequence>();
+
+        public int zoom {
+            get { return (int)Math.Pow(3, zoomRegler.Value - 1); }
+            set { zoomRegler.Value = value; }
+        }
         public WindowMain()
         {
             InitializeComponent();
@@ -31,36 +29,43 @@ namespace DNATagger
 
 
         public int maxTrackLength() {
+            /*
             int max = 0;
-            foreach (SequenceTrack track in tracks)
+            foreach (DNASequence track in tracks)
             {
                 if (track.getLength() > max) max = track.getLength();
             }
             return max;
+            */
+            return 0;
         }
 
 
 
-        private void addTrack(SequenceTrack track){
+        private void addTrack(DNASequence track){
+            /*
             track.window = this;
             this.tracks.Add(track);
             panelEditor.Controls.Add(track);
             this.trackSelector.Items.Add(track);
             arrangeTracks();
+            */
         }
 
 
 
-        private void dropTrack(SequenceTrack track){
+        private void dropTrack(DNASequence track){
+            /*
             this.trackSelector.Items.Remove(track);
             tracks.Remove(track);
             panelEditor.Controls.Remove(track);
             refreshEditor();
+            */
         }
 
 
 
-        public void select(SequenceTrack track){
+        public void select(DNASequence track){
             trackSelector.SelectedItem = track;
         }
 
@@ -79,11 +84,11 @@ namespace DNATagger
 
 
         public void arrangeTracks(){
-            int y = 0;
-            foreach (SequenceTrack track in tracks){
+            /*int y = 0;
+            foreach (DNASequence track in tracks){
                 track.Location = new Point(0, y);
                 y += track.Height + track.Font.Height * 2;
-            }
+            }*/
         }
 
 
@@ -106,20 +111,22 @@ namespace DNATagger
         #region Event Management
 
         private void OnAddTestSequence(object sender, EventArgs e)
-        {
-            addTrack(new SequenceTrack(new DNASequence(">Testsequenz\nACGT", src : "System Test")));
-            refreshEditor();
+        {   /*
+            addTrack(new ALT_SequenceTrack(new ALT_DNASequence(">Testsequenz\nACGT", src : "System Test")));
+            refreshEditor(); */
         }
 
 
 
         private void OnOpenFasta(object sender, EventArgs e)
         {
+            /*
             openFileDialog.Filter = "Fasta File|*.fasta|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
-            addTrack(new SequenceTrack(readSeqs));
+            List<ALT_DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
+            addTrack(new ALT_SequenceTrack(readSeqs));
             refreshEditor();
+            */
         }
 
 
@@ -127,7 +134,7 @@ namespace DNATagger
         private void OnClickCanvas(object sender, MouseEventArgs e)
         {
             Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
-            foreach (SequenceTrack track in tracks){
+            foreach (DNASequence track in tracks){
                 
             }
             refreshEditor();
@@ -150,32 +157,35 @@ namespace DNATagger
 
         private void OnDeleteTrack(object sender, EventArgs e) {
             if (MessageBox.Show("Are you sure you want to delete this track and all contained nucleotide sequences?", "Delete Track", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                dropTrack((SequenceTrack)trackSelector.SelectedItem);
+                dropTrack((DNASequence)trackSelector.SelectedItem);
         }
 
 
 
         private void OnSwitchLetterVisibility(object sender, EventArgs e) {
-            if (showNucleotideLettersToolStripMenuItem.Checked) showLetters();
+            /*if (showNucleotideLettersToolStripMenuItem.Checked) showLetters();
             else hideLetters();
-            Invalidate();
+            Invalidate(); */
         }
 
 
 
         private void OnChangeZoom(object sender, EventArgs e) {
-            if (zoomRegler.Value == 1 && showNucleotideLettersToolStripMenuItem.Checked) showLetters();
+            /*
+             * if (zoomRegler.Value == 1 && showNucleotideLettersToolStripMenuItem.Checked) showLetters();
             else hideLetters();
-            foreach (SequenceTrack track in tracks) track.adjustToZoom();
+            foreach (DNASequence track in tracks) track.adjustToZoom();
             refreshEditor();
+            */
         }
 
-        #endregion
 
         private void OnAddTag(object sender, EventArgs e) {
-            if (trackSelector.SelectedItem == null) return;
-            SequenceTrack track = (SequenceTrack)trackSelector.SelectedItem;
+            /*if (trackSelector.SelectedItem == null) return;
+            DNASequence track = (DNASequence)trackSelector.SelectedItem;
             track.addTag("TestTag", 0, 100, Color.Green);
+            */
         }
+        #endregion
     }
 }

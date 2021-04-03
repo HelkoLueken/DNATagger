@@ -1,6 +1,6 @@
-﻿
+﻿/*
 namespace DNATagger {
-    partial class SequenceTrack {
+    partial class ALT_SequenceTrack {
         /// <summary> 
         /// Erforderliche Designervariable.
         /// </summary>
@@ -183,3 +183,4 @@ namespace DNATagger {
         private System.Windows.Forms.Panel markerBetween;
     }
 }
+*/

@@ -46,24 +46,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ALT_DNASequence.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ALT_DNASequence.Designer.cs">
+      <DependentUpon>ALT_DNASequence.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ALT_SequenceTrack.cs" />
+    <Compile Include="ALT_SequenceTrack.Designer.cs">
+      <DependentUpon>ALT_SequenceTrack.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileHandler.cs" />
+    <Compile Include="ALT_SequenceTag.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ALT_SequenceTag.Designer.cs">
+      <DependentUpon>ALT_SequenceTag.cs</DependentUpon>
+    </Compile>
     <Compile Include="DNASequence.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="DNASequence.Designer.cs">
       <DependentUpon>DNASequence.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FileHandler.cs" />
-    <Compile Include="SequenceTag.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SequenceTag.Designer.cs">
-      <DependentUpon>SequenceTag.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SequenceTrack.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="SequenceTrack.Designer.cs">
-      <DependentUpon>SequenceTrack.cs</DependentUpon>
     </Compile>
     <Compile Include="WindowAddTag.cs">
       <SubType>Form</SubType>
@@ -79,8 +83,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="DNASequence.resx">
-      <DependentUpon>DNASequence.cs</DependentUpon>
+    <EmbeddedResource Include="ALT_DNASequence.resx">
+      <DependentUpon>ALT_DNASequence.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ALT_SequenceTrack.resx">
+      <DependentUpon>ALT_SequenceTrack.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -91,11 +98,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="SequenceTag.resx">
-      <DependentUpon>SequenceTag.cs</DependentUpon>
+    <EmbeddedResource Include="ALT_SequenceTag.resx">
+      <DependentUpon>ALT_SequenceTag.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SequenceTrack.resx">
-      <DependentUpon>SequenceTrack.cs</DependentUpon>
+    <EmbeddedResource Include="DNASequence.resx">
+      <DependentUpon>DNASequence.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WindowAddTag.resx">
       <DependentUpon>WindowAddTag.cs</DependentUpon>

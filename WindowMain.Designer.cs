@@ -48,6 +48,7 @@ namespace DNATagger
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.trackSelector = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonAddTag = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tagSelector = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -57,7 +58,8 @@ namespace DNATagger
             this.zoomRegler = new System.Windows.Forms.TrackBar();
             this.groupBoxZoom = new System.Windows.Forms.GroupBox();
             this.panelSequenceViewer = new System.Windows.Forms.Panel();
-            this.buttonAddTag = new System.Windows.Forms.Button();
+            this.selectStartLabel = new System.Windows.Forms.Label();
+            this.selectEndLabel = new System.Windows.Forms.Label();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -246,6 +248,17 @@ namespace DNATagger
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             // 
+            // buttonAddTag
+            // 
+            this.buttonAddTag.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonAddTag.Location = new System.Drawing.Point(479, 53);
+            this.buttonAddTag.Name = "buttonAddTag";
+            this.buttonAddTag.Size = new System.Drawing.Size(97, 27);
+            this.buttonAddTag.TabIndex = 6;
+            this.buttonAddTag.Text = "Add";
+            this.buttonAddTag.UseVisualStyleBackColor = false;
+            this.buttonAddTag.Click += new System.EventHandler(this.OnAddTag);
+            // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Control;
@@ -336,16 +349,23 @@ namespace DNATagger
             this.panelSequenceViewer.Size = new System.Drawing.Size(1439, 100);
             this.panelSequenceViewer.TabIndex = 10;
             // 
-            // buttonAddTag
+            // selectStartLabel
             // 
-            this.buttonAddTag.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonAddTag.Location = new System.Drawing.Point(479, 53);
-            this.buttonAddTag.Name = "buttonAddTag";
-            this.buttonAddTag.Size = new System.Drawing.Size(97, 27);
-            this.buttonAddTag.TabIndex = 6;
-            this.buttonAddTag.Text = "Add";
-            this.buttonAddTag.UseVisualStyleBackColor = false;
-            this.buttonAddTag.Click += new System.EventHandler(this.OnAddTag);
+            this.selectStartLabel.AutoSize = true;
+            this.selectStartLabel.Location = new System.Drawing.Point(1191, 217);
+            this.selectStartLabel.Name = "selectStartLabel";
+            this.selectStartLabel.Size = new System.Drawing.Size(98, 15);
+            this.selectStartLabel.TabIndex = 11;
+            this.selectStartLabel.Text = "startSelected";
+            // 
+            // selectEndLabel
+            // 
+            this.selectEndLabel.AutoSize = true;
+            this.selectEndLabel.Location = new System.Drawing.Point(1359, 217);
+            this.selectEndLabel.Name = "selectEndLabel";
+            this.selectEndLabel.Size = new System.Drawing.Size(84, 15);
+            this.selectEndLabel.TabIndex = 11;
+            this.selectEndLabel.Text = "endSelected";
             // 
             // WindowMain
             // 
@@ -353,6 +373,8 @@ namespace DNATagger
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1475, 723);
+            this.Controls.Add(this.selectEndLabel);
+            this.Controls.Add(this.selectStartLabel);
             this.Controls.Add(this.panelSequenceViewer);
             this.Controls.Add(this.groupBoxZoom);
             this.Controls.Add(this.groupBox1);
@@ -408,6 +430,8 @@ namespace DNATagger
         private System.Windows.Forms.GroupBox groupBoxZoom;
         private System.Windows.Forms.Panel panelSequenceViewer;
         private System.Windows.Forms.Button buttonAddTag;
+        private System.Windows.Forms.Label selectStartLabel;
+        private System.Windows.Forms.Label selectEndLabel;
     }
 }
 
