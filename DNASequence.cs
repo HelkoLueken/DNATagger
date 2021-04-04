@@ -16,20 +16,74 @@ namespace DNATagger {
         private int offsetSense = 0;
         private int offsetAntisense = 0;
         private String _src;
+        private WindowMain _window = new WindowMain();
+        
 
 
 
-        public DNASequence(){ 
-            
+
+
+        public DNASequence(String fasta, String src = "unknown") {
+            InitializeComponent();
+            String[] fastaParts = fasta.Split('\n');
+            if (fastaParts.Length == 2) {
+                header = fastaParts[0];
+                sense = fastaParts[1].ToCharArray();
+            }
+            else {
+                header = "Unnamed DNA Sequence";
+                sense = fasta.ToCharArray();
+            }
+            this.src = src;
+            createAntisense();
+            sequencePanel.Width = getLengthTotal();
         }
 
 
 
+        private void createAntisense() {
+            this.antisense = new char[this.sense.Length];
+            for (int i = 0; i < this.sense.Length; i++) {
+                if (this.sense[i] == 'A') this.antisense[i] = 'T';
+                if (this.sense[i] == 'C') this.antisense[i] = 'G';
+                if (this.sense[i] == 'G') this.antisense[i] = 'C';
+                if (this.sense[i] == 'T') this.antisense[i] = 'A';
+                if (this.sense[i] == 'R') this.antisense[i] = 'Y';
+                if (this.sense[i] == 'Y') this.antisense[i] = 'R';
+                if (this.sense[i] == 'S') this.antisense[i] = 'S';
+                if (this.sense[i] == 'W') this.antisense[i] = 'W';
+                if (this.sense[i] == 'K') this.antisense[i] = 'M';
+                if (this.sense[i] == 'M') this.antisense[i] = 'K';
+                if (this.sense[i] == 'B') this.antisense[i] = 'V';
+                if (this.sense[i] == 'V') this.antisense[i] = 'B';
+                if (this.sense[i] == 'D') this.antisense[i] = 'H';
+                if (this.sense[i] == 'H') this.antisense[i] = 'T';
+                if (this.sense[i] == 'N') this.antisense[i] = 'N';
+                if (this.antisense[i] == 0) this.antisense[i] = '?';
+            }
+        }
 
 
 
+        public void highlight() {
+            BackColor = Color.LightGray;
+            headerLabel.BackColor = Color.Yellow;
+            headerLabel.ForeColor = Color.Black;
+            markerPrim.Visible = true;
+            markerSek.Visible = true;
+            markerBetween.Visible = true;
+        }
 
 
+
+        public void unhighlight(){
+            BackColor = Color.DimGray;
+            headerLabel.BackColor = Color.Blue;
+            headerLabel.ForeColor = Color.White;
+            markerPrim.Visible = false;
+            markerSek.Visible = false;
+            markerBetween.Visible = false;
+        }
 
 
 
@@ -46,51 +100,67 @@ namespace DNATagger {
             set { _src = value; }
         }
 
+        public WindowMain window {
+            get { return this._window; }
+            set { this._window = value; }
+        }
+
+        public override String ToString() {
+            return this.header;
+        }
+
+        public int getLengthSense() {
+            return this.sense.Length;
+        }
+
+        public int getLengthAntisense() {
+            return this.antisense.Length;
+        }
+
+        public int getLengthTotal() {
+            int up = this.sense.Length + this.offsetSense;
+            int lo = this.antisense.Length + this.offsetAntisense;
+            if (up >= lo) return up;
+            else return lo;
+        }
+
+
+
+        private void OnDraw(object sender, PaintEventArgs e) {
+            Width = Parent.Width - 4;
+        }
+
+
+
+        private void OnClick(object sender, MouseEventArgs e) {
+            window.selectSequence(this);
+        }
+
+
+
+
 
 
 
 
         #region ALT
 
-        private List<ALT_DNASequence> sequences = new List<ALT_DNASequence>();
         private List<ALT_SequenceTag> tags = new List<ALT_SequenceTag>();
-        private String header{ 
-            get{ return this.headerLabel.Text; }
-            set{ this.headerLabel.Text = value; }
-        }
 
-        private WindowMain Window = new WindowMain();
-        public WindowMain window{ 
-            get{ return this.Window; }
-            set{ this.Window = value; }
-        }
+       
 
 
 
 
-        public DNASequence(List<ALT_DNASequence> seqs) {
-            InitializeComponent();
-            foreach (ALT_DNASequence seq in seqs) {
-                addSequence(seq);
-            }
-            this.header = seqs.ElementAt(0).src;
-        }
-
-        public DNASequence(ALT_DNASequence seq) {
-            InitializeComponent();
-            addSequence(seq);
-            this.header = seq.header;
-        }
 
 
-
-        public void addSequence(ALT_DNASequence seq) {
+        /*public void addSequence(ALT_DNASequence seq) {
             seq.track = this;
             this.sequences.Add(seq);
             this.scrollContainer.Controls.Add(seq);
             adjustToZoom();
             arrangeBars();
-        }
+        }*/
 
 
 
@@ -108,96 +178,36 @@ namespace DNATagger {
 
 
         public void adjustToZoom(){
-            foreach (ALT_DNASequence seq in sequences) seq.Width = (int)Font.Size * seq.getLengthTotal() / window.zoom;
+            /*foreach (ALT_DNASequence seq in sequences) seq.Width = (int)Font.Size * seq.getLengthTotal() / window.zoom;
             foreach (ALT_SequenceTag tag in tags) tag.Width = (int)Font.Size * tag.getLength() / window.zoom;
-            arrangeBars();
+            arrangeBars();*/
         }
 
 
 
 
         public void arrangeBars(){
-            int lastEnd = 0;
+            /*int lastEnd = 0;
             foreach (ALT_DNASequence seq in sequences) {
                 seq.Location = new Point(lastEnd, 0);
                 lastEnd = seq.Location.X + seq.Width - scrollContainer.AutoScrollOffset.X;
-            }
+            } */
         }
 
 
 
 
-        public int getEndPosition(){
-            int pos = 0;
-            foreach (ALT_DNASequence seq in sequences) pos += seq.Width;
-            return pos;
-        }
+        
 
 
 
-        public ALT_DNASequence getSequence(int i) {
-            return this.sequences.ElementAt(i);
-        }
-
-
-
-        public List<ALT_DNASequence> getSequences() {
-            return this.sequences;
-        }
-
-
-
-        public int getLength() {
-            int len = 0;
-            foreach (ALT_DNASequence seq in sequences) {
-                len += seq.getLengthTotal();
-            }
-            return len;
-        }
-
-
-
-        public override String ToString() {
-            return header;
-        }
-
-
-
-        private void OnDraw(object sender, PaintEventArgs e) {
-            Width = Parent.Width - 4;
-        }
-
-
-
-        private void OnClick(object sender, MouseEventArgs e) {
-            select();
-        }
-
-
-
-        public void select(){
-            window.select(this);
-            foreach (DNASequence track in Parent.Controls) {
-                track.BackColor = Color.DimGray;
-                track.headerLabel.BackColor = Color.Blue;
-                track.headerLabel.ForeColor = Color.White;
-                track.markerPrim.Visible = false;
-                track.markerSek.Visible = false;
-                track.markerBetween.Visible = false;
-            }
-            this.BackColor = Color.LightGray;
-            headerLabel.BackColor = Color.Yellow;
-            headerLabel.ForeColor = Color.Black;
-            markerPrim.Visible = true;
-            markerSek.Visible = true;
-            markerBetween.Visible = true;
-        }
+        
 
 
 
 
         public void setFirstMarker(int xPos){
-            select();
+            window.selectSequence(this);
             markerSek.Visible = false;
             markerBetween.Visible = false;
             markerPrim.Location = new Point(xPos, 0);

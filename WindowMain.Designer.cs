@@ -46,13 +46,11 @@ namespace DNATagger
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panelEditor = new System.Windows.Forms.Panel();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
-            this.trackSelector = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonAddTag = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.tagSelector = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
             this.zoomRegler = new System.Windows.Forms.TrackBar();
@@ -220,28 +218,14 @@ namespace DNATagger
             this.groupBoxCanvas.TabStop = false;
             this.groupBoxCanvas.Text = "Editor";
             // 
-            // trackSelector
-            // 
-            this.trackSelector.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackSelector.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.trackSelector.Location = new System.Drawing.Point(7, 27);
-            this.trackSelector.Name = "trackSelector";
-            this.trackSelector.Size = new System.Drawing.Size(230, 23);
-            this.trackSelector.TabIndex = 4;
-            this.trackSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.buttonAddTag);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.tagSelector);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.comboBox1);
             this.groupBox1.Controls.Add(this.sequenceSelector);
-            this.groupBox1.Controls.Add(this.trackSelector);
             this.groupBox1.Location = new System.Drawing.Point(14, 139);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(1165, 86);
@@ -262,13 +246,12 @@ namespace DNATagger
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(140, 56);
+            this.button1.Location = new System.Drawing.Point(376, 53);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(97, 27);
             this.button1.TabIndex = 6;
             this.button1.Text = "Delete Track";
             this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.OnDeleteTrack);
             // 
             // tagSelector
             // 
@@ -287,15 +270,6 @@ namespace DNATagger
             this.label2.Size = new System.Drawing.Size(126, 15);
             this.label2.TabIndex = 5;
             this.label2.Text = "Selected Sequence";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 8);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(105, 15);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Selected Track";
             // 
             // comboBox1
             // 
@@ -418,11 +392,9 @@ namespace DNATagger
         private System.Windows.Forms.GroupBox groupBoxCanvas;
         private System.Windows.Forms.ToolStripMenuItem showAntisenseStrandToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showNucleotideLettersToolStripMenuItem;
-        private System.Windows.Forms.ComboBox trackSelector;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ComboBox sequenceSelector;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label tagSelector;
         private System.Windows.Forms.ComboBox comboBox1;

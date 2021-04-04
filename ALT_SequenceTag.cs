@@ -60,8 +60,6 @@ namespace DNATagger {
 
 
         private void OnClick(object sender, MouseEventArgs e) {
-            if (track == null) return;
-            track.select();
         }
 
 

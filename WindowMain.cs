@@ -15,7 +15,7 @@ namespace DNATagger
     {
         #region Datenverwaltung
 
-        List<DNASequence> tracks = new List<DNASequence>();
+        List<DNASequence> sequences = new List<DNASequence>();
 
         public int zoom {
             get { return (int)Math.Pow(3, zoomRegler.Value - 1); }
@@ -42,14 +42,12 @@ namespace DNATagger
 
 
 
-        private void addTrack(DNASequence track){
-            /*
-            track.window = this;
-            this.tracks.Add(track);
-            panelEditor.Controls.Add(track);
-            this.trackSelector.Items.Add(track);
-            arrangeTracks();
-            */
+        private void addSequence(DNASequence seq){
+            seq.window = this;
+            sequences.Add(seq);
+            panelEditor.Controls.Add(seq);
+            sequenceSelector.Items.Add(seq);
+            arrangeSequences();
         }
 
 
@@ -65,8 +63,10 @@ namespace DNATagger
 
 
 
-        public void select(DNASequence track){
-            trackSelector.SelectedItem = track;
+        public void selectSequence(DNASequence seq){
+            sequenceSelector.SelectedItem = seq;
+            foreach (DNASequence seqi in sequences) seqi.unhighlight();
+            seq.highlight();
         }
 
         #endregion
@@ -76,19 +76,19 @@ namespace DNATagger
         #region Graphische Darstellungen
 
         public void refreshEditor() {
-            arrangeTracks();
+            arrangeSequences();
             panelEditor.Invalidate();
             foreach (Control ctrl in panelEditor.Controls) ctrl.Invalidate();
         }
 
 
 
-        public void arrangeTracks(){
-            /*int y = 0;
-            foreach (DNASequence track in tracks){
-                track.Location = new Point(0, y);
-                y += track.Height + track.Font.Height * 2;
-            }*/
+        public void arrangeSequences(){
+            int y = 0;
+            foreach (DNASequence seq in sequences){
+                seq.Location = new Point(0, y);
+                y += seq.Height + seq.Font.Height * 2;
+            }
         }
 
 
@@ -111,22 +111,22 @@ namespace DNATagger
         #region Event Management
 
         private void OnAddTestSequence(object sender, EventArgs e)
-        {   /*
-            addTrack(new ALT_SequenceTrack(new ALT_DNASequence(">Testsequenz\nACGT", src : "System Test")));
-            refreshEditor(); */
+        {  
+            addSequence(new DNASequence(">Testsequenz\nACGT", src : "System Test"));
+            refreshEditor(); 
         }
 
 
 
         private void OnOpenFasta(object sender, EventArgs e)
         {
-            /*
             openFileDialog.Filter = "Fasta File|*.fasta|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            List<ALT_DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
-            addTrack(new ALT_SequenceTrack(readSeqs));
+            List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
+            foreach (DNASequence seq in readSeqs){
+                addSequence(seq);
+            }
             refreshEditor();
-            */
         }
 
 
@@ -134,9 +134,6 @@ namespace DNATagger
         private void OnClickCanvas(object sender, MouseEventArgs e)
         {
             Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
-            foreach (DNASequence track in tracks){
-                
-            }
             refreshEditor();
         }
 
@@ -156,8 +153,7 @@ namespace DNATagger
 
 
         private void OnDeleteTrack(object sender, EventArgs e) {
-            if (MessageBox.Show("Are you sure you want to delete this track and all contained nucleotide sequences?", "Delete Track", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                dropTrack((DNASequence)trackSelector.SelectedItem);
+
         }
 
 

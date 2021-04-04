@@ -129,7 +129,6 @@ namespace DNATagger {
         }
 
         private void OnClick(object sender, MouseEventArgs e) {
-            track.select();
         }
 
         private void OnMouseDown(object sender, MouseEventArgs e) {

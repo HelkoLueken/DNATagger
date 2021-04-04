@@ -28,10 +28,10 @@ namespace DNATagger {
             this.scrollContainer = new System.Windows.Forms.Panel();
             this.markerBetween = new System.Windows.Forms.Panel();
             this.markerSek = new System.Windows.Forms.Panel();
+            this.sequencePanel = new System.Windows.Forms.Panel();
             this.markerPrim = new System.Windows.Forms.Panel();
             this.sequenceLabel = new System.Windows.Forms.Label();
             this.tagLabel = new System.Windows.Forms.Label();
-            this.SequencePanel = new System.Windows.Forms.Panel();
             this.scrollContainer.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -58,7 +58,7 @@ namespace DNATagger {
             this.scrollContainer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.scrollContainer.Controls.Add(this.markerBetween);
             this.scrollContainer.Controls.Add(this.markerSek);
-            this.scrollContainer.Controls.Add(this.SequencePanel);
+            this.scrollContainer.Controls.Add(this.sequencePanel);
             this.scrollContainer.Controls.Add(this.markerPrim);
             this.scrollContainer.Location = new System.Drawing.Point(92, 24);
             this.scrollContainer.Margin = new System.Windows.Forms.Padding(0);
@@ -72,7 +72,7 @@ namespace DNATagger {
             // markerBetween
             // 
             this.markerBetween.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.markerBetween.BackColor = System.Drawing.Color.Gold;
+            this.markerBetween.BackColor = System.Drawing.Color.Red;
             this.markerBetween.Location = new System.Drawing.Point(290, 1);
             this.markerBetween.Margin = new System.Windows.Forms.Padding(0);
             this.markerBetween.Name = "markerBetween";
@@ -83,7 +83,7 @@ namespace DNATagger {
             // markerSek
             // 
             this.markerSek.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.markerSek.BackColor = System.Drawing.Color.Gold;
+            this.markerSek.BackColor = System.Drawing.Color.Red;
             this.markerSek.Location = new System.Drawing.Point(317, 1);
             this.markerSek.Margin = new System.Windows.Forms.Padding(0);
             this.markerSek.Name = "markerSek";
@@ -91,10 +91,23 @@ namespace DNATagger {
             this.markerSek.TabIndex = 0;
             this.markerSek.Visible = false;
             // 
+            // sequencePanel
+            // 
+            this.sequencePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sequencePanel.BackColor = System.Drawing.Color.Gold;
+            this.sequencePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.sequencePanel.Location = new System.Drawing.Point(0, 0);
+            this.sequencePanel.Margin = new System.Windows.Forms.Padding(0);
+            this.sequencePanel.Name = "sequencePanel";
+            this.sequencePanel.Size = new System.Drawing.Size(240, 24);
+            this.sequencePanel.TabIndex = 0;
+            // 
             // markerPrim
             // 
             this.markerPrim.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.markerPrim.BackColor = System.Drawing.Color.Gold;
+            this.markerPrim.BackColor = System.Drawing.Color.Red;
             this.markerPrim.Location = new System.Drawing.Point(290, 3);
             this.markerPrim.Margin = new System.Windows.Forms.Padding(0);
             this.markerPrim.Name = "markerPrim";
@@ -133,20 +146,6 @@ namespace DNATagger {
             this.tagLabel.Text = "Tags";
             this.tagLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
             // 
-            // SequencePanel
-            // 
-            this.SequencePanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.SequencePanel.BackColor = System.Drawing.Color.Gold;
-            this.SequencePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SequencePanel.Location = new System.Drawing.Point(0, 0);
-            this.SequencePanel.Margin = new System.Windows.Forms.Padding(0);
-            this.SequencePanel.Name = "SequencePanel";
-            this.SequencePanel.Size = new System.Drawing.Size(240, 24);
-            this.SequencePanel.TabIndex = 0;
-            this.SequencePanel.Visible = false;
-            // 
             // DNASequence
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -179,6 +178,6 @@ namespace DNATagger {
         private System.Windows.Forms.Panel markerSek;
         private System.Windows.Forms.Panel markerPrim;
         private System.Windows.Forms.Panel markerBetween;
-        private System.Windows.Forms.Panel SequencePanel;
+        private System.Windows.Forms.Panel sequencePanel;
     }
 }

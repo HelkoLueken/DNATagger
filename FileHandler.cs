@@ -47,8 +47,8 @@ namespace DNATagger
 
 
 
-        public static List<ALT_DNASequence> readFasta(String path) {
-            List<ALT_DNASequence> output = new List<ALT_DNASequence>();
+        public static List<DNASequence> readFasta(String path) {
+            List<DNASequence> output = new List<DNASequence>();
             if (openFile(path))
             {
                 StringBuilder fastaBlock = new StringBuilder();
@@ -66,14 +66,14 @@ namespace DNATagger
                         {
                             if (fastaBlock.Length > 0)
                             {
-                                output.Add(new ALT_DNASequence(fastaBlock.ToString(), src : path));
+                                output.Add(new DNASequence(fastaBlock.ToString(), src : path));
                                 fastaBlock.Clear();
                             }
                             fastaBlock.Append(line + "\n");
                         }
                         else fastaBlock.Append(line);
                     }
-                    output.Add(new ALT_DNASequence(fastaBlock.ToString(), src : path));
+                    output.Add(new DNASequence(fastaBlock.ToString(), src : path));
                 }
             }
             closeFile();
