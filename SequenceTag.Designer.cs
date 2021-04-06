@@ -1,6 +1,6 @@
 ﻿
 namespace DNATagger {
-    partial class ALT_SequenceTag {
+    partial class SequenceTag {
         /// <summary> 
         /// Erforderliche Designervariable.
         /// </summary>

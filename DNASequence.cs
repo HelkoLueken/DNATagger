@@ -17,7 +17,8 @@ namespace DNATagger {
         private int offsetAntisense = 0;
         private String _src;
         private WindowMain _window = new WindowMain();
-        
+        private List<SequenceTag> tags = new List<SequenceTag>();
+
 
 
 
@@ -87,6 +88,16 @@ namespace DNATagger {
 
 
 
+        public void adjustToZoom() {
+            sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
+            foreach (SequenceTag tag in tags){
+                tag.Location = new Point((int)(window.zoom * tag.startPos), tag.Location.Y);
+                tag.Width = (int)(window.zoom * tag.getLength());
+            }
+        }
+
+
+
         public String header {
             get { return this.Name; }
             set {
@@ -102,11 +113,16 @@ namespace DNATagger {
 
         public WindowMain window {
             get { return this._window; }
-            set { this._window = value; }
+            set { this._window = value; adjustToZoom(); }
         }
 
         public override String ToString() {
             return this.header;
+        }
+        public int selectedStart =>  markerPrim.Location.X / (int)window.zoom;
+
+        public int selectedEnd{ 
+            get { return markerSek.Location.X / (int)window.zoom; }
         }
 
         public int getLengthSense() {
@@ -133,81 +149,24 @@ namespace DNATagger {
 
 
         private void OnClick(object sender, MouseEventArgs e) {
-            window.selectSequence(this);
+            window.selectedSequence = this;
         }
 
 
 
-
-
-
-
-
-        #region ALT
-
-        private List<ALT_SequenceTag> tags = new List<ALT_SequenceTag>();
-
-       
-
-
-
-
-
-
-        /*public void addSequence(ALT_DNASequence seq) {
-            seq.track = this;
-            this.sequences.Add(seq);
-            this.scrollContainer.Controls.Add(seq);
-            adjustToZoom();
-            arrangeBars();
-        }*/
-
-
-
-        public void addTag(String header, int fromPos, int toPos, Color color) {
-            ALT_SequenceTag tag = new ALT_SequenceTag(header, fromPos, toPos, color);
+        public void addTag(SequenceTag tag) {
             tags.Add(tag);
             scrollContainer.Controls.Add(tag);
-            tag.Location = new Point((int)Font.Size * tag.startPosition, tagLabel.Location.Y - scrollContainer.Location.Y);
-            tag.Width = tag.getLength() * (int) Font.Size;
-            tag.track = this;
-            adjustToZoom();
-            arrangeBars();
+            tag.Location = new Point((int)window.zoom * tag.startPos, tagLabel.Location.Y - scrollContainer.Location.Y);
+            tag.Width = tag.getLength() * (int) window.zoom;
+            tag.sequence = this;
         }
-
-
-
-        public void adjustToZoom(){
-            /*foreach (ALT_DNASequence seq in sequences) seq.Width = (int)Font.Size * seq.getLengthTotal() / window.zoom;
-            foreach (ALT_SequenceTag tag in tags) tag.Width = (int)Font.Size * tag.getLength() / window.zoom;
-            arrangeBars();*/
-        }
-
-
-
-
-        public void arrangeBars(){
-            /*int lastEnd = 0;
-            foreach (ALT_DNASequence seq in sequences) {
-                seq.Location = new Point(lastEnd, 0);
-                lastEnd = seq.Location.X + seq.Width - scrollContainer.AutoScrollOffset.X;
-            } */
-        }
-
-
-
-
-        
-
-
-
-        
 
 
 
 
         public void setFirstMarker(int xPos){
-            window.selectSequence(this);
+            window.selectedSequence = this;
             markerSek.Visible = false;
             markerBetween.Visible = false;
             markerPrim.Location = new Point(xPos, 0);
@@ -229,22 +188,6 @@ namespace DNATagger {
             Invalidate();
         }
 
-
-
-        private int getMarkerStartBase(){ 
-            int startBase = 0;
-
-
-
-            return startBase;
-        }
-
-
-
-        private void OnChangeBarContainerSize(object sender, EventArgs e) {
-            arrangeBars();
-        }
-
         private void OnMouseUpOverBG(object sender, MouseEventArgs e) {
             setSecondMarker(e.X - scrollContainer.Location.X);
         }
@@ -264,7 +207,5 @@ namespace DNATagger {
         private void SequencePanel_Paint(object sender, PaintEventArgs e) {
 
         }
-
-        #endregion
     }
 }

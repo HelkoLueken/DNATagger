@@ -57,11 +57,11 @@
       <DependentUpon>ALT_SequenceTrack.cs</DependentUpon>
     </Compile>
     <Compile Include="FileHandler.cs" />
-    <Compile Include="ALT_SequenceTag.cs">
+    <Compile Include="SequenceTag.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ALT_SequenceTag.Designer.cs">
-      <DependentUpon>ALT_SequenceTag.cs</DependentUpon>
+    <Compile Include="SequenceTag.Designer.cs">
+      <DependentUpon>SequenceTag.cs</DependentUpon>
     </Compile>
     <Compile Include="DNASequence.cs">
       <SubType>UserControl</SubType>
@@ -98,8 +98,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="ALT_SequenceTag.resx">
-      <DependentUpon>ALT_SequenceTag.cs</DependentUpon>
+    <EmbeddedResource Include="SequenceTag.resx">
+      <DependentUpon>SequenceTag.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DNASequence.resx">
       <DependentUpon>DNASequence.cs</DependentUpon>

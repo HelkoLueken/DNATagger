@@ -16,14 +16,29 @@ namespace DNATagger
         #region Datenverwaltung
 
         List<DNASequence> sequences = new List<DNASequence>();
+        WindowAddTag tagAddingDialogue;
 
-        public int zoom {
-            get { return (int)Math.Pow(3, zoomRegler.Value - 1); }
-            set { zoomRegler.Value = value; }
+
+        public delegate void ControlCloser();
+        public void OnCloseMyControl() {
+            if (tagAddingDialogue != null)
+                tagAddingDialogue.Dispose();
+            tagAddingDialogue = null;
+        }
+
+        public double zoom {
+            get { return Math.Pow(2, zoomRegler.Value); }
         }
         public WindowMain()
         {
             InitializeComponent();
+        }
+
+
+
+        public DNASequence selectedSequence{ 
+            get { DNASequence seq = (DNASequence)sequenceSelector.SelectedItem; return seq; }
+            set { sequenceSelector.SelectedItem = value; }
         }
 
 
@@ -52,21 +67,12 @@ namespace DNATagger
 
 
 
-        private void dropTrack(DNASequence track){
-            /*
-            this.trackSelector.Items.Remove(track);
-            tracks.Remove(track);
-            panelEditor.Controls.Remove(track);
+        private void dropSequence(DNASequence seq) {
+            this.sequenceSelector.Items.Remove(seq);
+            sequences.Remove(seq);
+            panelEditor.Controls.Remove(seq);
+            arrangeSequences();
             refreshEditor();
-            */
-        }
-
-
-
-        public void selectSequence(DNASequence seq){
-            sequenceSelector.SelectedItem = seq;
-            foreach (DNASequence seqi in sequences) seqi.unhighlight();
-            seq.highlight();
         }
 
         #endregion
@@ -90,19 +96,6 @@ namespace DNATagger
                 y += seq.Height + seq.Font.Height * 2;
             }
         }
-
-
-
-        public void hideLetters(){ 
-
-        }
-
-
-
-        public void showLetters() {
-
-        }
-
 
         #endregion
 
@@ -152,36 +145,58 @@ namespace DNATagger
 
 
 
-        private void OnDeleteTrack(object sender, EventArgs e) {
-
-        }
-
-
-
-        private void OnSwitchLetterVisibility(object sender, EventArgs e) {
-            /*if (showNucleotideLettersToolStripMenuItem.Checked) showLetters();
-            else hideLetters();
-            Invalidate(); */
-        }
-
-
-
         private void OnChangeZoom(object sender, EventArgs e) {
-            /*
-             * if (zoomRegler.Value == 1 && showNucleotideLettersToolStripMenuItem.Checked) showLetters();
-            else hideLetters();
-            foreach (DNASequence track in tracks) track.adjustToZoom();
+            foreach (DNASequence seq in sequences) seq.adjustToZoom();
             refreshEditor();
-            */
+            Console.WriteLine(zoomRegler.Value);
         }
 
 
         private void OnAddTag(object sender, EventArgs e) {
-            /*if (trackSelector.SelectedItem == null) return;
-            DNASequence track = (DNASequence)trackSelector.SelectedItem;
-            track.addTag("TestTag", 0, 100, Color.Green);
-            */
+            if (sequenceSelector.SelectedItem == null) return;
+            if (selectedSequence == null) return;
+            if (tagAddingDialogue == null) tagAddingDialogue = new WindowAddTag(selectedSequence, new ControlCloser(OnCloseMyControl));
+            tagAddingDialogue.Show();
+            tagAddingDialogue.Focus();
+            //selectedSequence.addTag("TestTag", 0, 100, Color.Green);
         }
         #endregion
+
+        #region tutorial
+        /*
+        private void OnMyPrivatDialogNonModal(object sender, EventArgs e) {
+            if (_dlgNonModalDlg == null)
+                _dlgNonModalDlg = new DlgMeinDialog(_cbCloseMyControl, _cbGetInfoPkg);  // Zahlenwert= Adresse auf die Funktion
+
+            DlgMeinDialog.ResultDataPkg resPkg = new DlgMeinDialog.ResultDataPkg();
+
+            FeedControlPkg(ref resPkg);
+            _dlgNonModalDlg.SetControl(resPkg); // Der existierende Dialog wird nun vorbereitet eingestellt.
+
+            _dlgNonModalDlg.Show();
+        }
+
+        public void OnCloseMyControl() {
+            if (_dlgNonModalDlg != null)
+                _dlgNonModalDlg.Dispose();
+            _dlgNonModalDlg = null;
+        }
+        protected void UpdateNonModalDialog() {
+            if (_dlgNonModalDlg == null)
+                return;
+            DlgMeinDialog.ResultDataPkg resPkg = new DlgMeinDialog.ResultDataPkg();
+
+            FeedControlPkg(ref resPkg);
+            _dlgNonModalDlg.SetControl(resPkg);
+            _dlgNonModalDlg.Sychronize();
+        }*/
+        #endregion
+
+        private void OnChangeSelectedSequence(object sender, EventArgs e) {
+            foreach (DNASequence seqi in sequences) seqi.unhighlight();
+            DNASequence seq = (DNASequence)sequenceSelector.SelectedItem;
+            seq.highlight();
+            refreshEditor();
+        }
     }
 }

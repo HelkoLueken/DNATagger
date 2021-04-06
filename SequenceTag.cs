@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DNATagger {
-    public partial class ALT_SequenceTag : UserControl {
-        private DNASequence _track;
-        private int startPos;
-        private int endPos;
+    public partial class SequenceTag : UserControl {
+        private DNASequence _seq;
+        public int startPos;
+        public int endPos;
 
-        public DNASequence track {
-            get { return _track; }
-            set { _track = value; }
+        public DNASequence sequence {
+            get { return _seq; }
+            set { _seq = value; }
         }
 
         public String header {
@@ -29,15 +29,7 @@ namespace DNATagger {
 
 
 
-        public int startPosition{ 
-            get{ return startPos; }
-        }
-
-
-
-
-
-        public ALT_SequenceTag(String header, int fromPos, int toPos, Color color) {
+        public SequenceTag(String header, int fromPos, int toPos, Color color) {
             InitializeComponent();
             this.header = header;
             this.startPos = fromPos;
@@ -65,11 +57,11 @@ namespace DNATagger {
 
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
-            track.setFirstMarker(e.X + Location.X);
+            sequence.setFirstMarker(e.X + Location.X);
         }
 
         private void OnMouseUp(object sender, MouseEventArgs e) {
-            track.setSecondMarker(e.X + Location.X);
+            sequence.setSecondMarker(e.X + Location.X);
         }
     }
 }
