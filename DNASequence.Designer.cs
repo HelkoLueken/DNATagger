@@ -64,30 +64,32 @@ namespace DNATagger {
             this.scrollContainer.Margin = new System.Windows.Forms.Padding(0);
             this.scrollContainer.Name = "scrollContainer";
             this.scrollContainer.Padding = new System.Windows.Forms.Padding(1);
-            this.scrollContainer.Size = new System.Drawing.Size(990, 66);
+            this.scrollContainer.Size = new System.Drawing.Size(990, 48);
             this.scrollContainer.TabIndex = 2;
             this.scrollContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverBarContainer);
-            this.scrollContainer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverBarContainer);
+            this.scrollContainer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverScrollContainer);
             // 
             // markerPrim
             // 
             this.markerPrim.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.markerPrim.BackColor = System.Drawing.Color.Red;
+            this.markerPrim.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.markerPrim.Location = new System.Drawing.Point(100, 1);
             this.markerPrim.Margin = new System.Windows.Forms.Padding(0);
             this.markerPrim.Name = "markerPrim";
-            this.markerPrim.Size = new System.Drawing.Size(6, 64);
+            this.markerPrim.Size = new System.Drawing.Size(6, 46);
             this.markerPrim.TabIndex = 0;
             this.markerPrim.Visible = false;
             // 
             // markerBetween
             // 
             this.markerBetween.BackColor = System.Drawing.Color.Red;
+            this.markerBetween.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.markerBetween.Location = new System.Drawing.Point(100, 1);
             this.markerBetween.Margin = new System.Windows.Forms.Padding(0);
             this.markerBetween.Name = "markerBetween";
-            this.markerBetween.Size = new System.Drawing.Size(20, 2);
+            this.markerBetween.Size = new System.Drawing.Size(20, 3);
             this.markerBetween.TabIndex = 0;
             this.markerBetween.Visible = false;
             // 
@@ -96,10 +98,11 @@ namespace DNATagger {
             this.markerSek.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.markerSek.BackColor = System.Drawing.Color.Red;
+            this.markerSek.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.markerSek.Location = new System.Drawing.Point(120, 1);
             this.markerSek.Margin = new System.Windows.Forms.Padding(0);
             this.markerSek.Name = "markerSek";
-            this.markerSek.Size = new System.Drawing.Size(6, 66);
+            this.markerSek.Size = new System.Drawing.Size(6, 48);
             this.markerSek.TabIndex = 0;
             this.markerSek.Visible = false;
             // 
@@ -113,6 +116,8 @@ namespace DNATagger {
             this.sequencePanel.Name = "sequencePanel";
             this.sequencePanel.Size = new System.Drawing.Size(240, 22);
             this.sequencePanel.TabIndex = 0;
+            this.sequencePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverSequencePanel);
+            this.sequencePanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverSequencePanel);
             // 
             // sequenceLabel
             // 
@@ -140,7 +145,7 @@ namespace DNATagger {
             this.tagLabel.Location = new System.Drawing.Point(0, 48);
             this.tagLabel.Margin = new System.Windows.Forms.Padding(0);
             this.tagLabel.Name = "tagLabel";
-            this.tagLabel.Size = new System.Drawing.Size(92, 45);
+            this.tagLabel.Size = new System.Drawing.Size(92, 26);
             this.tagLabel.TabIndex = 0;
             this.tagLabel.Text = "Tags";
             this.tagLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
@@ -158,7 +163,7 @@ namespace DNATagger {
             this.Location = new System.Drawing.Point(0, 20);
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "DNASequence";
-            this.Size = new System.Drawing.Size(1080, 91);
+            this.Size = new System.Drawing.Size(1080, 74);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDraw);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverBG);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverBG);

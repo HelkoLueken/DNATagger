@@ -160,6 +160,20 @@ namespace DNATagger {
             tag.Location = new Point((int)window.zoom * tag.startPos, tagLabel.Location.Y - scrollContainer.Location.Y);
             tag.Width = tag.getLength() * (int) window.zoom;
             tag.sequence = this;
+            bool positionFine = false;
+            while(!positionFine){
+                positionFine = true;
+                foreach (SequenceTag tagi in tags) {
+                    if (tag != tagi && tag.Bounds.IntersectsWith(tagi.Bounds)) {
+                        tag.Location = new Point(tag.Location.X, tag.Location.Y + tag.Height);
+                        if (tag.Location.Y + tag.Height > scrollContainer.Height){
+                            scrollContainer.Height += tag.Height;
+                            Height += tag.Height;
+                        }
+                        positionFine = false;
+                    }
+                }
+            }
         }
 
 
@@ -200,12 +214,16 @@ namespace DNATagger {
             setFirstMarker(e.X);
         }
 
-        private void OnMouseUpOverBarContainer(object sender, MouseEventArgs e) {
+        private void OnMouseUpOverScrollContainer(object sender, MouseEventArgs e) {
             setSecondMarker(e.X);
         }
 
-        private void SequencePanel_Paint(object sender, PaintEventArgs e) {
+        private void OnMouseDownOverSequencePanel(object sender, MouseEventArgs e) {
+            setFirstMarker(e.X);
+        }
 
+        private void OnMouseUpOverSequencePanel(object sender, MouseEventArgs e) {
+            setSecondMarker(e.X);
         }
     }
 }
