@@ -37,7 +37,6 @@ namespace DNATagger {
             }
             this.src = src;
             createAntisense();
-            sequencePanel.Width = getLengthTotal();
         }
 
 
@@ -91,9 +90,32 @@ namespace DNATagger {
         public void adjustToZoom() {
             sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
             foreach (SequenceTag tag in tags){
-                tag.Location = new Point((int)(window.zoom * tag.startPos), tag.Location.Y);
-                tag.Width = (int)(window.zoom * tag.getLength());
+                tag.Location = new Point((int)(screenBaseWidth() * tag.startPos), tag.Location.Y);
+                tag.Width = (int)(screenBaseWidth() * tag.getLength());
             }
+            sequencePanel.Controls.Clear();
+            int interval = Width/3;
+            for (int pos = 0; pos < sequencePanel.Width; pos += interval){
+                Label lab = new Label();
+                lab.Location = new Point(pos, sequencePanel.Location.Y);
+                lab.Text = getBaseAtPos(pos).ToString();
+                sequencePanel.Controls.Add(lab);
+            }
+        }
+
+
+
+        public double screenBaseWidth(){
+            return sequencePanel.Width / getLengthTotal();
+        }
+
+
+
+        public Int32 getBaseAtPos(int pos){
+            if (pos <= 0) return 0;
+            Int32 o = (pos * getLengthTotal() / sequencePanel.Width);
+            if (o > getLengthTotal()) return getLengthTotal();
+            return o;
         }
 
 
@@ -119,10 +141,10 @@ namespace DNATagger {
         public override String ToString() {
             return this.header;
         }
-        public int selectedStart =>  markerPrim.Location.X / (int)window.zoom;
+        public int selectedStart =>  getBaseAtPos(markerPrim.Location.X - scrollContainer.AutoScrollPosition.X);
 
         public int selectedEnd{ 
-            get { return markerSek.Location.X / (int)window.zoom; }
+            get { return getBaseAtPos(markerSek.Location.X - scrollContainer.AutoScrollPosition.X); }
         }
 
         public int getLengthSense() {
@@ -158,7 +180,7 @@ namespace DNATagger {
             tags.Add(tag);
             scrollContainer.Controls.Add(tag);
             tag.Location = new Point((int)window.zoom * tag.startPos, tagLabel.Location.Y - scrollContainer.Location.Y);
-            tag.Width = tag.getLength() * (int) window.zoom;
+            adjustToZoom();
             tag.sequence = this;
             bool positionFine = false;
             while(!positionFine){
@@ -175,7 +197,6 @@ namespace DNATagger {
                 }
             }
         }
-
 
 
 

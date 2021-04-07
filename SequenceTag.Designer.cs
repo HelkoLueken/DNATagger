@@ -45,11 +45,12 @@ namespace DNATagger {
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.YellowGreen;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.headerLabel);
             this.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "SequenceTag";
-            this.Size = new System.Drawing.Size(100, 24);
+            this.Size = new System.Drawing.Size(98, 22);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
