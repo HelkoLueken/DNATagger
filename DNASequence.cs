@@ -90,7 +90,7 @@ namespace DNATagger {
         public void adjustToZoom() {
             sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
             foreach (SequenceTag tag in tags){
-                tag.Location = new Point((int)(screenBaseWidth() * tag.startPos), tag.Location.Y);
+                tag.Location = new Point((int)(screenBaseWidth() * tag.startPos + scrollContainer.AutoScrollPosition.X), tag.Location.Y);
                 tag.Width = (int)(screenBaseWidth() * tag.getLength());
             }
             sequencePanel.Controls.Clear();
@@ -106,7 +106,7 @@ namespace DNATagger {
 
 
         public double screenBaseWidth(){
-            return sequencePanel.Width / getLengthTotal();
+            return (double)sequencePanel.Width / (double)getLengthTotal();
         }
 
 
@@ -179,11 +179,12 @@ namespace DNATagger {
         public void addTag(SequenceTag tag) {
             tags.Add(tag);
             scrollContainer.Controls.Add(tag);
-            tag.Location = new Point((int)window.zoom * tag.startPos, tagLabel.Location.Y - scrollContainer.Location.Y);
             adjustToZoom();
             tag.sequence = this;
+
             bool positionFine = false;
-            while(!positionFine){
+            tag.Location = new Point(tag.Location.X, tagLabel.Location.Y - scrollContainer.Location.Y);
+            while (!positionFine){
                 positionFine = true;
                 foreach (SequenceTag tagi in tags) {
                     if (tag != tagi && tag.Bounds.IntersectsWith(tagi.Bounds)) {
