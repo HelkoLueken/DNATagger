@@ -36,7 +36,6 @@ namespace DNATagger {
             this.headerLabel.Size = new System.Drawing.Size(70, 22);
             this.headerLabel.TabIndex = 0;
             this.headerLabel.Text = "header";
-            this.headerLabel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
             this.headerLabel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.headerLabel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             // 
@@ -52,7 +51,7 @@ namespace DNATagger {
             this.MinimumSize = new System.Drawing.Size(2, 2);
             this.Name = "SequenceTag";
             this.Size = new System.Drawing.Size(98, 22);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClick);
+            this.Load += new System.EventHandler(this.SequenceTag_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             this.ResumeLayout(false);

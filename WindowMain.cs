@@ -17,6 +17,7 @@ namespace DNATagger
 
         List<DNASequence> sequences = new List<DNASequence>();
         WindowAddTag tagAddingDialogue;
+        public String notes = "Here you can write notes regarding your project.\nYou will only see these after loading the project.\nBy selecting Sequences or Tags you can add notes to them as well";
 
 
         public delegate void ControlCloser();
@@ -32,27 +33,27 @@ namespace DNATagger
         public WindowMain()
         {
             InitializeComponent();
+            notizBox.Text = notes;
+            notizBoxLabel.Text = "Project Info";
         }
 
 
 
         public DNASequence selectedSequence{ 
             get { DNASequence seq = (DNASequence)sequenceSelector.SelectedItem; return seq; }
-            set { sequenceSelector.SelectedItem = value; }
+            set { saveNotes(); sequenceSelector.SelectedItem = value; }
         }
 
 
 
-        public int maxTrackLength() {
-            /*
-            int max = 0;
-            foreach (DNASequence track in tracks)
-            {
-                if (track.getLength() > max) max = track.getLength();
+        public SequenceTag selectedTag {
+            get { SequenceTag tag = (SequenceTag)tagSelector.SelectedItem; return tag; }
+            set { 
+                saveNotes();
+                if (selectedTag != null) selectedTag.unhighlight();
+                selectedSequence = value.sequence;
+                tagSelector.SelectedItem = value;
             }
-            return max;
-            */
-            return 0;
         }
 
 
@@ -124,22 +125,8 @@ namespace DNATagger
 
 
 
-        private void OnClickCanvas(object sender, MouseEventArgs e)
-        {
-            Console.WriteLine("X: " + e.X + ", Y: " +e.Y);
-            refreshEditor();
-        }
-
-
-
         private void OnResize(object sender, EventArgs e)
         {
-            refreshEditor();
-        }
-
-
-
-        private void OnChangeViewOptions(object sender, EventArgs e) {
             refreshEditor();
         }
 
@@ -148,7 +135,6 @@ namespace DNATagger
         private void OnChangeZoom(object sender, EventArgs e) {
             foreach (DNASequence seq in sequences) seq.adjustToZoom();
             refreshEditor();
-            Console.WriteLine(zoomRegler.Value);
         }
 
 
@@ -158,45 +144,54 @@ namespace DNATagger
             if (tagAddingDialogue == null) tagAddingDialogue = new WindowAddTag(selectedSequence, new ControlCloser(OnCloseMyControl));
             tagAddingDialogue.Show();
             tagAddingDialogue.Focus();
-            //selectedSequence.addTag("TestTag", 0, 100, Color.Green);
         }
         #endregion
 
-        #region tutorial
-        /*
-        private void OnMyPrivatDialogNonModal(object sender, EventArgs e) {
-            if (_dlgNonModalDlg == null)
-                _dlgNonModalDlg = new DlgMeinDialog(_cbCloseMyControl, _cbGetInfoPkg);  // Zahlenwert= Adresse auf die Funktion
-
-            DlgMeinDialog.ResultDataPkg resPkg = new DlgMeinDialog.ResultDataPkg();
-
-            FeedControlPkg(ref resPkg);
-            _dlgNonModalDlg.SetControl(resPkg); // Der existierende Dialog wird nun vorbereitet eingestellt.
-
-            _dlgNonModalDlg.Show();
-        }
-
-        public void OnCloseMyControl() {
-            if (_dlgNonModalDlg != null)
-                _dlgNonModalDlg.Dispose();
-            _dlgNonModalDlg = null;
-        }
-        protected void UpdateNonModalDialog() {
-            if (_dlgNonModalDlg == null)
-                return;
-            DlgMeinDialog.ResultDataPkg resPkg = new DlgMeinDialog.ResultDataPkg();
-
-            FeedControlPkg(ref resPkg);
-            _dlgNonModalDlg.SetControl(resPkg);
-            _dlgNonModalDlg.Sychronize();
-        }*/
-        #endregion
 
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
             foreach (DNASequence seqi in sequences) seqi.unhighlight();
             DNASequence seq = (DNASequence)sequenceSelector.SelectedItem;
             seq.highlight();
+            notizBox.Text = selectedSequence.notes;
+            notizBoxLabel.Text = "Annotations for Sequence: " + selectedSequence.header;
+            refreshTagSelector();
             refreshEditor();
+        }
+
+
+
+        public void refreshTagSelector(){
+            tagSelector.Items.Clear();
+            tagSelector.Text = "";
+            foreach (SequenceTag tag in selectedSequence.getTags()) tagSelector.Items.Add(tag);
+        }
+
+
+
+        private void OnChangeSelectedTag(object sender, EventArgs e) {
+            notizBox.Text = selectedTag.notes;
+            notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
+            selectedTag.highlight();
+            refreshEditor();
+        }
+
+
+
+        public void saveNotes(){
+            if (tagSelector.Text != "") {
+                selectedTag.notes = notizBox.Text;
+                return;
+            }
+            if (sequenceSelector.Text != "") selectedSequence.notes = notizBox.Text;
+            else notes = notizBox.Text;
+        }
+
+        private void OnSave(object sender, EventArgs e) {
+            saveNotes();
+        }
+
+        private void OnClickLink(object sender, LinkClickedEventArgs e) {
+            System.Diagnostics.Process.Start(e.LinkText);
         }
     }
 }

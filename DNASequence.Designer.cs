@@ -60,6 +60,7 @@ namespace DNATagger {
             this.scrollContainer.Controls.Add(this.markerBetween);
             this.scrollContainer.Controls.Add(this.markerSek);
             this.scrollContainer.Controls.Add(this.sequencePanel);
+            this.scrollContainer.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.scrollContainer.Location = new System.Drawing.Point(92, 24);
             this.scrollContainer.Margin = new System.Windows.Forms.Padding(0);
             this.scrollContainer.Name = "scrollContainer";

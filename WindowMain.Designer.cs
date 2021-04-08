@@ -47,17 +47,17 @@ namespace DNATagger
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonAddTag = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.tagSelector = new System.Windows.Forms.Label();
+            this.tagSelectorLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.tagSelector = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
             this.zoomRegler = new System.Windows.Forms.TrackBar();
             this.groupBoxZoom = new System.Windows.Forms.GroupBox();
-            this.panelSequenceViewer = new System.Windows.Forms.Panel();
-            this.selectStartLabel = new System.Windows.Forms.Label();
-            this.selectEndLabel = new System.Windows.Forms.Label();
-            this.labelMinus = new System.Windows.Forms.Label();
             this.labelPlus = new System.Windows.Forms.Label();
+            this.labelMinus = new System.Windows.Forms.Label();
+            this.panelSequenceViewer = new System.Windows.Forms.Panel();
+            this.notizBox = new System.Windows.Forms.RichTextBox();
+            this.notizBoxLabel = new System.Windows.Forms.Label();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -143,6 +143,7 @@ namespace DNATagger
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.saveToolStripMenuItem.Text = "Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnSave);
             // 
             // saveAsToolStripMenuItem
             // 
@@ -178,9 +179,8 @@ namespace DNATagger
             this.panelEditor.Location = new System.Drawing.Point(6, 22);
             this.panelEditor.Margin = new System.Windows.Forms.Padding(0);
             this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(1439, 455);
+            this.panelEditor.Size = new System.Drawing.Size(1439, 384);
             this.panelEditor.TabIndex = 1;
-            this.panelEditor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickCanvas);
             // 
             // groupBoxCanvas
             // 
@@ -188,24 +188,27 @@ namespace DNATagger
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCanvas.Controls.Add(this.panelEditor);
-            this.groupBoxCanvas.Location = new System.Drawing.Point(14, 231);
+            this.groupBoxCanvas.Location = new System.Drawing.Point(14, 302);
             this.groupBoxCanvas.Name = "groupBoxCanvas";
-            this.groupBoxCanvas.Size = new System.Drawing.Size(1449, 480);
+            this.groupBoxCanvas.Size = new System.Drawing.Size(1449, 409);
             this.groupBoxCanvas.TabIndex = 2;
             this.groupBoxCanvas.TabStop = false;
             this.groupBoxCanvas.Text = "Editor";
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.notizBox);
             this.groupBox1.Controls.Add(this.buttonAddTag);
             this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.tagSelector);
+            this.groupBox1.Controls.Add(this.groupBoxZoom);
+            this.groupBox1.Controls.Add(this.notizBoxLabel);
+            this.groupBox1.Controls.Add(this.tagSelectorLabel);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.tagSelector);
             this.groupBox1.Controls.Add(this.sequenceSelector);
             this.groupBox1.Location = new System.Drawing.Point(14, 139);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1007, 86);
+            this.groupBox1.Size = new System.Drawing.Size(1449, 157);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             // 
@@ -230,14 +233,14 @@ namespace DNATagger
             this.button1.Text = "Delete Track";
             this.button1.UseVisualStyleBackColor = false;
             // 
-            // tagSelector
+            // tagSelectorLabel
             // 
-            this.tagSelector.AutoSize = true;
-            this.tagSelector.Location = new System.Drawing.Point(258, 9);
-            this.tagSelector.Name = "tagSelector";
-            this.tagSelector.Size = new System.Drawing.Size(91, 15);
-            this.tagSelector.TabIndex = 5;
-            this.tagSelector.Text = "Selected Tag";
+            this.tagSelectorLabel.AutoSize = true;
+            this.tagSelectorLabel.Location = new System.Drawing.Point(258, 9);
+            this.tagSelectorLabel.Name = "tagSelectorLabel";
+            this.tagSelectorLabel.Size = new System.Drawing.Size(91, 15);
+            this.tagSelectorLabel.TabIndex = 5;
+            this.tagSelectorLabel.Text = "Selected Tag";
             // 
             // label2
             // 
@@ -248,20 +251,21 @@ namespace DNATagger
             this.label2.TabIndex = 5;
             this.label2.Text = "Selected Sequence";
             // 
-            // comboBox1
+            // tagSelector
             // 
-            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tagSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.comboBox1.Location = new System.Drawing.Point(261, 27);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(240, 23);
-            this.comboBox1.TabIndex = 4;
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.OnChangeViewOptions);
+            this.tagSelector.Location = new System.Drawing.Point(261, 27);
+            this.tagSelector.Name = "tagSelector";
+            this.tagSelector.Size = new System.Drawing.Size(240, 23);
+            this.tagSelector.TabIndex = 4;
+            this.tagSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeSelectedTag);
             // 
             // sequenceSelector
             // 
             this.sequenceSelector.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.sequenceSelector.DropDownWidth = 440;
             this.sequenceSelector.Location = new System.Drawing.Point(6, 27);
             this.sequenceSelector.Name = "sequenceSelector";
             this.sequenceSelector.Size = new System.Drawing.Size(240, 23);
@@ -285,53 +289,12 @@ namespace DNATagger
             this.groupBoxZoom.Controls.Add(this.labelPlus);
             this.groupBoxZoom.Controls.Add(this.labelMinus);
             this.groupBoxZoom.Controls.Add(this.zoomRegler);
-            this.groupBoxZoom.Location = new System.Drawing.Point(1138, 139);
+            this.groupBoxZoom.Location = new System.Drawing.Point(6, 86);
             this.groupBoxZoom.Name = "groupBoxZoom";
             this.groupBoxZoom.Size = new System.Drawing.Size(325, 71);
             this.groupBoxZoom.TabIndex = 8;
             this.groupBoxZoom.TabStop = false;
             this.groupBoxZoom.Text = "Zoom";
-            // 
-            // panelSequenceViewer
-            // 
-            this.panelSequenceViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelSequenceViewer.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panelSequenceViewer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelSequenceViewer.Location = new System.Drawing.Point(20, 33);
-            this.panelSequenceViewer.Name = "panelSequenceViewer";
-            this.panelSequenceViewer.Size = new System.Drawing.Size(1439, 100);
-            this.panelSequenceViewer.TabIndex = 10;
-            // 
-            // selectStartLabel
-            // 
-            this.selectStartLabel.AutoSize = true;
-            this.selectStartLabel.Location = new System.Drawing.Point(1135, 217);
-            this.selectStartLabel.Name = "selectStartLabel";
-            this.selectStartLabel.Size = new System.Drawing.Size(98, 15);
-            this.selectStartLabel.TabIndex = 11;
-            this.selectStartLabel.Text = "startSelected";
-            // 
-            // selectEndLabel
-            // 
-            this.selectEndLabel.AutoSize = true;
-            this.selectEndLabel.Location = new System.Drawing.Point(1359, 217);
-            this.selectEndLabel.Name = "selectEndLabel";
-            this.selectEndLabel.Size = new System.Drawing.Size(84, 15);
-            this.selectEndLabel.TabIndex = 11;
-            this.selectEndLabel.Text = "endSelected";
-            // 
-            // labelMinus
-            // 
-            this.labelMinus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelMinus.AutoSize = true;
-            this.labelMinus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.labelMinus.Location = new System.Drawing.Point(6, 27);
-            this.labelMinus.Name = "labelMinus";
-            this.labelMinus.Size = new System.Drawing.Size(16, 17);
-            this.labelMinus.TabIndex = 8;
-            this.labelMinus.Text = "-";
             // 
             // labelPlus
             // 
@@ -345,16 +308,54 @@ namespace DNATagger
             this.labelPlus.TabIndex = 8;
             this.labelPlus.Text = "+";
             // 
+            // labelMinus
+            // 
+            this.labelMinus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelMinus.AutoSize = true;
+            this.labelMinus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelMinus.Location = new System.Drawing.Point(6, 27);
+            this.labelMinus.Name = "labelMinus";
+            this.labelMinus.Size = new System.Drawing.Size(16, 17);
+            this.labelMinus.TabIndex = 8;
+            this.labelMinus.Text = "-";
+            // 
+            // panelSequenceViewer
+            // 
+            this.panelSequenceViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelSequenceViewer.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.panelSequenceViewer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelSequenceViewer.Location = new System.Drawing.Point(20, 33);
+            this.panelSequenceViewer.Name = "panelSequenceViewer";
+            this.panelSequenceViewer.Size = new System.Drawing.Size(1439, 100);
+            this.panelSequenceViewer.TabIndex = 10;
+            // 
+            // notizBox
+            // 
+            this.notizBox.Location = new System.Drawing.Point(507, 27);
+            this.notizBox.Name = "notizBox";
+            this.notizBox.Size = new System.Drawing.Size(936, 130);
+            this.notizBox.TabIndex = 12;
+            this.notizBox.Text = "Notes...";
+            this.notizBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
+            // 
+            // notizBoxLabel
+            // 
+            this.notizBoxLabel.AutoSize = true;
+            this.notizBoxLabel.Location = new System.Drawing.Point(507, 9);
+            this.notizBoxLabel.Name = "notizBoxLabel";
+            this.notizBoxLabel.Size = new System.Drawing.Size(84, 15);
+            this.notizBoxLabel.TabIndex = 5;
+            this.notizBoxLabel.Text = "Annotations";
+            // 
             // WindowMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1475, 723);
-            this.Controls.Add(this.selectEndLabel);
-            this.Controls.Add(this.selectStartLabel);
             this.Controls.Add(this.panelSequenceViewer);
-            this.Controls.Add(this.groupBoxZoom);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBoxCanvas);
             this.Controls.Add(this.mainWindowMenuStrip);
@@ -398,16 +399,16 @@ namespace DNATagger
         private System.Windows.Forms.ComboBox sequenceSelector;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Label tagSelector;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label tagSelectorLabel;
+        private System.Windows.Forms.ComboBox tagSelector;
         private System.Windows.Forms.TrackBar zoomRegler;
         private System.Windows.Forms.GroupBox groupBoxZoom;
         private System.Windows.Forms.Panel panelSequenceViewer;
         private System.Windows.Forms.Button buttonAddTag;
-        private System.Windows.Forms.Label selectStartLabel;
-        private System.Windows.Forms.Label selectEndLabel;
         private System.Windows.Forms.Label labelPlus;
         private System.Windows.Forms.Label labelMinus;
+        private System.Windows.Forms.RichTextBox notizBox;
+        private System.Windows.Forms.Label notizBoxLabel;
     }
 }
 

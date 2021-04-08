@@ -13,6 +13,8 @@ namespace DNATagger {
         private DNASequence _seq;
         public int startPos;
         public int endPos;
+        public String notes;
+        public Font standartFont;
 
         public DNASequence sequence {
             get { return _seq; }
@@ -35,6 +37,7 @@ namespace DNATagger {
             this.startPos = fromPos;
             this.endPos = toPos;
             this.BackColor = color;
+            notes = "Notes to " + header;
         }
 
 
@@ -51,17 +54,29 @@ namespace DNATagger {
 
 
 
-        private void OnClick(object sender, MouseEventArgs e) {
+        public void highlight(){
+            Font = new Font(this.Font, FontStyle.Bold);
+        }
+
+
+
+        public void unhighlight(){ 
+            Font = Parent.Font;
         }
 
 
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
             sequence.setFirstMarker(e.X + Location.X);
+            sequence.window.selectedTag = this;
         }
 
         private void OnMouseUp(object sender, MouseEventArgs e) {
             sequence.setSecondMarker(e.X + Location.X);
+        }
+
+        private void SequenceTag_Load(object sender, EventArgs e) {
+
         }
     }
 }

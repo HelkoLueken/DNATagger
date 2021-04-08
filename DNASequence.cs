@@ -16,6 +16,7 @@ namespace DNATagger {
         private int offsetSense = 0;
         private int offsetAntisense = 0;
         private String _src;
+        public String notes;
         private WindowMain _window = new WindowMain();
         private List<SequenceTag> tags = new List<SequenceTag>();
 
@@ -36,6 +37,7 @@ namespace DNATagger {
                 sense = fasta.ToCharArray();
             }
             this.src = src;
+            notes = "Loaded from: " + src;
             createAntisense();
         }
 
@@ -83,6 +85,7 @@ namespace DNATagger {
             markerPrim.Visible = false;
             markerSek.Visible = false;
             markerBetween.Visible = false;
+            foreach (SequenceTag tag in tags) tag.unhighlight();
         }
 
 
@@ -97,9 +100,25 @@ namespace DNATagger {
             int interval = Width/3;
             for (int pos = 0; pos < sequencePanel.Width; pos += interval){
                 Label lab = new Label();
+                lab.AutoSize = true;
                 lab.Location = new Point(pos, sequencePanel.Location.Y);
                 lab.Text = getBaseAtPos(pos).ToString();
                 sequencePanel.Controls.Add(lab);
+            }
+            foreach (SequenceTag tag in tags){
+                Label startLab = new Label();
+                startLab.Location = new Point((int)(screenBaseWidth() * tag.startPos), sequencePanel.Location.Y);
+                startLab.Text = tag.startPos.ToString();
+                startLab.AutoSize = true;
+                Label endLab = new Label();
+                endLab.Location = new Point((int)(screenBaseWidth() * tag.endPos), sequencePanel.Location.Y);
+                endLab.Text = tag.endPos.ToString();
+                endLab.AutoSize = true;
+                foreach(Label labi in sequencePanel.Controls) {
+                    if (labi.Bounds.IntersectsWith(startLab.Bounds) || labi.Bounds.IntersectsWith(endLab.Bounds)) sequencePanel.Controls.Remove(labi);
+                }
+                sequencePanel.Controls.Add(startLab);
+                sequencePanel.Controls.Add(endLab);
             }
         }
 
@@ -181,6 +200,9 @@ namespace DNATagger {
             scrollContainer.Controls.Add(tag);
             adjustToZoom();
             tag.sequence = this;
+            window.refreshTagSelector();
+            foreach (SequenceTag tagi in tags) tagi.unhighlight(); //Eigentlich überflüssig aber beim ersten speichern in der Combobox wird ein Tag iwie als null hinterlegt, daher kann der letzte Tag anders nicht erreicht werden
+            window.selectedTag = tag;
 
             bool positionFine = false;
             tag.Location = new Point(tag.Location.X, tagLabel.Location.Y - scrollContainer.Location.Y);
@@ -197,6 +219,12 @@ namespace DNATagger {
                     }
                 }
             }
+        }
+
+
+
+        public List<SequenceTag> getTags(){
+            return tags;
         }
 
 
