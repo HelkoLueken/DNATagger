@@ -45,24 +45,25 @@ namespace DNATagger
             this.panelEditor = new System.Windows.Forms.Panel();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.notizBox = new System.Windows.Forms.RichTextBox();
             this.buttonAddTag = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.groupBoxZoom = new System.Windows.Forms.GroupBox();
+            this.labelPlus = new System.Windows.Forms.Label();
+            this.labelMinus = new System.Windows.Forms.Label();
+            this.zoomRegler = new System.Windows.Forms.TrackBar();
+            this.notizBoxLabel = new System.Windows.Forms.Label();
             this.tagSelectorLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tagSelector = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
-            this.zoomRegler = new System.Windows.Forms.TrackBar();
-            this.groupBoxZoom = new System.Windows.Forms.GroupBox();
-            this.labelPlus = new System.Windows.Forms.Label();
-            this.labelMinus = new System.Windows.Forms.Label();
             this.panelSequenceViewer = new System.Windows.Forms.Panel();
-            this.notizBox = new System.Windows.Forms.RichTextBox();
-            this.notizBoxLabel = new System.Windows.Forms.Label();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).BeginInit();
             this.groupBoxZoom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).BeginInit();
             this.SuspendLayout();
             // 
             // mainWindowMenuStrip
@@ -136,6 +137,7 @@ namespace DNATagger
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.loadToolStripMenuItem.Text = "Load Project";
+            this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProject);
             // 
             // saveToolStripMenuItem
             // 
@@ -151,6 +153,7 @@ namespace DNATagger
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.saveAsToolStripMenuItem.Text = "Save as";
+            this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.OnSaveAs);
             // 
             // toolsToolStripMenuItem
             // 
@@ -212,6 +215,15 @@ namespace DNATagger
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             // 
+            // notizBox
+            // 
+            this.notizBox.Location = new System.Drawing.Point(507, 27);
+            this.notizBox.Name = "notizBox";
+            this.notizBox.Size = new System.Drawing.Size(936, 130);
+            this.notizBox.TabIndex = 12;
+            this.notizBox.Text = "Notes...";
+            this.notizBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
+            // 
             // buttonAddTag
             // 
             this.buttonAddTag.BackColor = System.Drawing.SystemColors.Control;
@@ -232,6 +244,63 @@ namespace DNATagger
             this.button1.TabIndex = 6;
             this.button1.Text = "Delete Track";
             this.button1.UseVisualStyleBackColor = false;
+            // 
+            // groupBoxZoom
+            // 
+            this.groupBoxZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBoxZoom.Controls.Add(this.labelPlus);
+            this.groupBoxZoom.Controls.Add(this.labelMinus);
+            this.groupBoxZoom.Controls.Add(this.zoomRegler);
+            this.groupBoxZoom.Location = new System.Drawing.Point(6, 86);
+            this.groupBoxZoom.Name = "groupBoxZoom";
+            this.groupBoxZoom.Size = new System.Drawing.Size(325, 71);
+            this.groupBoxZoom.TabIndex = 8;
+            this.groupBoxZoom.TabStop = false;
+            this.groupBoxZoom.Text = "Zoom";
+            // 
+            // labelPlus
+            // 
+            this.labelPlus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelPlus.AutoSize = true;
+            this.labelPlus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelPlus.Location = new System.Drawing.Point(303, 27);
+            this.labelPlus.Name = "labelPlus";
+            this.labelPlus.Size = new System.Drawing.Size(16, 17);
+            this.labelPlus.TabIndex = 8;
+            this.labelPlus.Text = "+";
+            // 
+            // labelMinus
+            // 
+            this.labelMinus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelMinus.AutoSize = true;
+            this.labelMinus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.labelMinus.Location = new System.Drawing.Point(6, 27);
+            this.labelMinus.Name = "labelMinus";
+            this.labelMinus.Size = new System.Drawing.Size(16, 17);
+            this.labelMinus.TabIndex = 8;
+            this.labelMinus.Text = "-";
+            // 
+            // zoomRegler
+            // 
+            this.zoomRegler.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.zoomRegler.Location = new System.Drawing.Point(28, 20);
+            this.zoomRegler.Maximum = 5;
+            this.zoomRegler.Minimum = -5;
+            this.zoomRegler.Name = "zoomRegler";
+            this.zoomRegler.Size = new System.Drawing.Size(269, 45);
+            this.zoomRegler.TabIndex = 7;
+            this.zoomRegler.ValueChanged += new System.EventHandler(this.OnChangeZoom);
+            // 
+            // notizBoxLabel
+            // 
+            this.notizBoxLabel.AutoSize = true;
+            this.notizBoxLabel.Location = new System.Drawing.Point(507, 9);
+            this.notizBoxLabel.Name = "notizBoxLabel";
+            this.notizBoxLabel.Size = new System.Drawing.Size(84, 15);
+            this.notizBoxLabel.TabIndex = 5;
+            this.notizBoxLabel.Text = "Annotations";
             // 
             // tagSelectorLabel
             // 
@@ -272,54 +341,6 @@ namespace DNATagger
             this.sequenceSelector.TabIndex = 4;
             this.sequenceSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeSelectedSequence);
             // 
-            // zoomRegler
-            // 
-            this.zoomRegler.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.zoomRegler.Location = new System.Drawing.Point(28, 20);
-            this.zoomRegler.Maximum = 5;
-            this.zoomRegler.Minimum = -5;
-            this.zoomRegler.Name = "zoomRegler";
-            this.zoomRegler.Size = new System.Drawing.Size(269, 45);
-            this.zoomRegler.TabIndex = 7;
-            this.zoomRegler.ValueChanged += new System.EventHandler(this.OnChangeZoom);
-            // 
-            // groupBoxZoom
-            // 
-            this.groupBoxZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxZoom.Controls.Add(this.labelPlus);
-            this.groupBoxZoom.Controls.Add(this.labelMinus);
-            this.groupBoxZoom.Controls.Add(this.zoomRegler);
-            this.groupBoxZoom.Location = new System.Drawing.Point(6, 86);
-            this.groupBoxZoom.Name = "groupBoxZoom";
-            this.groupBoxZoom.Size = new System.Drawing.Size(325, 71);
-            this.groupBoxZoom.TabIndex = 8;
-            this.groupBoxZoom.TabStop = false;
-            this.groupBoxZoom.Text = "Zoom";
-            // 
-            // labelPlus
-            // 
-            this.labelPlus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelPlus.AutoSize = true;
-            this.labelPlus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.labelPlus.Location = new System.Drawing.Point(303, 27);
-            this.labelPlus.Name = "labelPlus";
-            this.labelPlus.Size = new System.Drawing.Size(16, 17);
-            this.labelPlus.TabIndex = 8;
-            this.labelPlus.Text = "+";
-            // 
-            // labelMinus
-            // 
-            this.labelMinus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.labelMinus.AutoSize = true;
-            this.labelMinus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.labelMinus.Location = new System.Drawing.Point(6, 27);
-            this.labelMinus.Name = "labelMinus";
-            this.labelMinus.Size = new System.Drawing.Size(16, 17);
-            this.labelMinus.TabIndex = 8;
-            this.labelMinus.Text = "-";
-            // 
             // panelSequenceViewer
             // 
             this.panelSequenceViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -330,24 +351,6 @@ namespace DNATagger
             this.panelSequenceViewer.Name = "panelSequenceViewer";
             this.panelSequenceViewer.Size = new System.Drawing.Size(1439, 100);
             this.panelSequenceViewer.TabIndex = 10;
-            // 
-            // notizBox
-            // 
-            this.notizBox.Location = new System.Drawing.Point(507, 27);
-            this.notizBox.Name = "notizBox";
-            this.notizBox.Size = new System.Drawing.Size(936, 130);
-            this.notizBox.TabIndex = 12;
-            this.notizBox.Text = "Notes...";
-            this.notizBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
-            // 
-            // notizBoxLabel
-            // 
-            this.notizBoxLabel.AutoSize = true;
-            this.notizBoxLabel.Location = new System.Drawing.Point(507, 9);
-            this.notizBoxLabel.Name = "notizBoxLabel";
-            this.notizBoxLabel.Size = new System.Drawing.Size(84, 15);
-            this.notizBoxLabel.TabIndex = 5;
-            this.notizBoxLabel.Text = "Annotations";
             // 
             // WindowMain
             // 
@@ -364,15 +367,16 @@ namespace DNATagger
             this.MainMenuStrip = this.mainWindowMenuStrip;
             this.Name = "WindowMain";
             this.Text = "DNATagger";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
             this.SizeChanged += new System.EventHandler(this.OnResize);
             this.mainWindowMenuStrip.ResumeLayout(false);
             this.mainWindowMenuStrip.PerformLayout();
             this.groupBoxCanvas.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).EndInit();
             this.groupBoxZoom.ResumeLayout(false);
             this.groupBoxZoom.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -409,6 +413,7 @@ namespace DNATagger
         private System.Windows.Forms.Label labelMinus;
         private System.Windows.Forms.RichTextBox notizBox;
         private System.Windows.Forms.Label notizBoxLabel;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 

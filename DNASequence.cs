@@ -43,6 +43,15 @@ namespace DNATagger {
 
 
 
+        public DNASequence(String header, String sequence, String src){
+            InitializeComponent();
+            this.header = header;
+            this.sense = sequence.ToCharArray();
+            this.src = src;
+        }
+
+
+
         private void createAntisense() {
             this.antisense = new char[this.sense.Length];
             for (int i = 0; i < this.sense.Length; i++) {
@@ -147,6 +156,14 @@ namespace DNATagger {
             }
         }
 
+        public String sequence{ 
+            get{
+                StringBuilder o = new StringBuilder();
+                foreach (char c in sense) o.Append(c.ToString());
+                return o.ToString();
+            }
+        }
+
         public String src {
             get { return _src; }
             set { _src = value; }
@@ -176,6 +193,7 @@ namespace DNATagger {
 
         public int getLengthTotal() {
             int up = this.sense.Length + this.offsetSense;
+            if (antisense == null) return up;
             int lo = this.antisense.Length + this.offsetAntisense;
             if (up >= lo) return up;
             else return lo;

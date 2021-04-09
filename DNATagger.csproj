@@ -46,12 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ALT_DNASequence.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ALT_DNASequence.Designer.cs">
-      <DependentUpon>ALT_DNASequence.cs</DependentUpon>
-    </Compile>
     <Compile Include="FileHandler.cs" />
     <Compile Include="SequenceTag.cs">
       <SubType>UserControl</SubType>
@@ -79,9 +73,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="ALT_DNASequence.resx">
-      <DependentUpon>ALT_DNASequence.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

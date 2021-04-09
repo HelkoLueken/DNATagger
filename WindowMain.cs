@@ -15,11 +15,10 @@ namespace DNATagger
     {
         #region Datenverwaltung
 
-        List<DNASequence> sequences = new List<DNASequence>();
+        private List<DNASequence> sequences = new List<DNASequence>();
         WindowAddTag tagAddingDialogue;
+        public String savePath;
         public String notes = "Here you can write notes regarding your project.\nYou will only see these after loading the project.\nBy selecting Sequences or Tags you can add notes to them as well";
-
-
         public delegate void ControlCloser();
         public void OnCloseMyControl() {
             if (tagAddingDialogue != null)
@@ -58,7 +57,7 @@ namespace DNATagger
 
 
 
-        private void addSequence(DNASequence seq){
+        public void addSequence(DNASequence seq){
             seq.window = this;
             sequences.Add(seq);
             panelEditor.Controls.Add(seq);
@@ -76,6 +75,62 @@ namespace DNATagger
             refreshEditor();
         }
 
+
+
+        public void saveNotes() {
+            if (tagSelector.Text != "") {
+                selectedTag.notes = notizBox.Text;
+                return;
+            }
+            if (sequenceSelector.Text != "") selectedSequence.notes = notizBox.Text;
+            else notes = notizBox.Text;
+        }
+
+
+
+        public void refreshTagSelector() {
+            tagSelector.Items.Clear();
+            tagSelector.Text = "";
+            if (selectedSequence != null) foreach (SequenceTag tag in selectedSequence.getTags()) tagSelector.Items.Add(tag);
+        }
+
+
+
+        public List<DNASequence> getSequences(){
+            return sequences;
+        }
+
+
+
+        private void selectSavePath(){
+            saveFileDialog.Filter = "DNATagger Project File|*.dnat";
+            saveFileDialog.ShowDialog();
+            savePath = saveFileDialog.FileName;
+        }
+
+
+
+        private void checkSafetySave(){ 
+            if (sequences.Count > 0){
+                if (MessageBox.Show("Save current project?", "Save project?", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) save();
+            }
+        }
+
+
+
+        public void save(){
+            saveNotes();
+            if (savePath == null || savePath == "") selectSavePath();
+            FileHandler.saveProject(this);
+        }
+
+
+
+        private void clearProject(){
+            notes = "";
+            foreach (DNASequence seq in sequences) dropSequence(seq);
+            savePath = "";
+        }
         #endregion
 
 
@@ -145,7 +200,7 @@ namespace DNATagger
             tagAddingDialogue.Show();
             tagAddingDialogue.Focus();
         }
-        #endregion
+
 
 
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
@@ -160,14 +215,6 @@ namespace DNATagger
 
 
 
-        public void refreshTagSelector(){
-            tagSelector.Items.Clear();
-            tagSelector.Text = "";
-            foreach (SequenceTag tag in selectedSequence.getTags()) tagSelector.Items.Add(tag);
-        }
-
-
-
         private void OnChangeSelectedTag(object sender, EventArgs e) {
             notizBox.Text = selectedTag.notes;
             notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
@@ -177,21 +224,39 @@ namespace DNATagger
 
 
 
-        public void saveNotes(){
-            if (tagSelector.Text != "") {
-                selectedTag.notes = notizBox.Text;
-                return;
-            }
-            if (sequenceSelector.Text != "") selectedSequence.notes = notizBox.Text;
-            else notes = notizBox.Text;
+        private void OnSave(object sender, EventArgs e) {
+            save();
         }
 
-        private void OnSave(object sender, EventArgs e) {
-            saveNotes();
-        }
+
 
         private void OnClickLink(object sender, LinkClickedEventArgs e) {
             System.Diagnostics.Process.Start(e.LinkText);
+        }
+
+
+
+        private void OnSaveAs(object sender, EventArgs e) {
+            saveNotes();
+            selectSavePath();
+            FileHandler.saveProject(this);
+        }
+
+
+
+        #endregion
+
+        private void OnLoadProject(object sender, EventArgs e) {
+            checkSafetySave();
+            clearProject();
+            openFileDialog.Filter = "DNATagger Project File|*.dnat";
+            openFileDialog.ShowDialog();
+            savePath = openFileDialog.FileName;
+            FileHandler.loadProject(this);
+        }
+
+        private void OnClosing(object sender, FormClosingEventArgs e) {
+            checkSafetySave();
         }
     }
 }
