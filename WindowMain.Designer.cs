@@ -44,7 +44,7 @@ namespace DNATagger
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panelEditor = new System.Windows.Forms.Panel();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxTools = new System.Windows.Forms.GroupBox();
             this.notizBox = new System.Windows.Forms.RichTextBox();
             this.buttonAddTag = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -57,13 +57,16 @@ namespace DNATagger
             this.label2 = new System.Windows.Forms.Label();
             this.tagSelector = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
-            this.panelSequenceViewer = new System.Windows.Forms.Panel();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.groupBoxLetterViewer = new System.Windows.Forms.GroupBox();
+            this.showInDepthMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LetterViewBox = new System.Windows.Forms.TextBox();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxTools.SuspendLayout();
             this.groupBoxZoom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).BeginInit();
+            this.groupBoxLetterViewer.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainWindowMenuStrip
@@ -163,6 +166,8 @@ namespace DNATagger
             // 
             // optionsToolStripMenuItem
             // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showInDepthMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(68, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -182,7 +187,7 @@ namespace DNATagger
             this.panelEditor.Location = new System.Drawing.Point(6, 22);
             this.panelEditor.Margin = new System.Windows.Forms.Padding(0);
             this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(1439, 384);
+            this.panelEditor.Size = new System.Drawing.Size(1441, 384);
             this.panelEditor.TabIndex = 1;
             this.panelEditor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickEditorBG);
             // 
@@ -192,35 +197,35 @@ namespace DNATagger
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxCanvas.Controls.Add(this.panelEditor);
-            this.groupBoxCanvas.Location = new System.Drawing.Point(14, 302);
+            this.groupBoxCanvas.Location = new System.Drawing.Point(12, 190);
             this.groupBoxCanvas.Name = "groupBoxCanvas";
-            this.groupBoxCanvas.Size = new System.Drawing.Size(1449, 409);
+            this.groupBoxCanvas.Size = new System.Drawing.Size(1451, 409);
             this.groupBoxCanvas.TabIndex = 2;
             this.groupBoxCanvas.TabStop = false;
             this.groupBoxCanvas.Text = "Editor";
             // 
-            // groupBox1
+            // groupBoxTools
             // 
-            this.groupBox1.Controls.Add(this.notizBox);
-            this.groupBox1.Controls.Add(this.buttonAddTag);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.groupBoxZoom);
-            this.groupBox1.Controls.Add(this.notizBoxLabel);
-            this.groupBox1.Controls.Add(this.tagSelectorLabel);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.tagSelector);
-            this.groupBox1.Controls.Add(this.sequenceSelector);
-            this.groupBox1.Location = new System.Drawing.Point(14, 139);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(1449, 157);
-            this.groupBox1.TabIndex = 5;
-            this.groupBox1.TabStop = false;
+            this.groupBoxTools.Controls.Add(this.notizBox);
+            this.groupBoxTools.Controls.Add(this.buttonAddTag);
+            this.groupBoxTools.Controls.Add(this.button1);
+            this.groupBoxTools.Controls.Add(this.groupBoxZoom);
+            this.groupBoxTools.Controls.Add(this.notizBoxLabel);
+            this.groupBoxTools.Controls.Add(this.tagSelectorLabel);
+            this.groupBoxTools.Controls.Add(this.label2);
+            this.groupBoxTools.Controls.Add(this.tagSelector);
+            this.groupBoxTools.Controls.Add(this.sequenceSelector);
+            this.groupBoxTools.Location = new System.Drawing.Point(12, 27);
+            this.groupBoxTools.Name = "groupBoxTools";
+            this.groupBoxTools.Size = new System.Drawing.Size(1451, 157);
+            this.groupBoxTools.TabIndex = 5;
+            this.groupBoxTools.TabStop = false;
             // 
             // notizBox
             // 
             this.notizBox.Location = new System.Drawing.Point(507, 27);
             this.notizBox.Name = "notizBox";
-            this.notizBox.Size = new System.Drawing.Size(936, 130);
+            this.notizBox.Size = new System.Drawing.Size(944, 130);
             this.notizBox.TabIndex = 12;
             this.notizBox.Text = "Notes...";
             this.notizBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
@@ -252,7 +257,7 @@ namespace DNATagger
             this.groupBoxZoom.Controls.Add(this.labelPlus);
             this.groupBoxZoom.Controls.Add(this.labelMinus);
             this.groupBoxZoom.Controls.Add(this.zoomRegler);
-            this.groupBoxZoom.Location = new System.Drawing.Point(6, 86);
+            this.groupBoxZoom.Location = new System.Drawing.Point(8, 86);
             this.groupBoxZoom.Name = "groupBoxZoom";
             this.groupBoxZoom.Size = new System.Drawing.Size(325, 71);
             this.groupBoxZoom.TabIndex = 8;
@@ -342,25 +347,48 @@ namespace DNATagger
             this.sequenceSelector.TabIndex = 4;
             this.sequenceSelector.SelectedIndexChanged += new System.EventHandler(this.OnChangeSelectedSequence);
             // 
-            // panelSequenceViewer
+            // groupBoxLetterViewer
             // 
-            this.panelSequenceViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBoxLetterViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelSequenceViewer.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panelSequenceViewer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelSequenceViewer.Location = new System.Drawing.Point(20, 33);
-            this.panelSequenceViewer.Name = "panelSequenceViewer";
-            this.panelSequenceViewer.Size = new System.Drawing.Size(1439, 100);
-            this.panelSequenceViewer.TabIndex = 10;
+            this.groupBoxLetterViewer.Controls.Add(this.LetterViewBox);
+            this.groupBoxLetterViewer.Location = new System.Drawing.Point(12, 605);
+            this.groupBoxLetterViewer.Name = "groupBoxLetterViewer";
+            this.groupBoxLetterViewer.Size = new System.Drawing.Size(1451, 106);
+            this.groupBoxLetterViewer.TabIndex = 11;
+            this.groupBoxLetterViewer.TabStop = false;
+            this.groupBoxLetterViewer.Text = "In Depth Viewer";
+            // 
+            // showInDepthMenuItem
+            // 
+            this.showInDepthMenuItem.Checked = true;
+            this.showInDepthMenuItem.CheckOnClick = true;
+            this.showInDepthMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showInDepthMenuItem.Name = "showInDepthMenuItem";
+            this.showInDepthMenuItem.Size = new System.Drawing.Size(214, 22);
+            this.showInDepthMenuItem.Text = "In depth letter view";
+            this.showInDepthMenuItem.CheckStateChanged += new System.EventHandler(this.OnChangeLetterViewerVisibility);
+            // 
+            // LetterViewBox
+            // 
+            this.LetterViewBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.LetterViewBox.Location = new System.Drawing.Point(6, 22);
+            this.LetterViewBox.Multiline = true;
+            this.LetterViewBox.Name = "LetterViewBox";
+            this.LetterViewBox.Size = new System.Drawing.Size(1439, 78);
+            this.LetterViewBox.TabIndex = 11;
             // 
             // WindowMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1475, 723);
-            this.Controls.Add(this.panelSequenceViewer);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBoxLetterViewer);
+            this.Controls.Add(this.groupBoxTools);
             this.Controls.Add(this.groupBoxCanvas);
             this.Controls.Add(this.mainWindowMenuStrip);
             this.DoubleBuffered = true;
@@ -373,11 +401,13 @@ namespace DNATagger
             this.mainWindowMenuStrip.ResumeLayout(false);
             this.mainWindowMenuStrip.PerformLayout();
             this.groupBoxCanvas.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.groupBoxTools.ResumeLayout(false);
+            this.groupBoxTools.PerformLayout();
             this.groupBoxZoom.ResumeLayout(false);
             this.groupBoxZoom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).EndInit();
+            this.groupBoxLetterViewer.ResumeLayout(false);
+            this.groupBoxLetterViewer.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -400,7 +430,7 @@ namespace DNATagger
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Panel panelEditor;
         private System.Windows.Forms.GroupBox groupBoxCanvas;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBoxTools;
         private System.Windows.Forms.ComboBox sequenceSelector;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
@@ -408,13 +438,15 @@ namespace DNATagger
         private System.Windows.Forms.ComboBox tagSelector;
         private System.Windows.Forms.TrackBar zoomRegler;
         private System.Windows.Forms.GroupBox groupBoxZoom;
-        private System.Windows.Forms.Panel panelSequenceViewer;
         private System.Windows.Forms.Button buttonAddTag;
         private System.Windows.Forms.Label labelPlus;
         private System.Windows.Forms.Label labelMinus;
         private System.Windows.Forms.RichTextBox notizBox;
         private System.Windows.Forms.Label notizBoxLabel;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.GroupBox groupBoxLetterViewer;
+        private System.Windows.Forms.ToolStripMenuItem showInDepthMenuItem;
+        private System.Windows.Forms.TextBox LetterViewBox;
     }
 }
 

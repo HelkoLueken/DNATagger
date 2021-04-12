@@ -147,6 +147,14 @@ namespace DNATagger
 
 
 
+        public int displayableLetters { 
+            get{
+                return (int)(LetterViewBox.Width / 7) -2;
+            }
+        }
+
+
+
         private void selectSavePath(){
             saveFileDialog.Filter = "DNATagger Project File|*.dnat";
             saveFileDialog.ShowDialog();
@@ -197,6 +205,12 @@ namespace DNATagger
                 seq.Location = new Point(0, y);
                 y += seq.Height + seq.Font.Height * 2;
             }
+        }
+
+
+
+        public String inDepthView{ 
+            set{ LetterViewBox.Text = value; }
         }
 
 
@@ -320,6 +334,19 @@ namespace DNATagger
 
         private void OnClickEditorBG(object sender, MouseEventArgs e) {
             unselectSequence();
+        }
+
+
+
+        private void OnChangeLetterViewerVisibility(object sender, EventArgs e) {
+            if (showInDepthMenuItem.Checked){
+                groupBoxCanvas.Height -= groupBoxLetterViewer.Height;
+                groupBoxLetterViewer.Visible = true;
+            }
+            else{
+                groupBoxLetterViewer.Visible = false;
+                groupBoxCanvas.Height += groupBoxLetterViewer.Height;
+            }
         }
         #endregion
     }

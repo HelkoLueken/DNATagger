@@ -111,7 +111,7 @@ namespace DNATagger {
                 Label lab = new Label();
                 lab.AutoSize = true;
                 lab.Location = new Point(pos, sequencePanel.Location.Y);
-                lab.Text = getBaseAtPos(pos).ToString();
+                lab.Text = getBasePosAtScreenPos(pos).ToString();
                 sequencePanel.Controls.Add(lab);
             }
             foreach (SequenceTag tag in tags){
@@ -139,7 +139,7 @@ namespace DNATagger {
 
 
 
-        public Int32 getBaseAtPos(int pos){
+        public Int32 getBasePosAtScreenPos(int pos){
             if (pos <= 0) return 0;
             Int32 o = (pos * getLengthTotal() / sequencePanel.Width);
             if (o > getLengthTotal()) return getLengthTotal();
@@ -187,10 +187,10 @@ namespace DNATagger {
         }
 
 
-        public int selectedStart =>  getBaseAtPos(markerPrim.Location.X - scrollContainer.AutoScrollPosition.X);
+        public int selectedStart =>  getBasePosAtScreenPos(markerPrim.Location.X - scrollContainer.AutoScrollPosition.X);
 
         public int selectedEnd{ 
-            get { return getBaseAtPos(markerSek.Location.X - scrollContainer.AutoScrollPosition.X); }
+            get { return getBasePosAtScreenPos(markerSek.Location.X - scrollContainer.AutoScrollPosition.X); }
         }
 
 
@@ -265,6 +265,25 @@ namespace DNATagger {
 
 
 
+        /**<summary>Generiert einen String, der den Beginn der ausgewählten Basensequenz mit Beschriftungen ausgibt.</summary>
+         */
+        public String getInDepthView(){
+            StringBuilder o = new StringBuilder();
+
+            for (int i = selectedStart; o.Length < window.displayableLetters - (int)Math.Log10(i) && i < selectedEnd; i++){
+                if ((selectedStart - i)%10 == 0 ) o.Append(i);
+                if (i - selectedStart > o.Length) o.Append(" ");
+            }
+            o.AppendLine();
+            for (int i = selectedStart; i < selectedStart + window.displayableLetters && i < selectedEnd; i++){
+                o.Append(sense[i].ToString());
+            }
+
+            return o.ToString();
+        }
+
+
+
         public List<SequenceTag> getTags(){
             return tags;
         }
@@ -291,6 +310,7 @@ namespace DNATagger {
             markerBetween.Width = markerSek.Location.X - markerPrim.Location.X;
             markerSek.Visible = true;
             markerBetween.Visible = true;
+            window.inDepthView = getInDepthView();
             Invalidate();
         }
 
