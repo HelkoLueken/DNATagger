@@ -156,6 +156,8 @@ namespace DNATagger {
             }
         }
 
+
+
         public String sequence{ 
             get{
                 StringBuilder o = new StringBuilder();
@@ -164,32 +166,46 @@ namespace DNATagger {
             }
         }
 
+
+
         public String src {
             get { return _src; }
             set { _src = value; }
         }
+
+
 
         public WindowMain window {
             get { return this._window; }
             set { this._window = value; adjustToZoom(); }
         }
 
+
+
         public override String ToString() {
             return this.header;
         }
+
+
         public int selectedStart =>  getBaseAtPos(markerPrim.Location.X - scrollContainer.AutoScrollPosition.X);
 
         public int selectedEnd{ 
             get { return getBaseAtPos(markerSek.Location.X - scrollContainer.AutoScrollPosition.X); }
         }
 
+
+
         public int getLengthSense() {
             return this.sense.Length;
         }
 
+
+
         public int getLengthAntisense() {
             return this.antisense.Length;
         }
+
+
 
         public int getLengthTotal() {
             int up = this.sense.Length + this.offsetSense;
@@ -221,15 +237,23 @@ namespace DNATagger {
             window.refreshTagSelector();
             foreach (SequenceTag tagi in tags) tagi.unhighlight(); //Eigentlich überflüssig aber beim ersten speichern in der Combobox wird ein Tag iwie als null hinterlegt, daher kann der letzte Tag anders nicht erreicht werden
             window.selectedTag = tag;
+            initializeTagPosition(tag);
+        }
 
+
+
+        /**<summary>Berechnet die Screenposition für den neu hinzugefügten Tag.
+         * Die Y-Koordinate wird hiernach nicht merh verändert</summary>
+         */
+        private void initializeTagPosition(SequenceTag tag){
             bool positionFine = false;
             tag.Location = new Point(tag.Location.X, tagLabel.Location.Y - scrollContainer.Location.Y);
-            while (!positionFine){
+            while (!positionFine) {
                 positionFine = true;
                 foreach (SequenceTag tagi in tags) {
                     if (tag != tagi && tag.Bounds.IntersectsWith(tagi.Bounds)) {
                         tag.Location = new Point(tag.Location.X, tag.Location.Y + tag.Height);
-                        if (tag.Location.Y + tag.Height > scrollContainer.Height){
+                        if (tag.Location.Y + tag.Height > scrollContainer.Height) {
                             scrollContainer.Height += tag.Height;
                             Height += tag.Height;
                         }
@@ -270,28 +294,22 @@ namespace DNATagger {
             Invalidate();
         }
 
-        private void OnMouseUpOverBG(object sender, MouseEventArgs e) {
-            setSecondMarker(e.X - scrollContainer.Location.X);
+
+
+        private void OnMouseDown(object sender, MouseEventArgs e){ 
+            if (sender == this) setFirstMarker(e.X - scrollContainer.Location.X);
+            else setFirstMarker(e.X);
         }
 
-        private void OnMouseDownOverBG(object sender, MouseEventArgs e) {
-            setFirstMarker(e.X - scrollContainer.Location.X);
+
+
+        private void OnMouseUp(object sender, MouseEventArgs e){
+            if (sender == this) setSecondMarker(e.X - scrollContainer.Location.X);
+            else setSecondMarker(e.X);
         }
 
-        private void OnMouseDownOverBarContainer(object sender, MouseEventArgs e) {
-            setFirstMarker(e.X);
-        }
-
-        private void OnMouseUpOverScrollContainer(object sender, MouseEventArgs e) {
-            setSecondMarker(e.X);
-        }
-
-        private void OnMouseDownOverSequencePanel(object sender, MouseEventArgs e) {
-            setFirstMarker(e.X);
-        }
-
-        private void OnMouseUpOverSequencePanel(object sender, MouseEventArgs e) {
-            setSecondMarker(e.X);
+        private void OnClickSequencePanel(object sender, MouseEventArgs e) {
+            window.unselectTag();
         }
     }
 }

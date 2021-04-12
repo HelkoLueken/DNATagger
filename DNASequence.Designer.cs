@@ -67,8 +67,8 @@ namespace DNATagger {
             this.scrollContainer.Padding = new System.Windows.Forms.Padding(1);
             this.scrollContainer.Size = new System.Drawing.Size(990, 65);
             this.scrollContainer.TabIndex = 2;
-            this.scrollContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverBarContainer);
-            this.scrollContainer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverScrollContainer);
+            this.scrollContainer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            this.scrollContainer.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             // 
             // markerPrim
             // 
@@ -117,8 +117,9 @@ namespace DNATagger {
             this.sequencePanel.Name = "sequencePanel";
             this.sequencePanel.Size = new System.Drawing.Size(240, 22);
             this.sequencePanel.TabIndex = 0;
-            this.sequencePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverSequencePanel);
-            this.sequencePanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverSequencePanel);
+            this.sequencePanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickSequencePanel);
+            this.sequencePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            this.sequencePanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             // 
             // sequenceLabel
             // 
@@ -166,8 +167,8 @@ namespace DNATagger {
             this.Name = "DNASequence";
             this.Size = new System.Drawing.Size(1080, 91);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDraw);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDownOverBG);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUpOverBG);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             this.scrollContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -16,43 +16,88 @@ namespace DNATagger
         #region Datenverwaltung
 
         private List<DNASequence> sequences = new List<DNASequence>();
-        WindowAddTag tagAddingDialogue;
+        private WindowAddTag tagAddingDialogue;
         public String savePath;
-        public String notes = "Here you can write notes regarding your project.\nYou will only see these after loading the project.\nBy selecting Sequences or Tags you can add notes to them as well";
+        public String notes = "Here you can write notes regarding your project, such as URLs to cited papers.\n" +
+            "If you select a sequence or sequence-tag this box will display another set of notes, specifically for them.\n" +
+            "You can deselect any sequence or tag by clicking the background of the editor.";
         public delegate void ControlCloser();
-        public void OnCloseMyControl() {
-            if (tagAddingDialogue != null)
-                tagAddingDialogue.Dispose();
-            tagAddingDialogue = null;
-        }
 
-        public double zoom {
-            get { return Math.Pow(2, zoomRegler.Value); }
-        }
-        public WindowMain()
-        {
+
+
+
+
+        public WindowMain() {
             InitializeComponent();
             notizBox.Text = notes;
             notizBoxLabel.Text = "Project Info";
         }
 
 
+        /**@author Helko
+         * Diese Funktion wird als Delegat an ein untergordnetes Dialogfenster übergeben.
+         * Sie ermiöglicht den Dialogen sich selbst über das Parent Window zu schließen.
+         */
+        public void OnCloseMyControl() {
+            if (tagAddingDialogue != null)
+                tagAddingDialogue.Dispose();
+            tagAddingDialogue = null;
+        }
+
+
+
+        /**@author Helko
+         * <summary>Dieser Faktor wird zum skalieren der Sequenz- und Tags-Balken im Editor verwendet. Er wird über den Schieberegeler eingestellt.
+         * Die werte liegen zwischen 2^-5 und 2^5</summary>
+         */
+        public double zoom {
+            get { return Math.Pow(2, zoomRegler.Value); }
+        }
+        
+
+
 
         public DNASequence selectedSequence{ 
-            get { DNASequence seq = (DNASequence)sequenceSelector.SelectedItem; return seq; }
-            set { saveNotes(); sequenceSelector.SelectedItem = value; }
+            get { 
+                DNASequence seq = (DNASequence)sequenceSelector.SelectedItem;
+                return seq;
+            }
+            set {
+                if (value == selectedSequence) return;
+                saveNotes(); //Muss vor dem Ändern des selectedItem geschehen
+                if (selectedSequence != null) selectedSequence.unhighlight();
+                sequenceSelector.SelectedItem = value;
+            }
         }
 
 
 
         public SequenceTag selectedTag {
-            get { SequenceTag tag = (SequenceTag)tagSelector.SelectedItem; return tag; }
-            set { 
-                saveNotes();
+            get {
+                SequenceTag tag = (SequenceTag)tagSelector.SelectedItem;
+                return tag;
+            }
+            set {
+                if (value == selectedTag) return;
+                saveNotes(); //Muss vor dem Ändern des selectedItem geschehen
                 if (selectedTag != null) selectedTag.unhighlight();
                 selectedSequence = value.sequence;
                 tagSelector.SelectedItem = value;
             }
+        }
+
+
+
+        private void unselectSequence(){
+            if (selectedSequence != null) selectedSequence.unhighlight();
+            sequenceSelector.SelectedItem = null;
+        }
+
+
+
+        public void unselectTag(){
+            if (selectedTag != null) selectedTag.unhighlight();
+            tagSelector.SelectedItem = null;
         }
 
 
@@ -78,11 +123,11 @@ namespace DNATagger
 
 
         public void saveNotes() {
-            if (tagSelector.Text != "") {
+            if (selectedTag != null && tagSelector.Text != "") {
                 selectedTag.notes = notizBox.Text;
                 return;
             }
-            if (sequenceSelector.Text != "") selectedSequence.notes = notizBox.Text;
+            if (selectedSequence != null) selectedSequence.notes = notizBox.Text;
             else notes = notizBox.Text;
         }
 
@@ -105,11 +150,12 @@ namespace DNATagger
         private void selectSavePath(){
             saveFileDialog.Filter = "DNATagger Project File|*.dnat";
             saveFileDialog.ShowDialog();
-            savePath = saveFileDialog.FileName;
+            if (saveFileDialog.FileName != "") savePath = saveFileDialog.FileName;
         }
 
 
-
+        /**<summary> Asks the user to save the currently loaded project. If there are no sequences loaded the user will not be asked.</summary>
+         */
         private void checkSafetySave(){ 
             if (sequences.Count > 0){
                 if (MessageBox.Show("Save current project?", "Save project?", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) save();
@@ -128,7 +174,7 @@ namespace DNATagger
 
         private void clearProject(){
             notes = "";
-            foreach (DNASequence seq in sequences) dropSequence(seq);
+            for (int i = sequences.Count - 1; i >= 0; i--) dropSequence(sequences.ElementAt(i)); //foreach funktioniert nicht, weil gelöscht wird
             savePath = "";
         }
         #endregion
@@ -151,6 +197,23 @@ namespace DNATagger
                 seq.Location = new Point(0, y);
                 y += seq.Height + seq.Font.Height * 2;
             }
+        }
+
+
+
+        private void refreshNoteBox() {
+            if (selectedTag != null) {
+                notizBox.Text = selectedTag.notes;
+                notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
+                return;
+            }
+            if (selectedSequence != null) {
+                notizBox.Text = selectedSequence.notes;
+                notizBoxLabel.Text = "Annotations for Sequence: " + selectedSequence.header;
+                return;
+            }
+            notizBoxLabel.Text = "Project Info";
+            notizBox.Text = notes;
         }
 
         #endregion
@@ -194,8 +257,7 @@ namespace DNATagger
 
 
         private void OnAddTag(object sender, EventArgs e) {
-            if (sequenceSelector.SelectedItem == null) return;
-            if (selectedSequence == null) return;
+            if (sequenceSelector.SelectedItem == null || selectedSequence == null) return;
             if (tagAddingDialogue == null) tagAddingDialogue = new WindowAddTag(selectedSequence, new ControlCloser(OnCloseMyControl));
             tagAddingDialogue.Show();
             tagAddingDialogue.Focus();
@@ -204,11 +266,8 @@ namespace DNATagger
 
 
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
-            foreach (DNASequence seqi in sequences) seqi.unhighlight();
-            DNASequence seq = (DNASequence)sequenceSelector.SelectedItem;
-            seq.highlight();
-            notizBox.Text = selectedSequence.notes;
-            notizBoxLabel.Text = "Annotations for Sequence: " + selectedSequence.header;
+            if (selectedSequence != null) selectedSequence.highlight();
+            refreshNoteBox();
             refreshTagSelector();
             refreshEditor();
         }
@@ -216,9 +275,8 @@ namespace DNATagger
 
 
         private void OnChangeSelectedTag(object sender, EventArgs e) {
-            notizBox.Text = selectedTag.notes;
-            notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
-            selectedTag.highlight();
+            if (selectedTag != null) selectedTag.highlight();
+            refreshNoteBox();
             refreshEditor();
         }
 
@@ -244,8 +302,6 @@ namespace DNATagger
 
 
 
-        #endregion
-
         private void OnLoadProject(object sender, EventArgs e) {
             checkSafetySave();
             clearProject();
@@ -255,8 +311,16 @@ namespace DNATagger
             FileHandler.loadProject(this);
         }
 
+
+
         private void OnClosing(object sender, FormClosingEventArgs e) {
             checkSafetySave();
         }
+
+
+        private void OnClickEditorBG(object sender, MouseEventArgs e) {
+            unselectSequence();
+        }
+        #endregion
     }
 }

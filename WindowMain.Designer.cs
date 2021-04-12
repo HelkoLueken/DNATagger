@@ -184,6 +184,7 @@ namespace DNATagger
             this.panelEditor.Name = "panelEditor";
             this.panelEditor.Size = new System.Drawing.Size(1439, 384);
             this.panelEditor.TabIndex = 1;
+            this.panelEditor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickEditorBG);
             // 
             // groupBoxCanvas
             // 

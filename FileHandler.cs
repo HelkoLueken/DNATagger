@@ -35,6 +35,7 @@ namespace DNATagger
 
 
         public static void closeFileReader() {
+            if (fileReader == null) return;
             fileReader.Close();
             fileReader.Dispose();
             fileReader = null;
@@ -106,28 +107,28 @@ namespace DNATagger
 
 
         public static void saveProject(WindowMain prj){
-            accessSaveFile(prj.savePath);
-
-            try{
-                if (prj.notes != null) fileWriter.WriteLine(prj.notes);
-                foreach (DNASequence seq in prj.getSequences()){
-                    fileWriter.WriteLine("-Sequence");
-                    fileWriter.WriteLine(seq.header);
-                    fileWriter.WriteLine(seq.sequence);
-                    fileWriter.WriteLine(seq.src);
-                    if (seq.notes != null) fileWriter.WriteLine(seq.notes);
-                    foreach (SequenceTag tag in seq.getTags()){
-                        fileWriter.WriteLine("-Tag");
-                        fileWriter.WriteLine(tag.header);
-                        fileWriter.WriteLine(tag.startPos);
-                        fileWriter.WriteLine(tag.endPos);
-                        fileWriter.WriteLine(tag.BackColor.ToArgb().ToString());
-                        if (tag.notes != null) fileWriter.WriteLine(tag.notes);
+            if (accessSaveFile(prj.savePath)){
+                try{
+                    if (prj.notes != null) fileWriter.WriteLine(prj.notes);
+                    foreach (DNASequence seq in prj.getSequences()){
+                        fileWriter.WriteLine("-Sequence");
+                        fileWriter.WriteLine(seq.header);
+                        fileWriter.WriteLine(seq.sequence);
+                        fileWriter.WriteLine(seq.src);
+                        if (seq.notes != null) fileWriter.WriteLine(seq.notes);
+                        foreach (SequenceTag tag in seq.getTags()){
+                            fileWriter.WriteLine("-Tag");
+                            fileWriter.WriteLine(tag.header);
+                            fileWriter.WriteLine(tag.startPos);
+                            fileWriter.WriteLine(tag.endPos);
+                            fileWriter.WriteLine(tag.BackColor.ToArgb().ToString());
+                            if (tag.notes != null) fileWriter.WriteLine(tag.notes);
+                        }
                     }
                 }
-            }
-            catch{
-                Console.WriteLine("Critical Error while saving project! Save while might be corrupted!");
+                catch{
+                    Console.WriteLine("Critical Error while saving project! Save while might be corrupted!");
+                }
             }
 
             closeFileWriter();
@@ -142,7 +143,7 @@ namespace DNATagger
                     StringBuilder notes = new StringBuilder();
                     line = fileReader.ReadLine();
                     while(line != "-Sequence"){
-                        notes.Append(line);
+                        notes.AppendLine(line);
                         line = fileReader.ReadLine();
                     }
 
@@ -156,7 +157,7 @@ namespace DNATagger
                     
                         line = fileReader.ReadLine();
                         while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream){ //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
-                            notes.Append(line);
+                            notes.AppendLine(line);
                             line = fileReader.ReadLine();
                         }
                         seq.notes = notes.ToString();
@@ -168,7 +169,7 @@ namespace DNATagger
                             line = fileReader.ReadLine();
                             do { //Einlesen der Tagnotes, bis neuer Tag neue Sequenz oder Dateiende
                                 if (line != "-Tag" && line != "-Sequence"){
-                                    notes.Append(line);
+                                    notes.AppendLine(line);
                                     line = fileReader.ReadLine();
                                 }
                             } while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream);
