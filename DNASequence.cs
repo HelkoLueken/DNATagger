@@ -100,9 +100,10 @@ namespace DNATagger {
 
 
         public void adjustToZoom() {
+            if (window == null || Parent == null) return;
             sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
             foreach (SequenceTag tag in tags){
-                tag.Location = new Point((int)(screenBaseWidth() * tag.startPos + scrollContainer.AutoScrollPosition.X), tag.Location.Y);
+                tag.Location = new Point((int)(screenBaseWidth() * (tag.startPos) + scrollContainer.AutoScrollPosition.X), tag.Location.Y);
                 tag.Width = (int)(screenBaseWidth() * tag.getLength());
             }
             sequencePanel.Controls.Clear();
@@ -116,11 +117,11 @@ namespace DNATagger {
             }
             foreach (SequenceTag tag in tags){
                 Label startLab = new Label();
-                startLab.Location = new Point((int)(screenBaseWidth() * tag.startPos), sequencePanel.Location.Y);
+                startLab.Location = new Point((int)(screenBaseWidth() * (tag.startPos-1)), sequencePanel.Location.Y);
                 startLab.Text = tag.startPos.ToString();
                 startLab.AutoSize = true;
                 Label endLab = new Label();
-                endLab.Location = new Point((int)(screenBaseWidth() * tag.endPos), sequencePanel.Location.Y);
+                endLab.Location = new Point((int)(screenBaseWidth() * (tag.endPos-1)), sequencePanel.Location.Y);
                 endLab.Text = tag.endPos.ToString();
                 endLab.AutoSize = true;
                 foreach(Label labi in sequencePanel.Controls) {
@@ -177,7 +178,7 @@ namespace DNATagger {
 
         public WindowMain window {
             get { return this._window; }
-            set { this._window = value; adjustToZoom(); }
+            set { this._window = value; }
         }
 
 
@@ -271,14 +272,33 @@ namespace DNATagger {
             StringBuilder o = new StringBuilder();
 
             for (int i = selectedStart; o.Length < window.displayableLetters - (int)Math.Log10(i) && i < selectedEnd; i++){
-                if ((selectedStart - i)%10 == 0 ) o.Append(i);
+                if (i%10 == 0 ) o.Append(i);
                 if (i - selectedStart > o.Length) o.Append(" ");
             }
             o.AppendLine();
             for (int i = selectedStart; i < selectedStart + window.displayableLetters && i < selectedEnd; i++){
                 o.Append(sense[i].ToString());
             }
-
+            o.AppendLine();
+            foreach (SequenceTag tag in tags){
+                if (tag.startPos > selectedStart && tag.startPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters){
+                    for (int i = selectedStart; i < tag.startPos; i++) o.Append(" ");
+                    o.Append("|");
+                    if (tag.header.Length < window.displayableLetters - (tag.startPos - selectedStart) - 3) o.Append("-> " + tag.header);
+                    o.AppendLine();
+                }
+                if(tag.endPos > selectedStart && tag.endPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters){
+                    if (tag.header.Length < tag.endPos - selectedStart - 4){ // Dieser Block ist fehlerhaft
+                        for (int i = selectedStart; i < tag.endPos - tag.header.Length - 4; i++) o.Append(" ");
+                        o.Append(tag.header + " ->|");
+                    }
+                    else{
+                        for (int i = selectedStart; i < tag.endPos; i++) o.Append(" ");
+                        o.Append("|");
+                    }
+                    o.AppendLine();
+                }
+            }
             return o.ToString();
         }
 

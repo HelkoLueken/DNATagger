@@ -107,6 +107,7 @@ namespace DNATagger
             sequences.Add(seq);
             panelEditor.Controls.Add(seq);
             sequenceSelector.Items.Add(seq);
+            seq.adjustToZoom();
             arrangeSequences();
         }
 
@@ -184,6 +185,9 @@ namespace DNATagger
             notes = "";
             for (int i = sequences.Count - 1; i >= 0; i--) dropSequence(sequences.ElementAt(i)); //foreach funktioniert nicht, weil gelöscht wird
             savePath = "";
+            sequenceSelector.Text = "";
+            tagSelector.Text = "";
+            refreshNoteBox();
         }
         #endregion
 
@@ -228,6 +232,29 @@ namespace DNATagger
             }
             notizBoxLabel.Text = "Project Info";
             notizBox.Text = notes;
+        }
+
+
+
+        public void refreshPosLabels(){
+            if (selectedTag != null) {
+                lengthLabel.Text = "Length: " + selectedTag.getLength();
+                startLabel.Visible = true;
+                startLabel.Text = "Start: " + selectedTag.startPos;
+                endLabel.Visible = true;
+                endLabel.Text = "End: " + selectedTag.endPos;
+                notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
+                return;
+            }
+            if (selectedSequence != null) {
+                lengthLabel.Text = "Length: " + selectedSequence.getLengthTotal();
+                startLabel.Visible = false;
+                endLabel.Visible = false;
+                return;
+            }
+            lengthLabel.Text = "Length:";
+            startLabel.Visible = false;
+            endLabel.Visible = false;
         }
 
         #endregion
@@ -282,6 +309,7 @@ namespace DNATagger
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
             if (selectedSequence != null) selectedSequence.highlight();
             refreshNoteBox();
+            refreshPosLabels();
             refreshTagSelector();
             refreshEditor();
         }
@@ -291,6 +319,7 @@ namespace DNATagger
         private void OnChangeSelectedTag(object sender, EventArgs e) {
             if (selectedTag != null) selectedTag.highlight();
             refreshNoteBox();
+            refreshPosLabels();
             refreshEditor();
         }
 
@@ -349,5 +378,10 @@ namespace DNATagger
             }
         }
         #endregion
+
+        private void OnNewProject(object sender, EventArgs e) {
+            checkSafetySave();
+            clearProject();
+        }
     }
 }

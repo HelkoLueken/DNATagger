@@ -79,7 +79,7 @@ namespace DNATagger {
             this.markerPrim.Location = new System.Drawing.Point(100, 1);
             this.markerPrim.Margin = new System.Windows.Forms.Padding(0);
             this.markerPrim.Name = "markerPrim";
-            this.markerPrim.Size = new System.Drawing.Size(6, 63);
+            this.markerPrim.Size = new System.Drawing.Size(6, 65);
             this.markerPrim.TabIndex = 0;
             this.markerPrim.Visible = false;
             // 
