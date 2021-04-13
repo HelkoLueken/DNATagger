@@ -288,7 +288,7 @@ namespace DNATagger {
                     o.AppendLine();
                 }
                 if(tag.endPos > selectedStart && tag.endPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters){
-                    if (tag.header.Length < tag.endPos - selectedStart - 4){ // Dieser Block ist fehlerhaft
+                    if (tag.header.Length < tag.endPos - selectedStart - 4){
                         for (int i = selectedStart; i < tag.endPos - tag.header.Length - 4; i++) o.Append(" ");
                         o.Append(tag.header + " ->|");
                     }
@@ -306,6 +306,14 @@ namespace DNATagger {
 
         public List<SequenceTag> getTags(){
             return tags;
+        }
+
+
+
+        public void dropTag(SequenceTag tag){
+            tags.Remove(tag);
+            scrollContainer.Controls.Remove(tag);
+            tag.Dispose();
         }
 
 

@@ -17,6 +17,7 @@ namespace DNATagger
 
         private List<DNASequence> sequences = new List<DNASequence>();
         private WindowAddTag tagAddingDialogue;
+        private WindowAddSequence seqAddingDialogue;
         public String savePath;
         public String notes = "Here you can write notes regarding your project, such as URLs to cited papers.\n" +
             "If you select a sequence or sequence-tag this box will display another set of notes, specifically for them.\n" +
@@ -38,10 +39,16 @@ namespace DNATagger
          * Diese Funktion wird als Delegat an ein untergordnetes Dialogfenster übergeben.
          * Sie ermiöglicht den Dialogen sich selbst über das Parent Window zu schließen.
          */
-        public void OnCloseMyControl() {
+        public void OnCloseTagAddingDlg() {
             if (tagAddingDialogue != null)
                 tagAddingDialogue.Dispose();
             tagAddingDialogue = null;
+        }
+
+        public void OnCloseSeqAddingDlg() {
+            if (seqAddingDialogue != null)
+                seqAddingDialogue.Dispose();
+            seqAddingDialogue = null;
         }
 
 
@@ -114,10 +121,22 @@ namespace DNATagger
 
 
         private void dropSequence(DNASequence seq) {
+            if (seq == selectedSequence) sequenceSelector.Text = "";
             this.sequenceSelector.Items.Remove(seq);
             sequences.Remove(seq);
             panelEditor.Controls.Remove(seq);
+            seq.Dispose();
             arrangeSequences();
+            refreshEditor();
+        }
+
+
+
+        private void dropTag(SequenceTag tag){
+            if (tag == selectedTag) tagSelector.Text = "";
+            tag.sequence.dropTag(tag);
+            refreshTagSelector();
+            panelEditor.Controls.Remove(tag);
             refreshEditor();
         }
 
@@ -263,27 +282,6 @@ namespace DNATagger
 
         #region Event Management
 
-        private void OnAddTestSequence(object sender, EventArgs e)
-        {  
-            addSequence(new DNASequence(">Testsequenz\nACGT", src : "System Test"));
-            refreshEditor(); 
-        }
-
-
-
-        private void OnOpenFasta(object sender, EventArgs e)
-        {
-            openFileDialog.Filter = "Fasta File|*.fasta|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            List<DNASequence> readSeqs = FileHandler.readFasta(openFileDialog.FileName);
-            foreach (DNASequence seq in readSeqs){
-                addSequence(seq);
-            }
-            refreshEditor();
-        }
-
-
-
         private void OnResize(object sender, EventArgs e)
         {
             refreshEditor();
@@ -297,11 +295,20 @@ namespace DNATagger
         }
 
 
+
         private void OnAddTag(object sender, EventArgs e) {
             if (sequenceSelector.SelectedItem == null || selectedSequence == null) return;
-            if (tagAddingDialogue == null) tagAddingDialogue = new WindowAddTag(selectedSequence, new ControlCloser(OnCloseMyControl));
+            if (tagAddingDialogue == null) tagAddingDialogue = new WindowAddTag(selectedSequence, new ControlCloser(OnCloseTagAddingDlg));
             tagAddingDialogue.Show();
             tagAddingDialogue.Focus();
+        }
+
+
+
+        private void OnAddSeq(object sender, EventArgs e) {
+            if (seqAddingDialogue == null) seqAddingDialogue = new WindowAddSequence(this, new ControlCloser(OnCloseSeqAddingDlg));
+            seqAddingDialogue.Show();
+            seqAddingDialogue.Focus();
         }
 
 
@@ -361,6 +368,7 @@ namespace DNATagger
         }
 
 
+
         private void OnClickEditorBG(object sender, MouseEventArgs e) {
             unselectSequence();
         }
@@ -377,11 +385,28 @@ namespace DNATagger
                 groupBoxCanvas.Height += groupBoxLetterViewer.Height;
             }
         }
-        #endregion
+
+
 
         private void OnNewProject(object sender, EventArgs e) {
             checkSafetySave();
             clearProject();
         }
+
+
+
+        private void OnDropSequence(object sender, EventArgs e) {
+            if (selectedSequence == null) return;
+            if (MessageBox.Show("Really delete selected sequence?", "Delete sequence?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) dropSequence(selectedSequence);
+        }
+
+
+
+        private void OnDropTag(object sender, EventArgs e) {
+            if (selectedTag == null) return;
+            if (MessageBox.Show("Really delete selected sequence-tag?", "Delete tag?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) dropTag(selectedTag);
+        }
+
+        #endregion
     }
 }

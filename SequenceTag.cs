@@ -74,9 +74,5 @@ namespace DNATagger {
         private void OnMouseUp(object sender, MouseEventArgs e) {
             sequence.setSecondMarker(e.X + Location.X);
         }
-
-        private void SequenceTag_Load(object sender, EventArgs e) {
-
-        }
     }
 }

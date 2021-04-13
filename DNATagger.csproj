@@ -59,6 +59,12 @@
     <Compile Include="DNASequence.Designer.cs">
       <DependentUpon>DNASequence.cs</DependentUpon>
     </Compile>
+    <Compile Include="WindowAddSequence.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowAddSequence.Designer.cs">
+      <DependentUpon>WindowAddSequence.cs</DependentUpon>
+    </Compile>
     <Compile Include="WindowAddTag.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DNASequence.resx">
       <DependentUpon>DNASequence.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowAddSequence.resx">
+      <DependentUpon>WindowAddSequence.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WindowAddTag.resx">
       <DependentUpon>WindowAddTag.cs</DependentUpon>

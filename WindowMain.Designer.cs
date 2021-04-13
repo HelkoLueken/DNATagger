@@ -32,20 +32,20 @@ namespace DNATagger
             this.mainWindowMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterDNASequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loadFastaFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.asTextToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showInDepthMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panelEditor = new System.Windows.Forms.Panel();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.groupBoxTools = new System.Windows.Forms.GroupBox();
+            this.groupBoxPosLabels = new System.Windows.Forms.GroupBox();
+            this.lengthLabel = new System.Windows.Forms.Label();
+            this.endLabel = new System.Windows.Forms.Label();
+            this.startLabel = new System.Windows.Forms.Label();
             this.notizBox = new System.Windows.Forms.RichTextBox();
             this.buttonAddTag = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -61,17 +61,15 @@ namespace DNATagger
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxLetterViewer = new System.Windows.Forms.GroupBox();
             this.LetterViewBox = new System.Windows.Forms.TextBox();
-            this.lengthLabel = new System.Windows.Forms.Label();
-            this.startLabel = new System.Windows.Forms.Label();
-            this.endLabel = new System.Windows.Forms.Label();
-            this.groupBoxPosLabels = new System.Windows.Forms.GroupBox();
+            this.buttonAddSeq = new System.Windows.Forms.Button();
+            this.deleteTagButton = new System.Windows.Forms.Button();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBoxTools.SuspendLayout();
+            this.groupBoxPosLabels.SuspendLayout();
             this.groupBoxZoom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).BeginInit();
             this.groupBoxLetterViewer.SuspendLayout();
-            this.groupBoxPosLabels.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainWindowMenuStrip
@@ -80,7 +78,6 @@ namespace DNATagger
             this.mainWindowMenuStrip.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mainWindowMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.toolsToolStripMenuItem,
             this.optionsToolStripMenuItem});
             this.mainWindowMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainWindowMenuStrip.Name = "mainWindowMenuStrip";
@@ -104,33 +101,10 @@ namespace DNATagger
             // 
             // enterDNASequenceToolStripMenuItem
             // 
-            this.enterDNASequenceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadFastaFileToolStripMenuItem,
-            this.asTextToolStripMenuItem,
-            this.testToolStripMenuItem});
             this.enterDNASequenceToolStripMenuItem.Name = "enterDNASequenceToolStripMenuItem";
             this.enterDNASequenceToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.enterDNASequenceToolStripMenuItem.Text = "Enter DNA sequence...";
-            // 
-            // loadFastaFileToolStripMenuItem
-            // 
-            this.loadFastaFileToolStripMenuItem.Name = "loadFastaFileToolStripMenuItem";
-            this.loadFastaFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.loadFastaFileToolStripMenuItem.Text = "From file";
-            this.loadFastaFileToolStripMenuItem.Click += new System.EventHandler(this.OnOpenFasta);
-            // 
-            // asTextToolStripMenuItem
-            // 
-            this.asTextToolStripMenuItem.Name = "asTextToolStripMenuItem";
-            this.asTextToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.asTextToolStripMenuItem.Text = "As text";
-            // 
-            // testToolStripMenuItem
-            // 
-            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
-            this.testToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.testToolStripMenuItem.Text = "Test";
-            this.testToolStripMenuItem.Click += new System.EventHandler(this.OnAddTestSequence);
+            this.enterDNASequenceToolStripMenuItem.Click += new System.EventHandler(this.OnAddSeq);
             // 
             // newToolStripMenuItem
             // 
@@ -163,12 +137,6 @@ namespace DNATagger
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
             this.saveAsToolStripMenuItem.Text = "Save as";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.OnSaveAs);
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.toolsToolStripMenuItem.Text = "Tools";
             // 
             // optionsToolStripMenuItem
             // 
@@ -227,7 +195,9 @@ namespace DNATagger
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTools.Controls.Add(this.groupBoxPosLabels);
             this.groupBoxTools.Controls.Add(this.notizBox);
+            this.groupBoxTools.Controls.Add(this.buttonAddSeq);
             this.groupBoxTools.Controls.Add(this.buttonAddTag);
+            this.groupBoxTools.Controls.Add(this.deleteTagButton);
             this.groupBoxTools.Controls.Add(this.button1);
             this.groupBoxTools.Controls.Add(this.groupBoxZoom);
             this.groupBoxTools.Controls.Add(this.notizBoxLabel);
@@ -240,6 +210,44 @@ namespace DNATagger
             this.groupBoxTools.Size = new System.Drawing.Size(1451, 157);
             this.groupBoxTools.TabIndex = 5;
             this.groupBoxTools.TabStop = false;
+            // 
+            // groupBoxPosLabels
+            // 
+            this.groupBoxPosLabels.Controls.Add(this.lengthLabel);
+            this.groupBoxPosLabels.Controls.Add(this.endLabel);
+            this.groupBoxPosLabels.Controls.Add(this.startLabel);
+            this.groupBoxPosLabels.Location = new System.Drawing.Point(339, 86);
+            this.groupBoxPosLabels.Name = "groupBoxPosLabels";
+            this.groupBoxPosLabels.Size = new System.Drawing.Size(162, 71);
+            this.groupBoxPosLabels.TabIndex = 14;
+            this.groupBoxPosLabels.TabStop = false;
+            // 
+            // lengthLabel
+            // 
+            this.lengthLabel.AutoSize = true;
+            this.lengthLabel.Location = new System.Drawing.Point(6, 19);
+            this.lengthLabel.Name = "lengthLabel";
+            this.lengthLabel.Size = new System.Drawing.Size(56, 15);
+            this.lengthLabel.TabIndex = 13;
+            this.lengthLabel.Text = "Length:";
+            // 
+            // endLabel
+            // 
+            this.endLabel.AutoSize = true;
+            this.endLabel.Location = new System.Drawing.Point(6, 50);
+            this.endLabel.Name = "endLabel";
+            this.endLabel.Size = new System.Drawing.Size(35, 15);
+            this.endLabel.TabIndex = 13;
+            this.endLabel.Text = "End:";
+            // 
+            // startLabel
+            // 
+            this.startLabel.AutoSize = true;
+            this.startLabel.Location = new System.Drawing.Point(6, 35);
+            this.startLabel.Name = "startLabel";
+            this.startLabel.Size = new System.Drawing.Size(49, 15);
+            this.startLabel.TabIndex = 13;
+            this.startLabel.Text = "Start:";
             // 
             // notizBox
             // 
@@ -257,21 +265,22 @@ namespace DNATagger
             this.buttonAddTag.BackColor = System.Drawing.SystemColors.Control;
             this.buttonAddTag.Location = new System.Drawing.Point(261, 53);
             this.buttonAddTag.Name = "buttonAddTag";
-            this.buttonAddTag.Size = new System.Drawing.Size(97, 27);
+            this.buttonAddTag.Size = new System.Drawing.Size(108, 27);
             this.buttonAddTag.TabIndex = 6;
-            this.buttonAddTag.Text = "Add";
+            this.buttonAddTag.Text = "Add Tag";
             this.buttonAddTag.UseVisualStyleBackColor = false;
             this.buttonAddTag.Click += new System.EventHandler(this.OnAddTag);
             // 
             // button1
             // 
             this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(149, 53);
+            this.button1.Location = new System.Drawing.Point(120, 53);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(97, 27);
+            this.button1.Size = new System.Drawing.Size(126, 27);
             this.button1.TabIndex = 6;
-            this.button1.Text = "Delete Track";
+            this.button1.Text = "Delete Sequence";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.OnDropSequence);
             // 
             // groupBoxZoom
             // 
@@ -373,12 +382,11 @@ namespace DNATagger
             // 
             this.groupBoxLetterViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxLetterViewer.AutoSize = true;
             this.groupBoxLetterViewer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBoxLetterViewer.Controls.Add(this.LetterViewBox);
-            this.groupBoxLetterViewer.Location = new System.Drawing.Point(12, 605);
+            this.groupBoxLetterViewer.Location = new System.Drawing.Point(12, 602);
             this.groupBoxLetterViewer.Name = "groupBoxLetterViewer";
-            this.groupBoxLetterViewer.Size = new System.Drawing.Size(1448, 106);
+            this.groupBoxLetterViewer.Size = new System.Drawing.Size(1451, 117);
             this.groupBoxLetterViewer.TabIndex = 11;
             this.groupBoxLetterViewer.TabStop = false;
             this.groupBoxLetterViewer.Text = "In Depth Viewer";
@@ -391,46 +399,30 @@ namespace DNATagger
             this.LetterViewBox.Location = new System.Drawing.Point(6, 22);
             this.LetterViewBox.Multiline = true;
             this.LetterViewBox.Name = "LetterViewBox";
-            this.LetterViewBox.Size = new System.Drawing.Size(1436, 78);
+            this.LetterViewBox.Size = new System.Drawing.Size(1442, 92);
             this.LetterViewBox.TabIndex = 11;
             // 
-            // lengthLabel
+            // buttonAddSeq
             // 
-            this.lengthLabel.AutoSize = true;
-            this.lengthLabel.Location = new System.Drawing.Point(6, 19);
-            this.lengthLabel.Name = "lengthLabel";
-            this.lengthLabel.Size = new System.Drawing.Size(56, 15);
-            this.lengthLabel.TabIndex = 13;
-            this.lengthLabel.Text = "Length:";
+            this.buttonAddSeq.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonAddSeq.Location = new System.Drawing.Point(6, 53);
+            this.buttonAddSeq.Name = "buttonAddSeq";
+            this.buttonAddSeq.Size = new System.Drawing.Size(108, 27);
+            this.buttonAddSeq.TabIndex = 6;
+            this.buttonAddSeq.Text = "Add Sequence";
+            this.buttonAddSeq.UseVisualStyleBackColor = false;
+            this.buttonAddSeq.Click += new System.EventHandler(this.OnAddSeq);
             // 
-            // startLabel
+            // deleteTagButton
             // 
-            this.startLabel.AutoSize = true;
-            this.startLabel.Location = new System.Drawing.Point(6, 35);
-            this.startLabel.Name = "startLabel";
-            this.startLabel.Size = new System.Drawing.Size(49, 15);
-            this.startLabel.TabIndex = 13;
-            this.startLabel.Text = "Start:";
-            // 
-            // endLabel
-            // 
-            this.endLabel.AutoSize = true;
-            this.endLabel.Location = new System.Drawing.Point(6, 50);
-            this.endLabel.Name = "endLabel";
-            this.endLabel.Size = new System.Drawing.Size(35, 15);
-            this.endLabel.TabIndex = 13;
-            this.endLabel.Text = "End:";
-            // 
-            // groupBoxPosLabels
-            // 
-            this.groupBoxPosLabels.Controls.Add(this.lengthLabel);
-            this.groupBoxPosLabels.Controls.Add(this.endLabel);
-            this.groupBoxPosLabels.Controls.Add(this.startLabel);
-            this.groupBoxPosLabels.Location = new System.Drawing.Point(339, 86);
-            this.groupBoxPosLabels.Name = "groupBoxPosLabels";
-            this.groupBoxPosLabels.Size = new System.Drawing.Size(162, 71);
-            this.groupBoxPosLabels.TabIndex = 14;
-            this.groupBoxPosLabels.TabStop = false;
+            this.deleteTagButton.BackColor = System.Drawing.SystemColors.Control;
+            this.deleteTagButton.Location = new System.Drawing.Point(375, 53);
+            this.deleteTagButton.Name = "deleteTagButton";
+            this.deleteTagButton.Size = new System.Drawing.Size(126, 27);
+            this.deleteTagButton.TabIndex = 6;
+            this.deleteTagButton.Text = "Delete Tag";
+            this.deleteTagButton.UseVisualStyleBackColor = false;
+            this.deleteTagButton.Click += new System.EventHandler(this.OnDropTag);
             // 
             // WindowMain
             // 
@@ -454,13 +446,13 @@ namespace DNATagger
             this.groupBoxCanvas.ResumeLayout(false);
             this.groupBoxTools.ResumeLayout(false);
             this.groupBoxTools.PerformLayout();
+            this.groupBoxPosLabels.ResumeLayout(false);
+            this.groupBoxPosLabels.PerformLayout();
             this.groupBoxZoom.ResumeLayout(false);
             this.groupBoxZoom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zoomRegler)).EndInit();
             this.groupBoxLetterViewer.ResumeLayout(false);
             this.groupBoxLetterViewer.PerformLayout();
-            this.groupBoxPosLabels.ResumeLayout(false);
-            this.groupBoxPosLabels.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -474,12 +466,8 @@ namespace DNATagger
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveAsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterDNASequenceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem asTextToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem loadFastaFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Panel panelEditor;
         private System.Windows.Forms.GroupBox groupBoxCanvas;
@@ -504,6 +492,8 @@ namespace DNATagger
         private System.Windows.Forms.Label lengthLabel;
         private System.Windows.Forms.Label endLabel;
         private System.Windows.Forms.Label startLabel;
+        private System.Windows.Forms.Button buttonAddSeq;
+        private System.Windows.Forms.Button deleteTagButton;
     }
 }
 

@@ -51,7 +51,6 @@ namespace DNATagger {
             this.MinimumSize = new System.Drawing.Size(2, 2);
             this.Name = "SequenceTag";
             this.Size = new System.Drawing.Size(98, 22);
-            this.Load += new System.EventHandler(this.SequenceTag_Load);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             this.ResumeLayout(false);

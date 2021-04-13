@@ -68,6 +68,7 @@ namespace DNATagger
                     while (!fileReader.EndOfStream)
                     {
                         line = fileReader.ReadLine();
+                        if (line.Length == 0) continue;
                         if (line.ToCharArray()[0] == '>')
                         {
                             if (fastaBlock.Length > 0)
