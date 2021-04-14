@@ -31,23 +31,6 @@ namespace DNATagger
         }
 
 
-        //<summary> Diese Funktion wird als Delegat an das Tag-Adding Formular übergeben. Sie ermöglicht das schließen des Formulars über das Hauptfenster.</summary>
-        public void OnCloseTagAddingDlg() {
-            if (tagAddingDialogue != null)
-                tagAddingDialogue.Dispose();
-            tagAddingDialogue = null;
-        }
-
-
-
-        /**<summary> Diese Funktion wird als Delegat an das Sequenz-Adding Formular übergeben. Sie ermöglicht das schließen des Formulars über das Hauptfenster.</summary>*/
-        public void OnCloseSeqAddingDlg() {
-            if (seqAddingDialogue != null)
-                seqAddingDialogue.Dispose();
-            seqAddingDialogue = null;
-        }
-
-
 
         /**<summary>Dieser Faktor wird zum skalieren der Sequenz- und Tags-Balken im Editor verwendet. Er wird über den Schieberegeler eingestellt.</summary>*/
         public double zoom {
@@ -283,6 +266,24 @@ namespace DNATagger
 
 
 
+        //<summary> Diese Funktion wird als Delegat an das Tag-Adding Formular übergeben. Sie ermöglicht das schließen des Formulars über das Hauptfenster.</summary>
+        public void OnCloseTagAddingDlg() {
+            if (tagAddingDialogue != null)
+                tagAddingDialogue.Dispose();
+            tagAddingDialogue = null;
+        }
+
+
+
+        /**<summary> Diese Funktion wird als Delegat an das Sequenz-Adding Formular übergeben. Sie ermöglicht das schließen des Formulars über das Hauptfenster.</summary>*/
+        public void OnCloseSeqAddingDlg() {
+            if (seqAddingDialogue != null)
+                seqAddingDialogue.Dispose();
+            seqAddingDialogue = null;
+        }
+
+
+
         private void OnChangeZoom(object sender, EventArgs e) {
             foreach (DNASequence seq in sequences) seq.adjustToZoom();
             refreshEditor();
@@ -391,14 +392,14 @@ namespace DNATagger
 
         private void OnDropSequence(object sender, EventArgs e) {
             if (selectedSequence == null) return;
-            if (MessageBox.Show("Really delete selected sequence?", "Delete sequence?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) dropSequence(selectedSequence);
+            if (MessageBox.Show("Really delete selected sequence?", "Delete Sequence?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) dropSequence(selectedSequence);
         }
 
 
 
         private void OnDropTag(object sender, EventArgs e) {
             if (selectedTag == null) return;
-            if (MessageBox.Show("Really delete selected sequence-tag?", "Delete tag?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) dropTag(selectedTag);
+            if (MessageBox.Show("Really delete selected sequence-tag?", "Delete Tag?", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK) dropTag(selectedTag);
         }
 
         #endregion

@@ -112,7 +112,7 @@ namespace DNATagger
             this.newToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.newToolStripMenuItem.Text = "New Project";
+            this.newToolStripMenuItem.Text = "New project";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewProject);
             // 
             // loadToolStripMenuItem
@@ -120,7 +120,7 @@ namespace DNATagger
             this.loadToolStripMenuItem.BackColor = System.Drawing.SystemColors.Control;
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
             this.loadToolStripMenuItem.Size = new System.Drawing.Size(221, 22);
-            this.loadToolStripMenuItem.Text = "Load Project";
+            this.loadToolStripMenuItem.Text = "Load project";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.OnLoadProject);
             // 
             // saveToolStripMenuItem

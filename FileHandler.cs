@@ -111,6 +111,7 @@ namespace DNATagger
 
 
 
+        /** <summary>Speichert ein Projekt als dnat Datei ab. Der Dateipfad wird vorher in der path Eigenschaft des Hauptfensters festgelegt.</summary>*/
         public static void saveProject(WindowMain prj){
             if (accessSaveFile(prj.savePath)){
                 try{
@@ -140,6 +141,7 @@ namespace DNATagger
 
 
 
+        /** <summary>Lädt ein Projekt aus einer dnat Datei ein. Die Datei muss vorher in der path Eigenschaft des Hauptfensters festgelegt werden.</summary>*/
         public static void loadProject(WindowMain prj){ 
             try{
                 if (openFile(prj.savePath)){
@@ -160,10 +162,12 @@ namespace DNATagger
                         DNASequence seq = new DNASequence(fileReader.ReadLine(), fileReader.ReadLine());
                     
                         line = fileReader.ReadLine();
-                        while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream){ //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
-                            notes.AppendLine(line);
-                            line = fileReader.ReadLine();
-                        }
+                        do { //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
+                            if (line != "-Tag" && line != "-Sequence") {
+                                notes.AppendLine(line);
+                                line = fileReader.ReadLine();
+                            }
+                        } while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream);
                         seq.notes = notes.ToString();
                         notes.Clear();
                         prj.addSequence(seq);

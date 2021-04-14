@@ -11,6 +11,8 @@ using System.Windows.Forms;
 namespace DNATagger {
     public partial class DNASequence : UserControl {
 
+        #region Datenverwaltung
+
         private char[] sense;
         private char[] antisense;
         private int offsetSense = 0;
@@ -71,6 +73,98 @@ namespace DNATagger {
 
 
 
+        public String header {
+            get { return this.Name; }
+            set {
+                this.Name = value;
+                headerLabel.Text = value;
+            }
+        }
+
+
+
+        public String sequence {
+            get {
+                StringBuilder o = new StringBuilder();
+                foreach (char c in sense) o.Append(c.ToString());
+                return o.ToString();
+            }
+        }
+
+
+
+        public WindowMain window {
+            get { return this._window; }
+            set { this._window = value; }
+        }
+
+
+
+        public override String ToString() {
+            return this.header;
+        }
+
+
+
+        public double screenBaseWidth() {
+            return (double)sequencePanel.Width / (double)getLengthTotal();
+        }
+
+
+
+        public Int32 getBasePosAtScreenPos(int pos) {
+            Int32 o = (pos * getLengthTotal() / sequencePanel.Width) + 1;
+            if (o > getLengthTotal() + 1) return getLengthTotal() + 1;
+            if (o < 1) return 1;
+            return o;
+        }
+
+
+
+        public int getScreenPosAtBasePos(int basePos){
+            return (int)(basePos * screenBaseWidth());
+        }
+
+
+
+        public int selectedStart => getBasePosAtScreenPos(markerPrim.Location.X - scrollContainer.AutoScrollPosition.X);
+
+
+
+        public int selectedEnd {
+            get { return getBasePosAtScreenPos(markerSek.Location.X - scrollContainer.AutoScrollPosition.X); }
+        }
+
+
+
+        public int getLengthTotal() {
+            int up = this.sense.Length + this.offsetSense;
+            if (antisense == null) return up;
+            int lo = this.antisense.Length + this.offsetAntisense;
+            if (up >= lo) return up;
+            else return lo;
+        }
+
+
+
+        public List<SequenceTag> getTags() {
+            return tags;
+        }
+
+
+
+        public void dropTag(SequenceTag tag) {
+            tags.Remove(tag);
+            scrollContainer.Controls.Remove(tag);
+            tag.Dispose();
+        }
+
+        #endregion
+
+
+
+        #region Grafische Darstellungen
+
         public void highlight() {
             BackColor = Color.LightGray;
             headerLabel.BackColor = Color.Yellow;
@@ -98,29 +192,28 @@ namespace DNATagger {
             if (window == null || Parent == null) return;
             sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
             foreach (SequenceTag tag in tags){
-                tag.Location = new Point((int)(screenBaseWidth() * (tag.startPos - 1) + scrollContainer.AutoScrollPosition.X), tag.Location.Y);
+                tag.Location = new Point(getScreenPosAtBasePos(tag.startPos) + scrollContainer.AutoScrollPosition.X, tag.Location.Y);
                 tag.Width = (int)(screenBaseWidth() * tag.getLength());
             }
             sequencePanel.Controls.Clear();
-            int interval = Width/3;
-            for (int pos = 1; pos < sequencePanel.Width; pos += interval){
+            for (int pos = 0; pos < sequencePanel.Width; pos += Width/3){
                 Label lab = addPositionLabel(getBasePosAtScreenPos(pos));
             }
             foreach (SequenceTag tag in tags){
                 Label startLab = addPositionLabel(tag.startPos);
                 Label endLab = addPositionLabel(tag.endPos);
                 foreach(Label labi in sequencePanel.Controls) {
-                    if (labi.Bounds.IntersectsWith(startLab.Bounds) || labi.Bounds.IntersectsWith(endLab.Bounds)) sequencePanel.Controls.Remove(labi);
+                    if (labi.Bounds.IntersectsWith(startLab.Bounds) && labi != startLab || labi.Bounds.IntersectsWith(endLab.Bounds) && labi != endLab) sequencePanel.Controls.Remove(labi);
                 }
             }
         }
 
 
 
-        private Label addPositionLabel(int pos){
+        private Label addPositionLabel(int atBase) {
             Label lab = new Label();
-            lab.Text = pos.ToString();
-            lab.Location = new Point((int)(screenBaseWidth() * (pos - 1)), sequencePanel.Location.Y);
+            lab.Text = atBase.ToString();
+            lab.Location = new Point(getScreenPosAtBasePos(atBase), sequencePanel.Location.Y);
             lab.AutoSize = true;
             sequencePanel.Controls.Add(lab);
             return lab;
@@ -128,91 +221,28 @@ namespace DNATagger {
 
 
 
-        public double screenBaseWidth(){
-            return (double)sequencePanel.Width / (double)getLengthTotal();
-        }
-
-
-
-        public Int32 getBasePosAtScreenPos(int pos){
-            Int32 o = (pos * getLengthTotal() / sequencePanel.Width) + 1;
-            if (o > getLengthTotal() + 1) return getLengthTotal() + 1;
-            if (o < 1) return 1;
-            return o;
-        }
-
-
-
-        public String header {
-            get { return this.Name; }
-            set {
-                this.Name = value;
-                headerLabel.Text = value;
-            }
-        }
-
-
-
-        public String sequence{ 
-            get{
-                StringBuilder o = new StringBuilder();
-                foreach (char c in sense) o.Append(c.ToString());
-                return o.ToString();
-            }
-        }
-
-
-
-        public WindowMain window {
-            get { return this._window; }
-            set { this._window = value; }
-        }
-
-
-
-        public override String ToString() {
-            return this.header;
-        }
-
-
-        public int selectedStart =>  getBasePosAtScreenPos(markerPrim.Location.X - scrollContainer.AutoScrollPosition.X);
-
-        public int selectedEnd{ 
-            get { return getBasePosAtScreenPos(markerSek.Location.X - scrollContainer.AutoScrollPosition.X); }
-        }
-
-
-
-        public int getLengthSense() {
-            return this.sense.Length;
-        }
-
-
-
-        public int getLengthAntisense() {
-            return this.antisense.Length;
-        }
-
-
-
-        public int getLengthTotal() {
-            int up = this.sense.Length + this.offsetSense;
-            if (antisense == null) return up;
-            int lo = this.antisense.Length + this.offsetAntisense;
-            if (up >= lo) return up;
-            else return lo;
-        }
-
-
-
-        private void OnDraw(object sender, PaintEventArgs e) {
-            Width = Parent.Width - 4;
-        }
-
-
-
-        private void OnClick(object sender, MouseEventArgs e) {
+        public void setFirstMarker(int xPos) {
             window.selectedSequence = this;
+            markerSek.Visible = false;
+            markerBetween.Visible = false;
+            markerPrim.Location = new Point(xPos, 0);
+        }
+
+
+
+        public void setSecondMarker(int xPos) {
+            if (BackColor == Color.DimGray) return; //Wenn nicht auch auf diesem Track die Maus runtergedrücktwurde, dieser Track also ausgewählt ist
+            if (xPos > markerPrim.Location.X) markerSek.Location = new Point(xPos, 0);
+            else {
+                markerSek.Location = new Point(markerPrim.Location.X, 0);
+                markerPrim.Location = new Point(xPos, 0);
+            }
+            markerBetween.Location = new Point(markerPrim.Location.X, 0);
+            markerBetween.Width = markerSek.Location.X - markerPrim.Location.X;
+            markerSek.Visible = true;
+            markerBetween.Visible = true;
+            window.inDepthView = getInDepthView();
+            Invalidate();
         }
 
 
@@ -251,8 +281,7 @@ namespace DNATagger {
             }
         }
 
-
-
+        #region inDepthView
         /**<summary>Generiert einen String, der den Beginn der ausgewählten Basensequenz mit Beschriftungen ausgibt.</summary>
          */
         public String getInDepthView(){
@@ -310,47 +339,13 @@ namespace DNATagger {
             return o.ToString();
         }
 
+        #endregion
 
-
-        public List<SequenceTag> getTags(){
-            return tags;
-        }
-
-
-
-        public void dropTag(SequenceTag tag){
-            tags.Remove(tag);
-            scrollContainer.Controls.Remove(tag);
-            tag.Dispose();
-        }
+        #endregion
 
 
 
-        public void setFirstMarker(int xPos){
-            window.selectedSequence = this;
-            markerSek.Visible = false;
-            markerBetween.Visible = false;
-            markerPrim.Location = new Point(xPos, 0);
-        }
-
-
-
-        public void setSecondMarker(int xPos){
-            if (BackColor == Color.DimGray) return; //Wenn nicht auch auf diesem Track die Maus runtergedrücktwurde, dieser Track also ausgewählt ist
-            if (xPos > markerPrim.Location.X) markerSek.Location = new Point(xPos, 0);
-            else {
-                markerSek.Location = new Point(markerPrim.Location.X, 0);
-                markerPrim.Location = new Point(xPos, 0);
-            }
-            markerBetween.Location = new Point(markerPrim.Location.X, 0);
-            markerBetween.Width = markerSek.Location.X - markerPrim.Location.X;
-            markerSek.Visible = true;
-            markerBetween.Visible = true;
-            window.inDepthView = getInDepthView();
-            Invalidate();
-        }
-
-
+        #region Eventhandling
 
         private void OnMouseDown(object sender, MouseEventArgs e){ 
             if (sender == this) setFirstMarker(e.X - scrollContainer.Location.X);
@@ -364,8 +359,24 @@ namespace DNATagger {
             else setSecondMarker(e.X);
         }
 
+
+
         private void OnClickSequencePanel(object sender, MouseEventArgs e) {
             window.unselectTag();
         }
+
+
+
+        private void OnDraw(object sender, PaintEventArgs e) {
+            Width = Parent.Width - 4;
+        }
+
+
+
+        private void OnClick(object sender, MouseEventArgs e) {
+            window.selectedSequence = this;
+        }
+
+        #endregion
     }
 }

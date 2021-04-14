@@ -65,7 +65,7 @@ namespace DNATagger {
             this.selectedSequenceLabel.Name = "selectedSequenceLabel";
             this.selectedSequenceLabel.Size = new System.Drawing.Size(127, 13);
             this.selectedSequenceLabel.TabIndex = 2;
-            this.selectedSequenceLabel.Text = "Add Tag to sequence:";
+            this.selectedSequenceLabel.Text = "Add tag to sequence:";
             // 
             // label1
             // 
@@ -74,7 +74,7 @@ namespace DNATagger {
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(109, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Color of new Tag:";
+            this.label1.Text = "Color of new tag:";
             // 
             // label3
             // 
