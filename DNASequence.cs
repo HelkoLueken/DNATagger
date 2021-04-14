@@ -15,7 +15,6 @@ namespace DNATagger {
         private char[] antisense;
         private int offsetSense = 0;
         private int offsetAntisense = 0;
-        private String _src;
         public String notes;
         private WindowMain _window = new WindowMain();
         private List<SequenceTag> tags = new List<SequenceTag>();
@@ -25,29 +24,25 @@ namespace DNATagger {
 
 
 
-        public DNASequence(String fasta, String src = "unknown") {
+        public DNASequence(String fastaSingle) {
             InitializeComponent();
-            String[] fastaParts = fasta.Split('\n');
-            if (fastaParts.Length == 2) {
-                header = fastaParts[0];
-                sense = fastaParts[1].ToCharArray();
+            String[] lines = fastaSingle.Split('\n');
+            if (lines.Length == 2) {
+                header = lines[0];
+                sense = lines[1].ToCharArray();
             }
             else {
                 header = "Unnamed DNA Sequence";
-                sense = fasta.ToCharArray();
+                sense = fastaSingle.ToCharArray();
             }
-            this.src = src;
-            notes = "Loaded from: " + src;
-            createAntisense();
         }
 
 
 
-        public DNASequence(String header, String sequence, String src){
+        public DNASequence(String header, String sequence){
             InitializeComponent();
             this.header = header;
             this.sense = sequence.ToCharArray();
-            this.src = src;
         }
 
 
@@ -103,33 +98,32 @@ namespace DNATagger {
             if (window == null || Parent == null) return;
             sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
             foreach (SequenceTag tag in tags){
-                tag.Location = new Point((int)(screenBaseWidth() * (tag.startPos) + scrollContainer.AutoScrollPosition.X), tag.Location.Y);
+                tag.Location = new Point((int)(screenBaseWidth() * (tag.startPos - 1) + scrollContainer.AutoScrollPosition.X), tag.Location.Y);
                 tag.Width = (int)(screenBaseWidth() * tag.getLength());
             }
             sequencePanel.Controls.Clear();
             int interval = Width/3;
-            for (int pos = 0; pos < sequencePanel.Width; pos += interval){
-                Label lab = new Label();
-                lab.AutoSize = true;
-                lab.Location = new Point(pos, sequencePanel.Location.Y);
-                lab.Text = getBasePosAtScreenPos(pos).ToString();
-                sequencePanel.Controls.Add(lab);
+            for (int pos = 1; pos < sequencePanel.Width; pos += interval){
+                Label lab = addPositionLabel(getBasePosAtScreenPos(pos));
             }
             foreach (SequenceTag tag in tags){
-                Label startLab = new Label();
-                startLab.Location = new Point((int)(screenBaseWidth() * (tag.startPos-1)), sequencePanel.Location.Y);
-                startLab.Text = tag.startPos.ToString();
-                startLab.AutoSize = true;
-                Label endLab = new Label();
-                endLab.Location = new Point((int)(screenBaseWidth() * (tag.endPos-1)), sequencePanel.Location.Y);
-                endLab.Text = tag.endPos.ToString();
-                endLab.AutoSize = true;
+                Label startLab = addPositionLabel(tag.startPos);
+                Label endLab = addPositionLabel(tag.endPos);
                 foreach(Label labi in sequencePanel.Controls) {
                     if (labi.Bounds.IntersectsWith(startLab.Bounds) || labi.Bounds.IntersectsWith(endLab.Bounds)) sequencePanel.Controls.Remove(labi);
                 }
-                sequencePanel.Controls.Add(startLab);
-                sequencePanel.Controls.Add(endLab);
             }
+        }
+
+
+
+        private Label addPositionLabel(int pos){
+            Label lab = new Label();
+            lab.Text = pos.ToString();
+            lab.Location = new Point((int)(screenBaseWidth() * (pos - 1)), sequencePanel.Location.Y);
+            lab.AutoSize = true;
+            sequencePanel.Controls.Add(lab);
+            return lab;
         }
 
 
@@ -141,9 +135,9 @@ namespace DNATagger {
 
 
         public Int32 getBasePosAtScreenPos(int pos){
-            if (pos <= 0) return 0;
-            Int32 o = (pos * getLengthTotal() / sequencePanel.Width);
-            if (o > getLengthTotal()) return getLengthTotal();
+            Int32 o = (pos * getLengthTotal() / sequencePanel.Width) + 1;
+            if (o > getLengthTotal() + 1) return getLengthTotal() + 1;
+            if (o < 1) return 1;
             return o;
         }
 
@@ -165,13 +159,6 @@ namespace DNATagger {
                 foreach (char c in sense) o.Append(c.ToString());
                 return o.ToString();
             }
-        }
-
-
-
-        public String src {
-            get { return _src; }
-            set { _src = value; }
         }
 
 
@@ -270,29 +257,50 @@ namespace DNATagger {
          */
         public String getInDepthView(){
             StringBuilder o = new StringBuilder();
+            o.AppendLine(getPositionLine());
+            o.AppendLine(getLetterLine());
+            o.AppendLine(getTagBoundsLine());
+            return o.ToString();
+        }
 
-            for (int i = selectedStart; o.Length < window.displayableLetters - (int)Math.Log10(i) && i < selectedEnd; i++){
-                if (i%10 == 0 ) o.Append(i);
+
+
+        private String getPositionLine(){
+            StringBuilder o = new StringBuilder();
+            for (int i = selectedStart; o.Length < window.displayableLetters - (int)Math.Log10(i) && i < selectedEnd; i++) {
+                if (i % 10 == 0) o.Append(i);
                 if (i - selectedStart > o.Length) o.Append(" ");
             }
-            o.AppendLine();
-            for (int i = selectedStart; i < selectedStart + window.displayableLetters && i < selectedEnd; i++){
-                o.Append(sense[i].ToString());
+            return o.ToString();
+        }
+
+
+
+        private String getLetterLine(){
+            StringBuilder o = new StringBuilder();
+            for (int i = selectedStart; i < selectedStart + window.displayableLetters && i < selectedEnd; i++) {
+                o.Append(sense[i-1].ToString());
             }
-            o.AppendLine();
-            foreach (SequenceTag tag in tags){
-                if (tag.startPos > selectedStart && tag.startPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters){
+            return o.ToString();
+        }
+
+
+
+        private String getTagBoundsLine(){
+            StringBuilder o = new StringBuilder();
+            foreach (SequenceTag tag in tags) {
+                if (tag.startPos > selectedStart && tag.startPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters) {
                     for (int i = selectedStart; i < tag.startPos; i++) o.Append(" ");
                     o.Append("|");
                     if (tag.header.Length < window.displayableLetters - (tag.startPos - selectedStart) - 3) o.Append("-> " + tag.header);
                     o.AppendLine();
                 }
-                if(tag.endPos > selectedStart && tag.endPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters){
-                    if (tag.header.Length < tag.endPos - selectedStart - 4){
+                if (tag.endPos > selectedStart && tag.endPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters) {
+                    if (tag.header.Length < tag.endPos - selectedStart - 4) {
                         for (int i = selectedStart; i < tag.endPos - tag.header.Length - 4; i++) o.Append(" ");
                         o.Append(tag.header + " ->|");
                     }
-                    else{
+                    else {
                         for (int i = selectedStart; i < tag.endPos; i++) o.Append(" ");
                         o.Append("|");
                     }

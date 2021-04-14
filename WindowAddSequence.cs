@@ -34,14 +34,18 @@ namespace DNATagger {
                 if (lines[i].Length == 0) continue;
                 if (lines[i].ToCharArray()[0] == '>') {
                     if (fastaBlock.Length > 0) {
-                        seqs.Add(new DNASequence(fastaBlock.ToString(), src: "fasta text from user dialogue"));
+                        DNASequence seqi = new DNASequence(fastaBlock.ToString());
+                        seqi.notes = "Loaded from fasta text input by user";
+                        seqs.Add(seqi);
                         fastaBlock.Clear();
                     }
                     fastaBlock.Append(lines[i] + "\n");
                 }
                 else fastaBlock.Append(lines[i]);
             }
-            seqs.Add(new DNASequence(fastaBlock.ToString(), src: "fasta text from user dialogue"));
+            DNASequence seq = new DNASequence(fastaBlock.ToString());
+            seq.notes = "Loaded from fasta text input by user";
+            seqs.Add(seq);
             return seqs;
         }
 

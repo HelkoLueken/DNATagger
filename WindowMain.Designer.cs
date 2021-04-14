@@ -29,6 +29,7 @@ namespace DNATagger
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WindowMain));
             this.mainWindowMenuStrip = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.enterDNASequenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,7 +48,9 @@ namespace DNATagger
             this.endLabel = new System.Windows.Forms.Label();
             this.startLabel = new System.Windows.Forms.Label();
             this.notizBox = new System.Windows.Forms.RichTextBox();
+            this.buttonAddSeq = new System.Windows.Forms.Button();
             this.buttonAddTag = new System.Windows.Forms.Button();
+            this.deleteTagButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.groupBoxZoom = new System.Windows.Forms.GroupBox();
             this.labelPlus = new System.Windows.Forms.Label();
@@ -61,8 +64,6 @@ namespace DNATagger
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxLetterViewer = new System.Windows.Forms.GroupBox();
             this.LetterViewBox = new System.Windows.Forms.TextBox();
-            this.buttonAddSeq = new System.Windows.Forms.Button();
-            this.deleteTagButton = new System.Windows.Forms.Button();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBoxTools.SuspendLayout();
@@ -257,8 +258,19 @@ namespace DNATagger
             this.notizBox.Name = "notizBox";
             this.notizBox.Size = new System.Drawing.Size(944, 130);
             this.notizBox.TabIndex = 12;
-            this.notizBox.Text = "Notes...";
+            this.notizBox.Text = resources.GetString("notizBox.Text");
             this.notizBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
+            // 
+            // buttonAddSeq
+            // 
+            this.buttonAddSeq.BackColor = System.Drawing.SystemColors.Control;
+            this.buttonAddSeq.Location = new System.Drawing.Point(6, 53);
+            this.buttonAddSeq.Name = "buttonAddSeq";
+            this.buttonAddSeq.Size = new System.Drawing.Size(108, 27);
+            this.buttonAddSeq.TabIndex = 6;
+            this.buttonAddSeq.Text = "Add Sequence";
+            this.buttonAddSeq.UseVisualStyleBackColor = false;
+            this.buttonAddSeq.Click += new System.EventHandler(this.OnAddSeq);
             // 
             // buttonAddTag
             // 
@@ -270,6 +282,17 @@ namespace DNATagger
             this.buttonAddTag.Text = "Add Tag";
             this.buttonAddTag.UseVisualStyleBackColor = false;
             this.buttonAddTag.Click += new System.EventHandler(this.OnAddTag);
+            // 
+            // deleteTagButton
+            // 
+            this.deleteTagButton.BackColor = System.Drawing.SystemColors.Control;
+            this.deleteTagButton.Location = new System.Drawing.Point(375, 53);
+            this.deleteTagButton.Name = "deleteTagButton";
+            this.deleteTagButton.Size = new System.Drawing.Size(126, 27);
+            this.deleteTagButton.TabIndex = 6;
+            this.deleteTagButton.Text = "Delete Tag";
+            this.deleteTagButton.UseVisualStyleBackColor = false;
+            this.deleteTagButton.Click += new System.EventHandler(this.OnDropTag);
             // 
             // button1
             // 
@@ -322,6 +345,7 @@ namespace DNATagger
             // zoomRegler
             // 
             this.zoomRegler.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.zoomRegler.LargeChange = 1;
             this.zoomRegler.Location = new System.Drawing.Point(28, 20);
             this.zoomRegler.Maximum = 5;
             this.zoomRegler.Minimum = -5;
@@ -335,9 +359,9 @@ namespace DNATagger
             this.notizBoxLabel.AutoSize = true;
             this.notizBoxLabel.Location = new System.Drawing.Point(507, 9);
             this.notizBoxLabel.Name = "notizBoxLabel";
-            this.notizBoxLabel.Size = new System.Drawing.Size(84, 15);
+            this.notizBoxLabel.Size = new System.Drawing.Size(91, 15);
             this.notizBoxLabel.TabIndex = 5;
-            this.notizBoxLabel.Text = "Annotations";
+            this.notizBoxLabel.Text = "Project Info";
             // 
             // tagSelectorLabel
             // 
@@ -401,28 +425,6 @@ namespace DNATagger
             this.LetterViewBox.Name = "LetterViewBox";
             this.LetterViewBox.Size = new System.Drawing.Size(1442, 92);
             this.LetterViewBox.TabIndex = 11;
-            // 
-            // buttonAddSeq
-            // 
-            this.buttonAddSeq.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonAddSeq.Location = new System.Drawing.Point(6, 53);
-            this.buttonAddSeq.Name = "buttonAddSeq";
-            this.buttonAddSeq.Size = new System.Drawing.Size(108, 27);
-            this.buttonAddSeq.TabIndex = 6;
-            this.buttonAddSeq.Text = "Add Sequence";
-            this.buttonAddSeq.UseVisualStyleBackColor = false;
-            this.buttonAddSeq.Click += new System.EventHandler(this.OnAddSeq);
-            // 
-            // deleteTagButton
-            // 
-            this.deleteTagButton.BackColor = System.Drawing.SystemColors.Control;
-            this.deleteTagButton.Location = new System.Drawing.Point(375, 53);
-            this.deleteTagButton.Name = "deleteTagButton";
-            this.deleteTagButton.Size = new System.Drawing.Size(126, 27);
-            this.deleteTagButton.TabIndex = 6;
-            this.deleteTagButton.Text = "Delete Tag";
-            this.deleteTagButton.UseVisualStyleBackColor = false;
-            this.deleteTagButton.Click += new System.EventHandler(this.OnDropTag);
             // 
             // WindowMain
             // 

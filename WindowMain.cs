@@ -19,9 +19,7 @@ namespace DNATagger
         private WindowAddTag tagAddingDialogue;
         private WindowAddSequence seqAddingDialogue;
         public String savePath;
-        public String notes = "Here you can write notes regarding your project, such as URLs to cited papers.\n" +
-            "If you select a sequence or sequence-tag this box will display another set of notes, specifically for them.\n" +
-            "You can deselect any sequence or tag by clicking the background of the editor.";
+        public String notes = "";
         public delegate void ControlCloser();
 
 
@@ -30,21 +28,19 @@ namespace DNATagger
 
         public WindowMain() {
             InitializeComponent();
-            notizBox.Text = notes;
-            notizBoxLabel.Text = "Project Info";
         }
 
 
-        /**@author Helko
-         * Diese Funktion wird als Delegat an ein untergordnetes Dialogfenster übergeben.
-         * Sie ermiöglicht den Dialogen sich selbst über das Parent Window zu schließen.
-         */
+        //<summary> Diese Funktion wird als Delegat an das Tag-Adding Formular übergeben. Sie ermöglicht das schließen des Formulars über das Hauptfenster.</summary>
         public void OnCloseTagAddingDlg() {
             if (tagAddingDialogue != null)
                 tagAddingDialogue.Dispose();
             tagAddingDialogue = null;
         }
 
+
+
+        /**<summary> Diese Funktion wird als Delegat an das Sequenz-Adding Formular übergeben. Sie ermöglicht das schließen des Formulars über das Hauptfenster.</summary>*/
         public void OnCloseSeqAddingDlg() {
             if (seqAddingDialogue != null)
                 seqAddingDialogue.Dispose();
@@ -53,17 +49,14 @@ namespace DNATagger
 
 
 
-        /**@author Helko
-         * <summary>Dieser Faktor wird zum skalieren der Sequenz- und Tags-Balken im Editor verwendet. Er wird über den Schieberegeler eingestellt.
-         * Die werte liegen zwischen 2^-5 und 2^5</summary>
-         */
+        /**<summary>Dieser Faktor wird zum skalieren der Sequenz- und Tags-Balken im Editor verwendet. Er wird über den Schieberegeler eingestellt.</summary>*/
         public double zoom {
             get { return Math.Pow(2, zoomRegler.Value); }
         }
         
 
 
-
+        /**<summary>Die aktuell vom User ausgewählte Nukleotid-Sequenz</summary>*/
         public DNASequence selectedSequence{ 
             get { 
                 DNASequence seq = (DNASequence)sequenceSelector.SelectedItem;
@@ -71,14 +64,15 @@ namespace DNATagger
             }
             set {
                 if (value == selectedSequence) return;
-                saveNotes(); //Muss vor dem Ändern des selectedItem geschehen
                 if (selectedSequence != null) selectedSequence.unhighlight();
+                saveNotes(); //Muss vor dem Ändern des selectedItem geschehen
                 sequenceSelector.SelectedItem = value;
             }
         }
 
 
 
+        /**<summary>Der aktuell vom User ausgewählte Sequenz-Tag</summary>*/
         public SequenceTag selectedTag {
             get {
                 SequenceTag tag = (SequenceTag)tagSelector.SelectedItem;
@@ -127,6 +121,7 @@ namespace DNATagger
             panelEditor.Controls.Remove(seq);
             seq.Dispose();
             arrangeSequences();
+            refreshNoteBox();
             refreshEditor();
         }
 
@@ -135,8 +130,9 @@ namespace DNATagger
         private void dropTag(SequenceTag tag){
             if (tag == selectedTag) tagSelector.Text = "";
             tag.sequence.dropTag(tag);
-            refreshTagSelector();
             panelEditor.Controls.Remove(tag);
+            refreshTagSelector();
+            refreshNoteBox();
             refreshEditor();
         }
 
@@ -182,8 +178,7 @@ namespace DNATagger
         }
 
 
-        /**<summary> Asks the user to save the currently loaded project. If there are no sequences loaded the user will not be asked.</summary>
-         */
+        /**<summary> Asks the user to save the currently loaded project. If there are no sequences loaded the user will not be asked.</summary> */
         private void checkSafetySave(){ 
             if (sequences.Count > 0){
                 if (MessageBox.Show("Save current project?", "Save project?", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) save();
@@ -217,7 +212,6 @@ namespace DNATagger
         public void refreshEditor() {
             arrangeSequences();
             panelEditor.Invalidate();
-            foreach (Control ctrl in panelEditor.Controls) ctrl.Invalidate();
         }
 
 

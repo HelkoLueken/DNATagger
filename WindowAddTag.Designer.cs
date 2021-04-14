@@ -46,7 +46,7 @@ namespace DNATagger {
             this.colorSelectionButton.TabIndex = 0;
             this.colorSelectionButton.Text = "Select";
             this.colorSelectionButton.UseVisualStyleBackColor = false;
-            this.colorSelectionButton.Click += new System.EventHandler(this.colorSelectionButton_Click);
+            this.colorSelectionButton.Click += new System.EventHandler(this.OnSelectColor);
             // 
             // confirmTagButton
             // 
@@ -56,7 +56,7 @@ namespace DNATagger {
             this.confirmTagButton.TabIndex = 0;
             this.confirmTagButton.Text = "Add Tag";
             this.confirmTagButton.UseVisualStyleBackColor = true;
-            this.confirmTagButton.Click += new System.EventHandler(this.confirmTagButton_Click);
+            this.confirmTagButton.Click += new System.EventHandler(this.OnConfirm);
             // 
             // selectedSequenceLabel
             // 

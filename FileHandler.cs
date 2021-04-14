@@ -73,14 +73,18 @@ namespace DNATagger
                         {
                             if (fastaBlock.Length > 0)
                             {
-                                output.Add(new DNASequence(fastaBlock.ToString(), src : path));
+                                DNASequence seqi = new DNASequence(fastaBlock.ToString());
+                                seqi.notes = "Loaded from: " + path;
+                                output.Add(seqi);
                                 fastaBlock.Clear();
                             }
                             fastaBlock.Append(line + "\n");
                         }
                         else fastaBlock.Append(line);
                     }
-                    output.Add(new DNASequence(fastaBlock.ToString(), src : path));
+                    DNASequence seq = new DNASequence(fastaBlock.ToString());
+                    seq.notes = "Loaded from: " + path;
+                    output.Add(seq);
                 }
             }
             closeFileReader();
@@ -115,7 +119,6 @@ namespace DNATagger
                         fileWriter.WriteLine("-Sequence");
                         fileWriter.WriteLine(seq.header);
                         fileWriter.WriteLine(seq.sequence);
-                        fileWriter.WriteLine(seq.src);
                         if (seq.notes != null) fileWriter.WriteLine(seq.notes);
                         foreach (SequenceTag tag in seq.getTags()){
                             fileWriter.WriteLine("-Tag");
@@ -154,7 +157,7 @@ namespace DNATagger
 
 
                     while (!fileReader.EndOfStream){ // Für den Rest des Dokuments
-                        DNASequence seq = new DNASequence(fileReader.ReadLine(), fileReader.ReadLine(), fileReader.ReadLine());
+                        DNASequence seq = new DNASequence(fileReader.ReadLine(), fileReader.ReadLine());
                     
                         line = fileReader.ReadLine();
                         while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream){ //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
