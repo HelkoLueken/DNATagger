@@ -117,7 +117,6 @@ namespace DNATagger {
             this.sequencePanel.Name = "sequencePanel";
             this.sequencePanel.Size = new System.Drawing.Size(240, 22);
             this.sequencePanel.TabIndex = 0;
-            this.sequencePanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickSequencePanel);
             this.sequencePanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
             this.sequencePanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             // 

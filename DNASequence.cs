@@ -113,7 +113,7 @@ namespace DNATagger {
 
 
         public Int32 getBasePosAtScreenPos(int pos) {
-            Int32 o = (pos * getLengthTotal() / sequencePanel.Width) + 1;
+            Int32 o = 1 + (int)(pos * screenBaseWidth());
             if (o > getLengthTotal() + 1) return getLengthTotal() + 1;
             if (o < 1) return 1;
             return o;
@@ -122,7 +122,7 @@ namespace DNATagger {
 
 
         public int getScreenPosAtBasePos(int basePos){
-            return (int)(basePos * screenBaseWidth());
+            return (int)((basePos-1) * screenBaseWidth());
         }
 
 
@@ -213,7 +213,7 @@ namespace DNATagger {
         private Label addPositionLabel(int atBase) {
             Label lab = new Label();
             lab.Text = atBase.ToString();
-            lab.Location = new Point(getScreenPosAtBasePos(atBase), sequencePanel.Location.Y);
+            lab.Location = new Point(getScreenPosAtBasePos(atBase) - (int)(0.5*Font.Size), sequencePanel.Location.Y);
             lab.AutoSize = true;
             sequencePanel.Controls.Add(lab);
             return lab;
@@ -255,6 +255,7 @@ namespace DNATagger {
             window.refreshTagSelector();
             foreach (SequenceTag tagi in tags) tagi.unhighlight(); //Eigentlich überflüssig aber beim ersten speichern in der Combobox wird ein Tag iwie als null hinterlegt, daher kann der letzte Tag anders nicht erreicht werden
             window.selectedTag = tag;
+            window.inDepthView = getInDepthView();
             initializeTagPosition(tag);
         }
 
@@ -288,7 +289,7 @@ namespace DNATagger {
             StringBuilder o = new StringBuilder();
             o.AppendLine(getPositionLine());
             o.AppendLine(getLetterLine());
-            o.AppendLine(getTagBoundsLine());
+            o.AppendLine(getTagBoundsLines());
             return o.ToString();
         }
 
@@ -315,16 +316,16 @@ namespace DNATagger {
 
 
 
-        private String getTagBoundsLine(){
+        private String getTagBoundsLines(){
             StringBuilder o = new StringBuilder();
             foreach (SequenceTag tag in tags) {
-                if (tag.startPos > selectedStart && tag.startPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters) {
-                    for (int i = selectedStart; i < tag.startPos; i++) o.Append(" ");
+                if (tag.startPos >= selectedStart && tag.startPos <= selectedEnd && tag.startPos <= selectedStart + window.displayableLetters) {
+                    for (int i = selectedStart; i < tag.startPos-1; i++) o.Append(" ");
                     o.Append("|");
                     if (tag.header.Length < window.displayableLetters - (tag.startPos - selectedStart) - 3) o.Append("-> " + tag.header);
                     o.AppendLine();
                 }
-                if (tag.endPos > selectedStart && tag.endPos < selectedEnd && tag.startPos < selectedStart + window.displayableLetters) {
+                if (tag.endPos >= selectedStart && tag.endPos <= selectedEnd && tag.endPos <= selectedStart + window.displayableLetters) {
                     if (tag.header.Length < tag.endPos - selectedStart - 4) {
                         for (int i = selectedStart; i < tag.endPos - tag.header.Length - 4; i++) o.Append(" ");
                         o.Append(tag.header + " ->|");
@@ -361,11 +362,6 @@ namespace DNATagger {
 
 
 
-        private void OnClickSequencePanel(object sender, MouseEventArgs e) {
-            window.unselectTag();
-        }
-
-
 
         private void OnDraw(object sender, PaintEventArgs e) {
             Width = Parent.Width - 4;
@@ -375,6 +371,7 @@ namespace DNATagger {
 
         private void OnClick(object sender, MouseEventArgs e) {
             window.selectedSequence = this;
+            window.unselectTag();
         }
 
         #endregion

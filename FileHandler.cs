@@ -112,31 +112,32 @@ namespace DNATagger
 
 
         /** <summary>Speichert ein Projekt als dnat Datei ab. Der Dateipfad wird vorher in der path Eigenschaft des Hauptfensters festgelegt.</summary>*/
-        public static void saveProject(WindowMain prj){
-            if (accessSaveFile(prj.savePath)){
-                try{
-                    if (prj.notes != null) fileWriter.WriteLine(prj.notes);
-                    foreach (DNASequence seq in prj.getSequences()){
-                        fileWriter.WriteLine("-Sequence");
-                        fileWriter.WriteLine(seq.header);
-                        fileWriter.WriteLine(seq.sequence);
-                        if (seq.notes != null) fileWriter.WriteLine(seq.notes);
-                        foreach (SequenceTag tag in seq.getTags()){
-                            fileWriter.WriteLine("-Tag");
-                            fileWriter.WriteLine(tag.header);
-                            fileWriter.WriteLine(tag.startPos);
-                            fileWriter.WriteLine(tag.endPos);
-                            fileWriter.WriteLine(tag.BackColor.ToArgb().ToString());
-                            if (tag.notes != null) fileWriter.WriteLine(tag.notes);
-                        }
+        public static bool saveProject(WindowMain prj){
+            if (!accessSaveFile(prj.savePath)) return false;
+            try{
+                if (prj.notes != null) fileWriter.WriteLine(prj.notes);
+                foreach (DNASequence seq in prj.getSequences()){
+                    fileWriter.WriteLine("-Sequence");
+                    fileWriter.WriteLine(seq.header);
+                    fileWriter.WriteLine(seq.sequence);
+                    if (seq.notes != null) fileWriter.WriteLine(seq.notes);
+                    foreach (SequenceTag tag in seq.getTags()){
+                        fileWriter.WriteLine("-Tag");
+                        fileWriter.WriteLine(tag.header);
+                        fileWriter.WriteLine(tag.startPos);
+                        fileWriter.WriteLine(tag.endPos);
+                        fileWriter.WriteLine(tag.BackColor.ToArgb().ToString());
+                        if (tag.notes != null) fileWriter.WriteLine(tag.notes);
                     }
                 }
-                catch{
-                    Console.WriteLine("Critical Error while saving project! Save while might be corrupted!");
-                }
+                closeFileWriter();
+                return true;
             }
-
-            closeFileWriter();
+            catch{
+                Console.WriteLine("Critical Error while saving project! Save while might be corrupted!");
+                closeFileWriter();
+                return false;
+            }
         } 
 
 
@@ -148,26 +149,22 @@ namespace DNATagger
                     String line;
                     StringBuilder notes = new StringBuilder();
                     line = fileReader.ReadLine();
-                    while(line != "-Sequence"){
+                    while(line != "-Sequence" && line != null){
                         notes.AppendLine(line);
                         line = fileReader.ReadLine();
                     }
-
                     //An diesem Punkt ist line = -Sequence
                     prj.notes = notes.ToString();
                     notes.Clear();
-
 
                     while (!fileReader.EndOfStream){ // Für den Rest des Dokuments
                         DNASequence seq = new DNASequence(fileReader.ReadLine(), fileReader.ReadLine());
                     
                         line = fileReader.ReadLine();
-                        do { //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
-                            if (line != "-Tag" && line != "-Sequence") {
-                                notes.AppendLine(line);
-                                line = fileReader.ReadLine();
-                            }
-                        } while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream);
+                        while (line != "-Tag" && line != "-Sequence" && line != null) { //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
+                            notes.AppendLine(line);
+                            line = fileReader.ReadLine();
+                        }
                         seq.notes = notes.ToString();
                         notes.Clear();
                         prj.addSequence(seq);
@@ -175,12 +172,10 @@ namespace DNATagger
                         while (line == "-Tag" && !fileReader.EndOfStream){ //Nach dieser Schleife sind alle Tags eines Sequenz eingelesen
                             SequenceTag tag = new SequenceTag(fileReader.ReadLine(), int.Parse(fileReader.ReadLine()), int.Parse(fileReader.ReadLine()), System.Drawing.Color.FromArgb(int.Parse(fileReader.ReadLine())));
                             line = fileReader.ReadLine();
-                            do { //Einlesen der Tagnotes, bis neuer Tag neue Sequenz oder Dateiende
-                                if (line != "-Tag" && line != "-Sequence"){
-                                    notes.AppendLine(line);
-                                    line = fileReader.ReadLine();
-                                }
-                            } while (line != "-Tag" && line != "-Sequence" && !fileReader.EndOfStream);
+                            while (line != "-Tag" && line != "-Sequence" && line != null) { //Einlesen der Tagnotes, bis neuer Tag neue Sequenz oder Dateiende
+                                notes.AppendLine(line);
+                                line = fileReader.ReadLine();
+                            }
                             tag.notes = notes.ToString();
                             notes.Clear();
                             seq.addTag(tag);

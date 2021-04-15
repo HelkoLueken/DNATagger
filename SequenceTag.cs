@@ -32,6 +32,7 @@ namespace DNATagger {
 
         public SequenceTag(String header, int fromPos, int toPos, Color color) {
             InitializeComponent();
+            standartFont = Font;
             this.header = header;
             this.startPos = fromPos;
             this.endPos = toPos;
@@ -60,7 +61,7 @@ namespace DNATagger {
 
 
         public void unhighlight(){ 
-            Font = Parent.Font;
+            Font = standartFont;
         }
 
 

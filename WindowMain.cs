@@ -18,7 +18,6 @@ namespace DNATagger
         private List<DNASequence> sequences = new List<DNASequence>();
         private WindowAddTag tagAddingDialogue;
         private WindowAddSequence seqAddingDialogue;
-        public String savePath;
         public String notes = "";
         public delegate void ControlCloser();
 
@@ -35,6 +34,18 @@ namespace DNATagger
         /**<summary>Dieser Faktor wird zum skalieren der Sequenz- und Tags-Balken im Editor verwendet. Er wird über den Schieberegeler eingestellt.</summary>*/
         public double zoom {
             get { return Math.Pow(2, zoomRegler.Value); }
+        }
+
+
+
+        public String savePath{ 
+            get{
+                if (Text.Length <= 10) return "";
+                return Text.Substring(10);
+            }
+            set{
+                Text = "DNATagger " + value;
+            }
         }
         
 
@@ -75,6 +86,7 @@ namespace DNATagger
         private void unselectSequence(){
             if (selectedSequence != null) selectedSequence.unhighlight();
             sequenceSelector.SelectedItem = null;
+            unselectTag();
         }
 
 
@@ -82,6 +94,7 @@ namespace DNATagger
         public void unselectTag(){
             if (selectedTag != null) selectedTag.unhighlight();
             tagSelector.SelectedItem = null;
+            refreshNoteBox();
         }
 
 
@@ -89,7 +102,7 @@ namespace DNATagger
         public void addSequence(DNASequence seq){
             seq.window = this;
             sequences.Add(seq);
-            panelEditor.Controls.Add(seq);
+            editorPanel.Controls.Add(seq);
             sequenceSelector.Items.Add(seq);
             seq.adjustToZoom();
             arrangeSequences();
@@ -101,7 +114,7 @@ namespace DNATagger
             if (seq == selectedSequence) sequenceSelector.Text = "";
             this.sequenceSelector.Items.Remove(seq);
             sequences.Remove(seq);
-            panelEditor.Controls.Remove(seq);
+            editorPanel.Controls.Remove(seq);
             seq.Dispose();
             arrangeSequences();
             refreshNoteBox();
@@ -113,7 +126,7 @@ namespace DNATagger
         private void dropTag(SequenceTag tag){
             if (tag == selectedTag) tagSelector.Text = "";
             tag.sequence.dropTag(tag);
-            panelEditor.Controls.Remove(tag);
+            editorPanel.Controls.Remove(tag);
             refreshTagSelector();
             refreshNoteBox();
             refreshEditor();
@@ -123,11 +136,11 @@ namespace DNATagger
 
         public void saveNotes() {
             if (selectedTag != null && tagSelector.Text != "") {
-                selectedTag.notes = notizBox.Text;
+                selectedTag.notes = noteBox.Text;
                 return;
             }
-            if (selectedSequence != null) selectedSequence.notes = notizBox.Text;
-            else notes = notizBox.Text;
+            if (selectedSequence != null) selectedSequence.notes = noteBox.Text;
+            else notes = noteBox.Text;
         }
 
 
@@ -148,7 +161,7 @@ namespace DNATagger
 
         public int displayableLetters { 
             get{
-                return (int)(LetterViewBox.Width / 7) -2;
+                return (int)(letterViewBox.Width / 7) -2;
             }
         }
 
@@ -173,7 +186,8 @@ namespace DNATagger
         public void save(){
             saveNotes();
             if (savePath == null || savePath == "") selectSavePath();
-            FileHandler.saveProject(this);
+            if (FileHandler.saveProject(this)) MessageBox.Show("Saving successful", "Done Saving", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else MessageBox.Show("Error: could not save file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
 
@@ -193,8 +207,7 @@ namespace DNATagger
         #region Graphische Darstellungen
 
         public void refreshEditor() {
-            arrangeSequences();
-            panelEditor.Invalidate();
+            Invalidate();
         }
 
 
@@ -210,24 +223,24 @@ namespace DNATagger
 
 
         public String inDepthView{ 
-            set{ LetterViewBox.Text = value; }
+            set{ letterViewBox.Text = value; }
         }
 
 
 
         private void refreshNoteBox() {
             if (selectedTag != null) {
-                notizBox.Text = selectedTag.notes;
-                notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
+                noteBox.Text = selectedTag.notes;
+                noteBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
                 return;
             }
             if (selectedSequence != null) {
-                notizBox.Text = selectedSequence.notes;
-                notizBoxLabel.Text = "Annotations for Sequence: " + selectedSequence.header;
+                noteBox.Text = selectedSequence.notes;
+                noteBoxLabel.Text = "Annotations for Sequence: " + selectedSequence.header;
                 return;
             }
-            notizBoxLabel.Text = "Project Info";
-            notizBox.Text = notes;
+            noteBoxLabel.Text = "Project Info";
+            noteBox.Text = notes;
         }
 
 
@@ -239,7 +252,7 @@ namespace DNATagger
                 startLabel.Text = "Start: " + selectedTag.startPos;
                 endLabel.Visible = true;
                 endLabel.Text = "End: " + selectedTag.endPos;
-                notizBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
+                noteBoxLabel.Text = "Annotations for Tag: " + selectedTag.header;
                 return;
             }
             if (selectedSequence != null) {
@@ -310,6 +323,7 @@ namespace DNATagger
 
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
             if (selectedSequence != null) selectedSequence.highlight();
+            if (selectedTag != null && selectedTag.sequence != selectedSequence) unselectTag();
             refreshNoteBox();
             refreshPosLabels();
             refreshTagSelector();

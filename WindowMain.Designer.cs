@@ -40,30 +40,30 @@ namespace DNATagger
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showInDepthMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.panelEditor = new System.Windows.Forms.Panel();
+            this.editorPanel = new System.Windows.Forms.Panel();
             this.groupBoxCanvas = new System.Windows.Forms.GroupBox();
             this.groupBoxTools = new System.Windows.Forms.GroupBox();
             this.groupBoxPosLabels = new System.Windows.Forms.GroupBox();
             this.lengthLabel = new System.Windows.Forms.Label();
             this.endLabel = new System.Windows.Forms.Label();
             this.startLabel = new System.Windows.Forms.Label();
-            this.notizBox = new System.Windows.Forms.RichTextBox();
-            this.buttonAddSeq = new System.Windows.Forms.Button();
-            this.buttonAddTag = new System.Windows.Forms.Button();
+            this.noteBox = new System.Windows.Forms.RichTextBox();
+            this.addSequenceButton = new System.Windows.Forms.Button();
+            this.addTagButton = new System.Windows.Forms.Button();
             this.deleteTagButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.deleteSequenceButton = new System.Windows.Forms.Button();
             this.groupBoxZoom = new System.Windows.Forms.GroupBox();
             this.labelPlus = new System.Windows.Forms.Label();
             this.labelMinus = new System.Windows.Forms.Label();
             this.zoomRegler = new System.Windows.Forms.TrackBar();
-            this.notizBoxLabel = new System.Windows.Forms.Label();
+            this.noteBoxLabel = new System.Windows.Forms.Label();
             this.tagSelectorLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tagSelector = new System.Windows.Forms.ComboBox();
             this.sequenceSelector = new System.Windows.Forms.ComboBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxLetterViewer = new System.Windows.Forms.GroupBox();
-            this.LetterViewBox = new System.Windows.Forms.TextBox();
+            this.letterViewBox = new System.Windows.Forms.TextBox();
             this.mainWindowMenuStrip.SuspendLayout();
             this.groupBoxCanvas.SuspendLayout();
             this.groupBoxTools.SuspendLayout();
@@ -161,28 +161,28 @@ namespace DNATagger
             // 
             this.openFileDialog.FileName = "openFileDialog";
             // 
-            // panelEditor
+            // editorPanel
             // 
-            this.panelEditor.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.editorPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.panelEditor.AutoScroll = true;
-            this.panelEditor.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panelEditor.BackColor = System.Drawing.SystemColors.AppWorkspace;
-            this.panelEditor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelEditor.Location = new System.Drawing.Point(6, 22);
-            this.panelEditor.Margin = new System.Windows.Forms.Padding(0);
-            this.panelEditor.Name = "panelEditor";
-            this.panelEditor.Size = new System.Drawing.Size(1441, 381);
-            this.panelEditor.TabIndex = 1;
-            this.panelEditor.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickEditorBG);
+            this.editorPanel.AutoScroll = true;
+            this.editorPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.editorPanel.BackColor = System.Drawing.SystemColors.AppWorkspace;
+            this.editorPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.editorPanel.Location = new System.Drawing.Point(6, 22);
+            this.editorPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.editorPanel.Name = "editorPanel";
+            this.editorPanel.Size = new System.Drawing.Size(1441, 381);
+            this.editorPanel.TabIndex = 1;
+            this.editorPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.OnClickEditorBG);
             // 
             // groupBoxCanvas
             // 
             this.groupBoxCanvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBoxCanvas.Controls.Add(this.panelEditor);
+            this.groupBoxCanvas.Controls.Add(this.editorPanel);
             this.groupBoxCanvas.Location = new System.Drawing.Point(12, 190);
             this.groupBoxCanvas.Name = "groupBoxCanvas";
             this.groupBoxCanvas.Size = new System.Drawing.Size(1451, 406);
@@ -195,13 +195,13 @@ namespace DNATagger
             this.groupBoxTools.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxTools.Controls.Add(this.groupBoxPosLabels);
-            this.groupBoxTools.Controls.Add(this.notizBox);
-            this.groupBoxTools.Controls.Add(this.buttonAddSeq);
-            this.groupBoxTools.Controls.Add(this.buttonAddTag);
+            this.groupBoxTools.Controls.Add(this.noteBox);
+            this.groupBoxTools.Controls.Add(this.addSequenceButton);
+            this.groupBoxTools.Controls.Add(this.addTagButton);
             this.groupBoxTools.Controls.Add(this.deleteTagButton);
-            this.groupBoxTools.Controls.Add(this.button1);
+            this.groupBoxTools.Controls.Add(this.deleteSequenceButton);
             this.groupBoxTools.Controls.Add(this.groupBoxZoom);
-            this.groupBoxTools.Controls.Add(this.notizBoxLabel);
+            this.groupBoxTools.Controls.Add(this.noteBoxLabel);
             this.groupBoxTools.Controls.Add(this.tagSelectorLabel);
             this.groupBoxTools.Controls.Add(this.label2);
             this.groupBoxTools.Controls.Add(this.tagSelector);
@@ -250,38 +250,38 @@ namespace DNATagger
             this.startLabel.TabIndex = 13;
             this.startLabel.Text = "Start:";
             // 
-            // notizBox
+            // noteBox
             // 
-            this.notizBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.noteBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.notizBox.Location = new System.Drawing.Point(507, 27);
-            this.notizBox.Name = "notizBox";
-            this.notizBox.Size = new System.Drawing.Size(944, 130);
-            this.notizBox.TabIndex = 12;
-            this.notizBox.Text = resources.GetString("notizBox.Text");
-            this.notizBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
+            this.noteBox.Location = new System.Drawing.Point(507, 27);
+            this.noteBox.Name = "noteBox";
+            this.noteBox.Size = new System.Drawing.Size(944, 130);
+            this.noteBox.TabIndex = 12;
+            this.noteBox.Text = resources.GetString("noteBox.Text");
+            this.noteBox.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.OnClickLink);
             // 
-            // buttonAddSeq
+            // addSequenceButton
             // 
-            this.buttonAddSeq.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonAddSeq.Location = new System.Drawing.Point(6, 53);
-            this.buttonAddSeq.Name = "buttonAddSeq";
-            this.buttonAddSeq.Size = new System.Drawing.Size(108, 27);
-            this.buttonAddSeq.TabIndex = 6;
-            this.buttonAddSeq.Text = "Add Sequence";
-            this.buttonAddSeq.UseVisualStyleBackColor = false;
-            this.buttonAddSeq.Click += new System.EventHandler(this.OnAddSeq);
+            this.addSequenceButton.BackColor = System.Drawing.SystemColors.Control;
+            this.addSequenceButton.Location = new System.Drawing.Point(6, 53);
+            this.addSequenceButton.Name = "addSequenceButton";
+            this.addSequenceButton.Size = new System.Drawing.Size(108, 27);
+            this.addSequenceButton.TabIndex = 6;
+            this.addSequenceButton.Text = "Add Sequence";
+            this.addSequenceButton.UseVisualStyleBackColor = false;
+            this.addSequenceButton.Click += new System.EventHandler(this.OnAddSeq);
             // 
-            // buttonAddTag
+            // addTagButton
             // 
-            this.buttonAddTag.BackColor = System.Drawing.SystemColors.Control;
-            this.buttonAddTag.Location = new System.Drawing.Point(261, 53);
-            this.buttonAddTag.Name = "buttonAddTag";
-            this.buttonAddTag.Size = new System.Drawing.Size(108, 27);
-            this.buttonAddTag.TabIndex = 6;
-            this.buttonAddTag.Text = "Add Tag";
-            this.buttonAddTag.UseVisualStyleBackColor = false;
-            this.buttonAddTag.Click += new System.EventHandler(this.OnAddTag);
+            this.addTagButton.BackColor = System.Drawing.SystemColors.Control;
+            this.addTagButton.Location = new System.Drawing.Point(261, 53);
+            this.addTagButton.Name = "addTagButton";
+            this.addTagButton.Size = new System.Drawing.Size(108, 27);
+            this.addTagButton.TabIndex = 6;
+            this.addTagButton.Text = "Add Tag";
+            this.addTagButton.UseVisualStyleBackColor = false;
+            this.addTagButton.Click += new System.EventHandler(this.OnAddTag);
             // 
             // deleteTagButton
             // 
@@ -294,16 +294,16 @@ namespace DNATagger
             this.deleteTagButton.UseVisualStyleBackColor = false;
             this.deleteTagButton.Click += new System.EventHandler(this.OnDropTag);
             // 
-            // button1
+            // deleteSequenceButton
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.Location = new System.Drawing.Point(120, 53);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(126, 27);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Delete Sequence";
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.OnDropSequence);
+            this.deleteSequenceButton.BackColor = System.Drawing.SystemColors.Control;
+            this.deleteSequenceButton.Location = new System.Drawing.Point(120, 53);
+            this.deleteSequenceButton.Name = "deleteSequenceButton";
+            this.deleteSequenceButton.Size = new System.Drawing.Size(126, 27);
+            this.deleteSequenceButton.TabIndex = 6;
+            this.deleteSequenceButton.Text = "Delete Sequence";
+            this.deleteSequenceButton.UseVisualStyleBackColor = false;
+            this.deleteSequenceButton.Click += new System.EventHandler(this.OnDropSequence);
             // 
             // groupBoxZoom
             // 
@@ -354,14 +354,14 @@ namespace DNATagger
             this.zoomRegler.TabIndex = 7;
             this.zoomRegler.ValueChanged += new System.EventHandler(this.OnChangeZoom);
             // 
-            // notizBoxLabel
+            // noteBoxLabel
             // 
-            this.notizBoxLabel.AutoSize = true;
-            this.notizBoxLabel.Location = new System.Drawing.Point(507, 9);
-            this.notizBoxLabel.Name = "notizBoxLabel";
-            this.notizBoxLabel.Size = new System.Drawing.Size(91, 15);
-            this.notizBoxLabel.TabIndex = 5;
-            this.notizBoxLabel.Text = "Project Info";
+            this.noteBoxLabel.AutoSize = true;
+            this.noteBoxLabel.Location = new System.Drawing.Point(507, 9);
+            this.noteBoxLabel.Name = "noteBoxLabel";
+            this.noteBoxLabel.Size = new System.Drawing.Size(91, 15);
+            this.noteBoxLabel.TabIndex = 5;
+            this.noteBoxLabel.Text = "Project Info";
             // 
             // tagSelectorLabel
             // 
@@ -407,7 +407,7 @@ namespace DNATagger
             this.groupBoxLetterViewer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxLetterViewer.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBoxLetterViewer.Controls.Add(this.LetterViewBox);
+            this.groupBoxLetterViewer.Controls.Add(this.letterViewBox);
             this.groupBoxLetterViewer.Location = new System.Drawing.Point(12, 602);
             this.groupBoxLetterViewer.Name = "groupBoxLetterViewer";
             this.groupBoxLetterViewer.Size = new System.Drawing.Size(1451, 117);
@@ -415,16 +415,16 @@ namespace DNATagger
             this.groupBoxLetterViewer.TabStop = false;
             this.groupBoxLetterViewer.Text = "In Depth Viewer";
             // 
-            // LetterViewBox
+            // letterViewBox
             // 
-            this.LetterViewBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.letterViewBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.LetterViewBox.Location = new System.Drawing.Point(6, 22);
-            this.LetterViewBox.Multiline = true;
-            this.LetterViewBox.Name = "LetterViewBox";
-            this.LetterViewBox.Size = new System.Drawing.Size(1442, 92);
-            this.LetterViewBox.TabIndex = 11;
+            this.letterViewBox.Location = new System.Drawing.Point(6, 22);
+            this.letterViewBox.Multiline = true;
+            this.letterViewBox.Name = "letterViewBox";
+            this.letterViewBox.Size = new System.Drawing.Size(1442, 92);
+            this.letterViewBox.TabIndex = 11;
             // 
             // WindowMain
             // 
@@ -471,30 +471,30 @@ namespace DNATagger
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem enterDNASequenceToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Panel panelEditor;
+        private System.Windows.Forms.Panel editorPanel;
         private System.Windows.Forms.GroupBox groupBoxCanvas;
         private System.Windows.Forms.GroupBox groupBoxTools;
         private System.Windows.Forms.ComboBox sequenceSelector;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button deleteSequenceButton;
         private System.Windows.Forms.Label tagSelectorLabel;
         private System.Windows.Forms.ComboBox tagSelector;
         private System.Windows.Forms.TrackBar zoomRegler;
         private System.Windows.Forms.GroupBox groupBoxZoom;
-        private System.Windows.Forms.Button buttonAddTag;
+        private System.Windows.Forms.Button addTagButton;
         private System.Windows.Forms.Label labelPlus;
         private System.Windows.Forms.Label labelMinus;
-        private System.Windows.Forms.RichTextBox notizBox;
-        private System.Windows.Forms.Label notizBoxLabel;
+        private System.Windows.Forms.RichTextBox noteBox;
+        private System.Windows.Forms.Label noteBoxLabel;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.GroupBox groupBoxLetterViewer;
         private System.Windows.Forms.ToolStripMenuItem showInDepthMenuItem;
-        private System.Windows.Forms.TextBox LetterViewBox;
+        private System.Windows.Forms.TextBox letterViewBox;
         private System.Windows.Forms.GroupBox groupBoxPosLabels;
         private System.Windows.Forms.Label lengthLabel;
         private System.Windows.Forms.Label endLabel;
         private System.Windows.Forms.Label startLabel;
-        private System.Windows.Forms.Button buttonAddSeq;
+        private System.Windows.Forms.Button addSequenceButton;
         private System.Windows.Forms.Button deleteTagButton;
     }
 }

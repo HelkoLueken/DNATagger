@@ -123,7 +123,7 @@
   <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>212, 15</value>
   </metadata>
-  <data name="notizBox.Text" xml:space="preserve">
+  <data name="noteBox.Text" xml:space="preserve">
     <value>Here you can write notes regarding your project, such as URLs to cited papers.
 If you select a sequence or sequence-tag this box will display another set of notes, specifically for them.
 You can deselect any sequence or tag by clicking the background of the editor.</value>
