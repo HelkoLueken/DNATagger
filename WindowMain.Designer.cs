@@ -307,7 +307,6 @@ namespace DNATagger
             // 
             // groupBoxZoom
             // 
-            this.groupBoxZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBoxZoom.Controls.Add(this.labelPlus);
             this.groupBoxZoom.Controls.Add(this.labelMinus);
             this.groupBoxZoom.Controls.Add(this.zoomRegler);
@@ -439,6 +438,7 @@ namespace DNATagger
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.mainWindowMenuStrip;
+            this.MinimumSize = new System.Drawing.Size(800, 440);
             this.Name = "WindowMain";
             this.Text = "DNATagger";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);

@@ -113,6 +113,7 @@ namespace DNATagger {
             this.sequencePanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.sequencePanel.Location = new System.Drawing.Point(1, 1);
             this.sequencePanel.Margin = new System.Windows.Forms.Padding(0);
+            this.sequencePanel.MaximumSize = new System.Drawing.Size(30000, 24);
             this.sequencePanel.MinimumSize = new System.Drawing.Size(4, 4);
             this.sequencePanel.Name = "sequencePanel";
             this.sequencePanel.Size = new System.Drawing.Size(240, 22);

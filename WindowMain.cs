@@ -18,7 +18,7 @@ namespace DNATagger
         private List<DNASequence> sequences = new List<DNASequence>();
         private WindowAddTag tagAddingDialogue;
         private WindowAddSequence seqAddingDialogue;
-        public String notes = "";
+        public String notes;
         public delegate void ControlCloser();
 
 
@@ -27,6 +27,7 @@ namespace DNATagger
 
         public WindowMain() {
             InitializeComponent();
+            notes = noteBox.Text;
         }
 
 
@@ -116,6 +117,7 @@ namespace DNATagger
             sequences.Remove(seq);
             editorPanel.Controls.Remove(seq);
             seq.Dispose();
+            seq = null;
             arrangeSequences();
             refreshNoteBox();
             refreshEditor();
@@ -127,6 +129,8 @@ namespace DNATagger
             if (tag == selectedTag) tagSelector.Text = "";
             tag.sequence.dropTag(tag);
             editorPanel.Controls.Remove(tag);
+            tag.Dispose();
+            tag = null;
             refreshTagSelector();
             refreshNoteBox();
             refreshEditor();
@@ -207,6 +211,7 @@ namespace DNATagger
         #region Graphische Darstellungen
 
         public void refreshEditor() {
+            foreach (DNASequence seq in sequences) seq.Invalidate();
             Invalidate();
         }
 
@@ -298,6 +303,7 @@ namespace DNATagger
 
 
         private void OnChangeZoom(object sender, EventArgs e) {
+            unselectSequence();
             foreach (DNASequence seq in sequences) seq.adjustToZoom();
             refreshEditor();
         }
@@ -367,7 +373,7 @@ namespace DNATagger
             openFileDialog.Filter = "DNATagger Project File|*.dnat";
             openFileDialog.ShowDialog();
             savePath = openFileDialog.FileName;
-            FileHandler.loadProject(this);
+            if (!FileHandler.loadProject(this)) MessageBox.Show("Critical Error while reading project file. It might be corrupted", "Loading Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
 

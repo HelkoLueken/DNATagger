@@ -30,11 +30,13 @@ namespace DNATagger {
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBoxFrom = new System.Windows.Forms.TextBox();
-            this.textBoxTo = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.startPosSelector = new System.Windows.Forms.NumericUpDown();
+            this.endPosSelector = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.startPosSelector)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.endPosSelector)).BeginInit();
             this.SuspendLayout();
             // 
             // colorSelectionButton
@@ -42,7 +44,7 @@ namespace DNATagger {
             this.colorSelectionButton.BackColor = System.Drawing.Color.GreenYellow;
             this.colorSelectionButton.Location = new System.Drawing.Point(127, 111);
             this.colorSelectionButton.Name = "colorSelectionButton";
-            this.colorSelectionButton.Size = new System.Drawing.Size(75, 23);
+            this.colorSelectionButton.Size = new System.Drawing.Size(120, 23);
             this.colorSelectionButton.TabIndex = 0;
             this.colorSelectionButton.Text = "Select";
             this.colorSelectionButton.UseVisualStyleBackColor = false;
@@ -94,22 +96,6 @@ namespace DNATagger {
             this.label4.TabIndex = 4;
             this.label4.Text = "To";
             // 
-            // textBoxFrom
-            // 
-            this.textBoxFrom.Location = new System.Drawing.Point(127, 59);
-            this.textBoxFrom.Name = "textBoxFrom";
-            this.textBoxFrom.Size = new System.Drawing.Size(100, 20);
-            this.textBoxFrom.TabIndex = 5;
-            this.textBoxFrom.Text = "Base";
-            // 
-            // textBoxTo
-            // 
-            this.textBoxTo.Location = new System.Drawing.Point(127, 85);
-            this.textBoxTo.Name = "textBoxTo";
-            this.textBoxTo.Size = new System.Drawing.Size(100, 20);
-            this.textBoxTo.TabIndex = 5;
-            this.textBoxTo.Text = "Base";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -123,9 +109,43 @@ namespace DNATagger {
             // 
             this.nameTextBox.Location = new System.Drawing.Point(127, 33);
             this.nameTextBox.Name = "nameTextBox";
-            this.nameTextBox.Size = new System.Drawing.Size(100, 20);
+            this.nameTextBox.Size = new System.Drawing.Size(120, 20);
             this.nameTextBox.TabIndex = 5;
             this.nameTextBox.Text = "Tagged region";
+            // 
+            // startPosSelector
+            // 
+            this.startPosSelector.Location = new System.Drawing.Point(127, 60);
+            this.startPosSelector.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.startPosSelector.Name = "startPosSelector";
+            this.startPosSelector.Size = new System.Drawing.Size(120, 20);
+            this.startPosSelector.TabIndex = 6;
+            this.startPosSelector.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // endPosSelector
+            // 
+            this.endPosSelector.Location = new System.Drawing.Point(127, 86);
+            this.endPosSelector.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.endPosSelector.Name = "endPosSelector";
+            this.endPosSelector.Size = new System.Drawing.Size(120, 20);
+            this.endPosSelector.TabIndex = 6;
+            this.endPosSelector.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // WindowAddTag
             // 
@@ -133,10 +153,10 @@ namespace DNATagger {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Menu;
-            this.ClientSize = new System.Drawing.Size(240, 174);
-            this.Controls.Add(this.textBoxTo);
+            this.ClientSize = new System.Drawing.Size(262, 174);
+            this.Controls.Add(this.endPosSelector);
+            this.Controls.Add(this.startPosSelector);
             this.Controls.Add(this.nameTextBox);
-            this.Controls.Add(this.textBoxFrom);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label3);
@@ -148,6 +168,8 @@ namespace DNATagger {
             this.Name = "WindowAddTag";
             this.Text = "Add Tag";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnClose);
+            ((System.ComponentModel.ISupportInitialize)(this.startPosSelector)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.endPosSelector)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -160,10 +182,10 @@ namespace DNATagger {
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBoxFrom;
-        private System.Windows.Forms.TextBox textBoxTo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.NumericUpDown startPosSelector;
+        private System.Windows.Forms.NumericUpDown endPosSelector;
     }
 }

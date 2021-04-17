@@ -23,15 +23,20 @@ namespace DNATagger {
             selectedSequenceLabel.Text = "Add Tag to sequence: " + targetSequence;
             this.targetSequence = targetSequence;
             this.controlCloser = controlCloser;
-            textBoxFrom.Text = targetSequence.selectedStart.ToString();
-            textBoxTo.Text = targetSequence.selectedEnd.ToString();
+            startPosSelector.Maximum = targetSequence.getLengthTotal();
+            endPosSelector.Maximum = targetSequence.getLengthTotal();
+            startPosSelector.Value = targetSequence.selectedStart;
+            endPosSelector.Value = targetSequence.selectedEnd;
         }
 
 
 
         private void OnConfirm(object sender, EventArgs e) {
-            SequenceTag tag = new SequenceTag(nameTextBox.Text, int.Parse(textBoxFrom.Text), int.Parse(textBoxTo.Text), colorSelectionButton.BackColor);
-            targetSequence.addTag(tag);
+            if (targetSequence != null && !targetSequence.IsDisposed) {
+                SequenceTag tag = new SequenceTag(nameTextBox.Text, (int)startPosSelector.Value, (int)endPosSelector.Value, colorSelectionButton.BackColor);
+                targetSequence.addTag(tag);
+            }
+            else MessageBox.Show("This Sequence no longer exists in editor!", "Sequence Not Found", MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
             Close();
         }
 

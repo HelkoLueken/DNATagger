@@ -55,25 +55,19 @@ namespace DNATagger
 
         public static List<DNASequence> readFasta(String path) {
             List<DNASequence> output = new List<DNASequence>();
-            if (openFile(path))
-            {
+
+            if (openFile(path)){
                 StringBuilder fastaBlock = new StringBuilder();
                 String line;
-                if (fileReader.EndOfStream)
-                {
-                    Console.WriteLine("Warning: Fasta file is empty");
-                }
-                else
-                {
-                    while (!fileReader.EndOfStream)
-                    {
+                if (fileReader.EndOfStream) Console.WriteLine("Warning: Fasta file is empty");
+                else{
+                    while (!fileReader.EndOfStream){
                         line = fileReader.ReadLine();
                         if (line.Length == 0) continue;
-                        if (line.ToCharArray()[0] == '>')
-                        {
-                            if (fastaBlock.Length > 0)
-                            {
+                        if (line.ToCharArray()[0] == '>'){
+                            if (fastaBlock.Length > 0){
                                 DNASequence seqi = new DNASequence(fastaBlock.ToString());
+                                if (!seqi.hasValidSequence()) return output;
                                 seqi.notes = "Loaded from: " + path;
                                 output.Add(seqi);
                                 fastaBlock.Clear();
@@ -143,25 +137,30 @@ namespace DNATagger
 
 
         /** <summary>Lädt ein Projekt aus einer dnat Datei ein. Die Datei muss vorher in der path Eigenschaft des Hauptfensters festgelegt werden.</summary>*/
-        public static void loadProject(WindowMain prj){ 
+        public static bool loadProject(WindowMain prj){
+            bool success = false;
             try{
                 if (openFile(prj.savePath)){
                     String line;
+                    String header;
+                    String letters;
                     StringBuilder notes = new StringBuilder();
                     line = fileReader.ReadLine();
-                    while(line != "-Sequence" && line != null){
+                    while(line != "-Sequence" && line != null){ //Zuerst werden alle Projektnotizen am anfang der Datei eingelesen
                         notes.AppendLine(line);
                         line = fileReader.ReadLine();
                     }
-                    //An diesem Punkt ist line = -Sequence
                     prj.notes = notes.ToString();
                     notes.Clear();
 
-                    while (!fileReader.EndOfStream){ // Für den Rest des Dokuments
-                        DNASequence seq = new DNASequence(fileReader.ReadLine(), fileReader.ReadLine());
+                    while (!fileReader.EndOfStream){ // Ab hier werden Sequenzen eingelesen
+                        header = fileReader.ReadLine();
+                        letters = fileReader.ReadLine();
+                        if (!DNASequence.isValidSequence(letters)) break;
+                        DNASequence seq = new DNASequence(header, letters);
                     
                         line = fileReader.ReadLine();
-                        while (line != "-Tag" && line != "-Sequence" && line != null) { //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle restliche Zeilen als Notes eingelesen
+                        while (line != "-Tag" && line != "-Sequence" && line != null) { //Bevor man auf Tag oder eine neue Sequenz stößt, werden alle folgenden Zeilen als Notes der Sequenz eingelesen
                             notes.AppendLine(line);
                             line = fileReader.ReadLine();
                         }
@@ -169,7 +168,7 @@ namespace DNATagger
                         notes.Clear();
                         prj.addSequence(seq);
 
-                        while (line == "-Tag" && !fileReader.EndOfStream){ //Nach dieser Schleife sind alle Tags eines Sequenz eingelesen
+                        while (line == "-Tag" && !fileReader.EndOfStream){ //Diese Schleife liest alle tags einer Sequenz ein
                             SequenceTag tag = new SequenceTag(fileReader.ReadLine(), int.Parse(fileReader.ReadLine()), int.Parse(fileReader.ReadLine()), System.Drawing.Color.FromArgb(int.Parse(fileReader.ReadLine())));
                             line = fileReader.ReadLine();
                             while (line != "-Tag" && line != "-Sequence" && line != null) { //Einlesen der Tagnotes, bis neuer Tag neue Sequenz oder Dateiende
@@ -181,13 +180,14 @@ namespace DNATagger
                             seq.addTag(tag);
                         }
                     }
+                    success = true;
                 }
-                closeFileReader();
             }
             catch{
                 Console.WriteLine("Critical Error while reading project file. It might be corrupted");
             }
+            closeFileReader();
+            return success;
         }
-
     }
 }

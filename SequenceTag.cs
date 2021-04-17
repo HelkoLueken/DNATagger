@@ -20,24 +20,32 @@ namespace DNATagger {
 
 
 
+        public SequenceTag(String header, int fromPos, int toPos, Color color) {
+            InitializeComponent();
+            standartFont = Font;
+            this.header = header;
+            this.BackColor = color;
+            notes = "Notes to " + header;
+            if (fromPos < 1) fromPos = 1;
+            if (toPos < 1) toPos = 1;
+            if (toPos >= fromPos){
+                this.startPos = fromPos;
+                this.endPos = toPos;
+            }
+            else{
+                this.startPos = toPos;
+                this.endPos = fromPos;
+            }
+        }
+
+
+
         public String header {
             get { return this.Name; }
             set {
                 this.Name = value;
                 headerLabel.Text = value;
             }
-        }
-
-
-
-        public SequenceTag(String header, int fromPos, int toPos, Color color) {
-            InitializeComponent();
-            standartFont = Font;
-            this.header = header;
-            this.startPos = fromPos;
-            this.endPos = toPos;
-            this.BackColor = color;
-            notes = "Notes to " + header;
         }
 
 

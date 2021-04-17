@@ -20,6 +20,7 @@ namespace DNATagger {
         public String notes;
         private WindowMain _window = new WindowMain();
         private List<SequenceTag> tags = new List<SequenceTag>();
+        private static String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_ ?";
 
 
 
@@ -37,6 +38,7 @@ namespace DNATagger {
                 header = "Unnamed DNA Sequence";
                 sense = fastaSingle.ToCharArray();
             }
+            if (!hasValidSequence()) this.Dispose();
         }
 
 
@@ -69,6 +71,24 @@ namespace DNATagger {
                 if (this.sense[i] == 'N') this.antisense[i] = 'N';
                 if (this.antisense[i] == 0) this.antisense[i] = '?';
             }
+        }
+
+
+
+        public static bool isValidSequence(String letters){ 
+            foreach (char c in letters){
+                if (!allowedChars.Contains(c.ToString())) return false;
+            }
+            return true;
+        }
+
+
+
+        public bool hasValidSequence(){
+            foreach (char c in sense) {
+                if (!allowedChars.Contains(c.ToString())) return false;
+            }
+            return true;
         }
 
 
@@ -106,15 +126,15 @@ namespace DNATagger {
 
 
 
-        public double screenBaseWidth() {
+        public double getScreenBaseWidth() {
             return (double)sequencePanel.Width / (double)getLengthTotal();
         }
 
 
 
         public Int32 getBasePosAtScreenPos(int pos) {
-            Int32 o = 1 + (int)(pos * screenBaseWidth());
-            if (o > getLengthTotal() + 1) return getLengthTotal() + 1;
+            Int32 o = 1 + (int)(pos / getScreenBaseWidth());
+            if (o > getLengthTotal()) return getLengthTotal();
             if (o < 1) return 1;
             return o;
         }
@@ -122,7 +142,7 @@ namespace DNATagger {
 
 
         public int getScreenPosAtBasePos(int basePos){
-            return (int)((basePos-1) * screenBaseWidth());
+            return 1 + (int)((basePos-1) * getScreenBaseWidth());
         }
 
 
@@ -193,30 +213,37 @@ namespace DNATagger {
             sequencePanel.Width = (int)(getLengthTotal() * window.zoom);
             foreach (SequenceTag tag in tags){
                 tag.Location = new Point(getScreenPosAtBasePos(tag.startPos) + scrollContainer.AutoScrollPosition.X, tag.Location.Y);
-                tag.Width = (int)(screenBaseWidth() * tag.getLength());
+                tag.Width = (int)(getScreenBaseWidth() * tag.getLength());
             }
+            setPositionLabels();
+        }
+
+
+
+        private void setPositionLabels(){
             sequencePanel.Controls.Clear();
-            for (int pos = 0; pos < sequencePanel.Width; pos += Width/3){
-                Label lab = addPositionLabel(getBasePosAtScreenPos(pos));
+            int labelInterval = (int)(500 / getScreenBaseWidth());
+            for (int i = 1; i < getLengthTotal(); i += labelInterval) {
+                addPositionLabel(i);
             }
-            foreach (SequenceTag tag in tags){
-                Label startLab = addPositionLabel(tag.startPos);
-                Label endLab = addPositionLabel(tag.endPos);
-                foreach(Label labi in sequencePanel.Controls) {
-                    if (labi.Bounds.IntersectsWith(startLab.Bounds) && labi != startLab || labi.Bounds.IntersectsWith(endLab.Bounds) && labi != endLab) sequencePanel.Controls.Remove(labi);
-                }
+            foreach (SequenceTag tag in tags) {
+                addPositionLabel(tag.startPos);
+                addPositionLabel(tag.endPos);
             }
         }
 
 
 
-        private Label addPositionLabel(int atBase) {
+        private void addPositionLabel(int atBase) {
             Label lab = new Label();
             lab.Text = atBase.ToString();
             lab.Location = new Point(getScreenPosAtBasePos(atBase) - (int)(0.5*Font.Size), sequencePanel.Location.Y);
             lab.AutoSize = true;
+            lab.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnMouseDown);
+            lab.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnMouseUp);
             sequencePanel.Controls.Add(lab);
-            return lab;
+            foreach (Label labi in sequencePanel.Controls) if (labi.Bounds.IntersectsWith(lab.Bounds) && labi != lab) sequencePanel.Controls.Remove(labi);
+            lab.Invalidate();
         }
 
 
@@ -350,14 +377,24 @@ namespace DNATagger {
 
         private void OnMouseDown(object sender, MouseEventArgs e){ 
             if (sender == this) setFirstMarker(e.X - scrollContainer.Location.X);
-            else setFirstMarker(e.X);
+            if (sender == scrollContainer) setFirstMarker(e.X);
+            if (sender == sequencePanel) setFirstMarker(e.X + scrollContainer.AutoScrollPosition.X);
+            if (sender is Label){
+                Label lab = (Label)sender;
+                setFirstMarker(e.X + lab.Location.X + scrollContainer.AutoScrollPosition.X);
+            }
         }
 
 
 
         private void OnMouseUp(object sender, MouseEventArgs e){
             if (sender == this) setSecondMarker(e.X - scrollContainer.Location.X);
-            else setSecondMarker(e.X);
+            if (sender == scrollContainer) setSecondMarker(e.X);
+            if (sender == sequencePanel) setSecondMarker(e.X + scrollContainer.AutoScrollPosition.X);
+            if (sender is Label) {
+                Label lab = (Label)sender;
+                setSecondMarker(e.X + lab.Location.X + scrollContainer.AutoScrollPosition.X);
+            }
         }
 
 
