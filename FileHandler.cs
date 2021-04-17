@@ -61,12 +61,14 @@ namespace DNATagger
                 String line;
                 if (fileReader.EndOfStream) Console.WriteLine("Warning: Fasta file is empty");
                 else{
-                    while (!fileReader.EndOfStream){
+                    while (!fileReader.EndOfStream && output.Count < 49){
                         line = fileReader.ReadLine();
+                        Console.WriteLine("ping");
                         if (line.Length == 0) continue;
                         if (line.ToCharArray()[0] == '>'){
                             if (fastaBlock.Length > 0){
                                 DNASequence seqi = new DNASequence(fastaBlock.ToString());
+                                Console.WriteLine("pong");
                                 if (!seqi.hasValidSequence()) return output;
                                 seqi.notes = "Loaded from: " + path;
                                 output.Add(seqi);

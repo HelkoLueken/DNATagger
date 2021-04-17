@@ -59,7 +59,6 @@ namespace DNATagger
             }
             set {
                 if (value == selectedSequence) return;
-                if (selectedSequence != null) selectedSequence.unhighlight();
                 saveNotes(); //Muss vor dem Ändern des selectedItem geschehen
                 sequenceSelector.SelectedItem = value;
             }
@@ -76,32 +75,18 @@ namespace DNATagger
             set {
                 if (value == selectedTag) return;
                 saveNotes(); //Muss vor dem Ändern des selectedItem geschehen
-                if (selectedTag != null) selectedTag.unhighlight();
-                selectedSequence = value.sequence;
                 tagSelector.SelectedItem = value;
             }
         }
 
 
 
-        private void unselectSequence(){
-            if (selectedSequence != null) selectedSequence.unhighlight();
-            sequenceSelector.SelectedItem = null;
-            unselectTag();
-        }
-
-
-
-        public void unselectTag(){
-            if (selectedTag != null) selectedTag.unhighlight();
-            tagSelector.SelectedItem = null;
-            refreshNoteBox();
-        }
-
-
-
         public void addSequence(DNASequence seq){
-            seq.window = this;
+            if (seq == null || seq.IsDisposed) return;
+            if (sequences.Count > 100){
+                MessageBox.Show("The maximum number of sequences is 100. Delete some sequences or create another project", "Sequence limit reached", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             sequences.Add(seq);
             editorPanel.Controls.Add(seq);
             sequenceSelector.Items.Add(seq);
@@ -211,7 +196,10 @@ namespace DNATagger
         #region Graphische Darstellungen
 
         public void refreshEditor() {
-            foreach (DNASequence seq in sequences) seq.Invalidate();
+            foreach (DNASequence seq in sequences){
+                seq.Invalidate();
+                foreach (SequenceTag tag in seq.getTags()) tag.Invalidate();
+            }
             Invalidate();
         }
 
@@ -220,6 +208,8 @@ namespace DNATagger
         public void arrangeSequences(){
             int y = 0;
             foreach (DNASequence seq in sequences){
+                if (seq.IsDisposed) continue;
+                editorPanel.AutoScrollPosition = new Point(0, 0);
                 seq.Location = new Point(0, y);
                 y += seq.Height + seq.Font.Height * 2;
             }
@@ -303,7 +293,7 @@ namespace DNATagger
 
 
         private void OnChangeZoom(object sender, EventArgs e) {
-            unselectSequence();
+            selectedSequence = null;
             foreach (DNASequence seq in sequences) seq.adjustToZoom();
             refreshEditor();
         }
@@ -328,18 +318,18 @@ namespace DNATagger
 
 
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
-            if (selectedSequence != null) selectedSequence.highlight();
-            if (selectedTag != null && selectedTag.sequence != selectedSequence) unselectTag();
+            if (selectedTag != null && selectedTag.sequence != selectedSequence) selectedTag = null;
             refreshNoteBox();
             refreshPosLabels();
             refreshTagSelector();
             refreshEditor();
+            if (selectedSequence != null) editorPanel.ScrollControlIntoView(selectedSequence);
         }
 
 
 
         private void OnChangeSelectedTag(object sender, EventArgs e) {
-            if (selectedTag != null) selectedTag.highlight();
+            if (selectedTag != null) selectedSequence = selectedTag.sequence;
             refreshNoteBox();
             refreshPosLabels();
             refreshEditor();
@@ -385,7 +375,7 @@ namespace DNATagger
 
 
         private void OnClickEditorBG(object sender, MouseEventArgs e) {
-            unselectSequence();
+            selectedSequence = null;
         }
 
 

@@ -50,6 +50,16 @@ namespace DNATagger {
 
 
 
+        private WindowMain window {
+            get {
+                if (Parent == null || !(Parent.Parent.Parent.Parent.Parent is WindowMain)) return null;
+                WindowMain window = (WindowMain)Parent.Parent.Parent.Parent.Parent;
+                return window;
+            }
+        }
+
+
+
         public int getLength(){
             return endPos - startPos;
         }
@@ -76,13 +86,18 @@ namespace DNATagger {
 
         private void OnMouseDown(object sender, MouseEventArgs e) {
             sequence.setFirstMarker(e.X + Location.X);
-            sequence.window.selectedTag = this;
+            window.selectedTag = this;
         }
 
 
 
         private void OnMouseUp(object sender, MouseEventArgs e) {
             sequence.setSecondMarker(e.X + Location.X);
+        }
+
+        private void OnDraw(object sender, PaintEventArgs e) {
+            if (window.selectedTag == this) highlight();
+            else unhighlight();
         }
     }
 }

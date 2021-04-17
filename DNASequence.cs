@@ -113,9 +113,13 @@ namespace DNATagger {
 
 
 
-        public WindowMain window {
-            get { return this._window; }
-            set { this._window = value; }
+        private WindowMain window {
+            get {
+                if (Parent == null || !(Parent.Parent.Parent is WindowMain)) return null;
+                WindowMain window = (WindowMain)Parent.Parent.Parent;
+                return window; 
+            
+            }
         }
 
 
@@ -250,9 +254,11 @@ namespace DNATagger {
 
         public void setFirstMarker(int xPos) {
             window.selectedSequence = this;
-            markerSek.Visible = false;
-            markerBetween.Visible = false;
             markerPrim.Location = new Point(xPos, 0);
+            markerSek.Location = markerPrim.Location;
+            markerBetween.Location = markerPrim.Location;
+            markerBetween.Width = 2;
+
         }
 
 
@@ -402,13 +408,15 @@ namespace DNATagger {
 
         private void OnDraw(object sender, PaintEventArgs e) {
             Width = Parent.Width - 4;
+            if (window.selectedSequence == this) highlight();
+            else unhighlight();
         }
 
 
 
         private void OnClick(object sender, MouseEventArgs e) {
             window.selectedSequence = this;
-            window.unselectTag();
+            window.selectedTag = null;
         }
 
         #endregion

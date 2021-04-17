@@ -54,7 +54,7 @@ namespace DNATagger {
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(637, 20);
             this.pathTextBox.TabIndex = 2;
-            this.pathTextBox.Text = "path to fasta";
+            this.pathTextBox.Text = "path to fasta (50 sequences max)";
             // 
             // label1
             // 
