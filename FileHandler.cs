@@ -61,7 +61,7 @@ namespace DNATagger
                 String line;
                 if (fileReader.EndOfStream) Console.WriteLine("Warning: Fasta file is empty");
                 else{
-                    while (!fileReader.EndOfStream && output.Count < 49){
+                    while (!fileReader.EndOfStream && output.Count < 99){
                         line = fileReader.ReadLine();
                         Console.WriteLine("ping");
                         if (line.Length == 0) continue;

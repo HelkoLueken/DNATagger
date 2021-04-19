@@ -83,8 +83,8 @@ namespace DNATagger
 
         public void addSequence(DNASequence seq){
             if (seq == null || seq.IsDisposed) return;
-            if (sequences.Count > 100){
-                MessageBox.Show("The maximum number of sequences is 100. Delete some sequences or create another project", "Sequence limit reached", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (sequences.Count >= 100){
+                MessageBox.Show("The maximum number of sequences is 100. Delete some sequences or create another project.", "Sequence limit reached", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             sequences.Add(seq);
@@ -92,6 +92,12 @@ namespace DNATagger
             sequenceSelector.Items.Add(seq);
             seq.adjustToZoom();
             arrangeSequences();
+        }
+
+
+
+        public void addTag(SequenceTag tag){
+            tagSelector.Items.Add(tag);
         }
 
 
@@ -114,9 +120,9 @@ namespace DNATagger
             if (tag == selectedTag) tagSelector.Text = "";
             tag.sequence.dropTag(tag);
             editorPanel.Controls.Remove(tag);
+            tagSelector.Items.Remove(tag);
             tag.Dispose();
             tag = null;
-            refreshTagSelector();
             refreshNoteBox();
             refreshEditor();
         }
@@ -124,20 +130,12 @@ namespace DNATagger
 
 
         public void saveNotes() {
-            if (selectedTag != null && tagSelector.Text != "") {
-                selectedTag.notes = noteBox.Text;
+            if (selectedTag != null) {
+                if (noteBox.Text != "" && selectedTag.notes != noteBox.Text) selectedTag.notes = noteBox.Text;
                 return;
             }
             if (selectedSequence != null) selectedSequence.notes = noteBox.Text;
             else notes = noteBox.Text;
-        }
-
-
-
-        public void refreshTagSelector() {
-            tagSelector.Items.Clear();
-            tagSelector.Text = "";
-            if (selectedSequence != null) foreach (SequenceTag tag in selectedSequence.getTags()) tagSelector.Items.Add(tag);
         }
 
 
@@ -185,8 +183,10 @@ namespace DNATagger
             notes = "";
             for (int i = sequences.Count - 1; i >= 0; i--) dropSequence(sequences.ElementAt(i)); //foreach funktioniert nicht, weil gelöscht wird
             savePath = "";
+            sequenceSelector.Items.Clear();
             sequenceSelector.Text = "";
             tagSelector.Text = "";
+            tagSelector.Items.Clear();
             refreshNoteBox();
         }
         #endregion
@@ -310,6 +310,10 @@ namespace DNATagger
 
 
         private void OnAddSeq(object sender, EventArgs e) {
+            if (sequences.Count >= 100) {
+                MessageBox.Show("The maximum number of sequences is 100. Delete some sequences or create another project.", "Sequence limit reached", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             if (seqAddingDialogue == null) seqAddingDialogue = new WindowAddSequence(this, new ControlCloser(OnCloseSeqAddingDlg));
             seqAddingDialogue.Show();
             seqAddingDialogue.Focus();
@@ -319,9 +323,11 @@ namespace DNATagger
 
         private void OnChangeSelectedSequence(object sender, EventArgs e) {
             if (selectedTag != null && selectedTag.sequence != selectedSequence) selectedTag = null;
+            tagSelector.Items.Clear();
+            tagSelector.Text = "";
+            if (selectedSequence != null) foreach (SequenceTag tag in selectedSequence.getTags()) tagSelector.Items.Add(tag);
             refreshNoteBox();
             refreshPosLabels();
-            refreshTagSelector();
             refreshEditor();
             if (selectedSequence != null) editorPanel.ScrollControlIntoView(selectedSequence);
         }

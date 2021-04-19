@@ -18,7 +18,6 @@ namespace DNATagger {
         private int offsetSense = 0;
         private int offsetAntisense = 0;
         public String notes;
-        private WindowMain _window = new WindowMain();
         private List<SequenceTag> tags = new List<SequenceTag>();
         private static String allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_ ?";
 
@@ -284,9 +283,7 @@ namespace DNATagger {
             tags.Add(tag);
             scrollContainer.Controls.Add(tag);
             adjustToZoom();
-            tag.sequence = this;
-            window.refreshTagSelector();
-            foreach (SequenceTag tagi in tags) tagi.unhighlight(); //Eigentlich überflüssig aber beim ersten speichern in der Combobox wird ein Tag iwie als null hinterlegt, daher kann der letzte Tag anders nicht erreicht werden
+            window.addTag(tag);
             window.selectedTag = tag;
             window.inDepthView = getInDepthView();
             initializeTagPosition(tag);

@@ -10,7 +10,6 @@ using System.Windows.Forms;
 
 namespace DNATagger {
     public partial class SequenceTag : UserControl {
-        public DNASequence sequence;
         public int startPos;
         public int endPos;
         public String notes;
@@ -60,6 +59,16 @@ namespace DNATagger {
 
 
 
+        public DNASequence sequence{ 
+            get{
+                if (Parent == null) return null;
+                DNASequence seq = (DNASequence)Parent.Parent;
+                return seq;
+            }
+        }
+
+
+
         public int getLength(){
             return endPos - startPos;
         }
@@ -94,6 +103,8 @@ namespace DNATagger {
         private void OnMouseUp(object sender, MouseEventArgs e) {
             sequence.setSecondMarker(e.X + Location.X);
         }
+
+
 
         private void OnDraw(object sender, PaintEventArgs e) {
             if (window.selectedTag == this) highlight();
