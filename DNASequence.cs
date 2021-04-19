@@ -176,6 +176,18 @@ namespace DNATagger {
 
 
 
+        public void addTag(SequenceTag tag) {
+            tags.Add(tag);
+            scrollContainer.Controls.Add(tag);
+            adjustToZoom();
+            initializeTagPosition(tag);
+            window.addTag(tag);
+            window.selectedTag = tag;
+            window.inDepthView = getInDepthView();
+        }
+
+
+
         public void dropTag(SequenceTag tag) {
             tags.Remove(tag);
             scrollContainer.Controls.Remove(tag);
@@ -275,18 +287,6 @@ namespace DNATagger {
             markerBetween.Visible = true;
             window.inDepthView = getInDepthView();
             Invalidate();
-        }
-
-
-
-        public void addTag(SequenceTag tag) {
-            tags.Add(tag);
-            scrollContainer.Controls.Add(tag);
-            adjustToZoom();
-            window.addTag(tag);
-            window.selectedTag = tag;
-            window.inDepthView = getInDepthView();
-            initializeTagPosition(tag);
         }
 
 

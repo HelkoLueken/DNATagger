@@ -48,7 +48,7 @@ namespace DNATagger {
             this.Controls.Add(this.headerLabel);
             this.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.MinimumSize = new System.Drawing.Size(2, 2);
+            this.MinimumSize = new System.Drawing.Size(3, 22);
             this.Name = "SequenceTag";
             this.Size = new System.Drawing.Size(98, 22);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnDraw);

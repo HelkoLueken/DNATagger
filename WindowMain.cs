@@ -98,6 +98,7 @@ namespace DNATagger
 
         public void addTag(SequenceTag tag){
             tagSelector.Items.Add(tag);
+            arrangeSequences();
         }
 
 
