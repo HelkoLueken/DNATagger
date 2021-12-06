@@ -1,60 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Drawing;
+using System.Windows.Forms;
 
-namespace DNATagger
-{
-    class DNASequence
-    {
-        private String header;
-        private String src;
+namespace DNATagger {
+    public partial class DNASequence : UserControl {
+
+        private static int letterWidth = 24;
         private char[] sense;
         private char[] antisense;
-        public Bar senseBar = new Bar(Brushes.Beige);
-        public Bar antisenseBar = new Bar(Brushes.Beige);
-        private int offSetSense = 0;
-        private int offSetAntiSense = 0;
-        private int offsetTrack = 0;
-        private List<SequenceTag> tags = new List<SequenceTag>();
-        private SequenceTrack track;
+        private int offsetSense = 0;
+        private int offsetAntisense = 0;
+        private String _src;
+        private SequenceTrack _track;
+        private Panel senseBar;
+        private Panel antisenseBar;
+        private bool ShowLetters = true;
+        //private List<SequenceTag> = new List<SequenceTag>();
 
-        //Zum Ausmustern
-        private int screenTop;
-        private int screenBottom;
-        private int screenStart;
-        private int screenEnd;
-        public Brush color = Brushes.Beige;
-
+        public SequenceTrack track{ 
+            get{ return _track; }
+            set{ _track = value; }
+        }
 
 
+        public String header {
+            get { return this.Name; }
+            set { this.Name = value; }
+        }
+
+        public String src{ 
+            get{ return _src; }
+            set{ _src = value; }
+        }
+
+        public bool showLetters{ 
+            get{ return ShowLetters; }
+            set { ShowLetters = value; }
+        }
 
 
 
         public DNASequence(String fasta, String src = "unknown") {
+            InitializeComponent();
             String[] fastaParts = fasta.Split('\n');
-            if (fastaParts.Length == 2)
-            {
-                this.header = fastaParts[0];
-                this.sense = fastaParts[1].ToCharArray();
+            if (fastaParts.Length == 2) {
+                header = fastaParts[0];
+                sense = fastaParts[1].ToCharArray();
             }
-            else
-            {
-                this.header = "Unnamed DNA Sequence";
-                this.sense = fasta.ToCharArray();
+            else {
+                header = "Unnamed DNA Sequence";
+                sense = fasta.ToCharArray();
             }
             this.src = src;
-            this.createAntisense();
+            createAntisense();
+            createBars();
         }
 
 
 
         private void createAntisense() {
             this.antisense = new char[this.sense.Length];
-            for (int i = 0; i < this.sense.Length; i++)
-            {
+            for (int i = 0; i < this.sense.Length; i++) {
                 if (this.sense[i] == 'A') this.antisense[i] = 'T';
                 if (this.sense[i] == 'C') this.antisense[i] = 'G';
                 if (this.sense[i] == 'G') this.antisense[i] = 'C';
@@ -76,62 +88,54 @@ namespace DNATagger
 
 
 
-        public void addTag(String label, int start, int end, Brush color) {
-            this.tags.Add(new SequenceTag(label, start, end, color));
+        public void createBars(){
+            senseBar = new Panel();
+            senseBar.BackColor = Color.Beige;
+            Console.WriteLine(getLengthSense());
+            senseBar.Width = letterWidth * getLengthSense();
+            senseBar.Height = Font.Height;
+            senseBar.Location = new Point(offsetSense*letterWidth, 0);
+            antisenseBar = new Panel();
+            antisenseBar.BackColor = Color.Beige;
+            antisenseBar.Width = letterWidth * getLengthAntisense();
+            antisenseBar.Height = Font.Height;
+            antisenseBar.Location = new Point(offsetAntisense* letterWidth, Font.Height);
+            Controls.Add(senseBar);
+            Controls.Add(antisenseBar);
         }
 
 
 
-        public void draw(System.Windows.Forms.Panel canvas, Font font, bool showLetters) {
-            senseBar.draw(canvas);
-            antisenseBar.draw(canvas);
-            foreach (SequenceTag tag in tags) tag.bar.draw(canvas);
+        /*public void addLetterLabels(){
+            for (int i = 0; i < sense.Length; i++){
+                Label label = new Label();
+                label.Font = Font;
+                label.Text = sense[i].ToString();
+                label.Location = new Point(letterWidth * i, 0);
+                label.AutoSize = true;
+                label.BackColor = Color.Beige;
+                senseBar.Controls.Add(label);
+            }
+            for (int i = 0; i < antisense.Length; i++) {
+                Label label = new Label();
+                label.Font = Font;
+                label.Text = antisense[i].ToString();
+                label.Location = new Point(letterWidth * i, 0);
+                label.AutoSize = true;
+                label.BackColor = Color.Beige;
+                antisenseBar.Controls.Add(label);
+            }
+        }*/
+
+
+
+        public void adjustToZoom(int zoom){
+            senseBar.Location = new Point(offsetSense*letterWidth/zoom, 0);
+            senseBar.Width = letterWidth * getLengthSense() / zoom;
+            antisenseBar.Location = new Point(offsetAntisense*letterWidth, Font.Height);
+            antisenseBar.Width = letterWidth * getLengthAntisense() / zoom;
         }
 
-
-        public void setScreenPosition(int start, int top, int end, int bottom){
-            this.screenStart = start;
-            this.screenTop = top;
-            this.screenEnd = end;
-            this.screenBottom = bottom;
-        }
-
-
-
-        public void setTrack(SequenceTrack track){
-            this.track = track;
-        }
-
-
-
-        public SequenceTrack getTrack() {
-            return this.track;
-        }
-
-
-
-        public bool isOnSequence(int x , int y){
-            if (x < this.screenStart || x > this.screenEnd || y < this.screenTop || y > this.screenBottom) return false;
-            return true;
-        }
-
-
-
-        public void setOffsetTrack(int to){
-            this.offsetTrack = to;
-        }
-
-
-
-        public String getSource() {
-            return this.src;
-        }
-
-
-
-        public String getHeader() {
-            return this.header;
-        }
 
 
 
@@ -146,12 +150,17 @@ namespace DNATagger
 
 
         public char getBaseAntisense(int pos) {
-            if (pos <= 0 || pos > this.sense.Length)
-            {
+            if (pos <= 0 || pos > this.sense.Length) {
                 Console.WriteLine("Error: Baseindex out of Bounds");
                 return ' ';
             }
             return this.antisense[pos - 1];
+        }
+
+
+
+        public override String ToString() {
+            return this.header;
         }
 
 
@@ -169,28 +178,37 @@ namespace DNATagger
 
 
         public int getLengthTotal() {
-            int up = this.sense.Length + this.offSetSense;
-            int lo = this.antisense.Length + this.offSetAntiSense;
+            int up = this.sense.Length + this.offsetSense;
+            int lo = this.antisense.Length + this.offsetAntisense;
             if (up >= lo) return up;
             else return lo;
         }
 
-
-
-        public int getOffSetSense() {
-            return this.offSetSense;
+        private void OnClick(object sender, MouseEventArgs e) {
+            
         }
 
-
-
-        public int getOffSetAntisense() {
-            return this.offSetAntiSense;
+        private void OnDraw(object sender, PaintEventArgs e) {
+            if (senseBar.Width == getLengthSense()*letterWidth && showLetters){
+                Graphics cxt = senseBar.CreateGraphics();
+                for (int i = 0; i < sense.Length; i++) {
+                    if (i * letterWidth < Parent.AutoScrollOffset.X || i * letterWidth > Parent.AutoScrollOffset.X +  Parent.Width) continue;
+                    cxt.DrawString(sense[i].ToString(), Font, Brushes.Black, i*letterWidth, 0);
+                }
+                cxt = antisenseBar.CreateGraphics();
+                for (int i = 0; i < antisense.Length; i++) {
+                    if (i * letterWidth < Parent.AutoScrollOffset.X || i * letterWidth > Parent.Location.X + Parent.Width) continue;
+                    cxt.DrawString(antisense[i].ToString(), Font, Brushes.Black, i * letterWidth, 0);
+                }
+                cxt.Dispose();
+            }
         }
-
-
-
-        public int getOffsetTrack(){
-            return this.offsetTrack;
+    }
+}
+/*class DNASequenceAlt
+    {
+        public void addTag(String label, int start, int end, Brush color) {
+            this.tags.Add(new SequenceTagAlt(label, start, end, color));
         }
 
 
@@ -206,11 +224,4 @@ namespace DNATagger
         public static Boolean isValidDNASequence(String seq) {
             return true;
         }
-
-
-
-        public override String ToString() {
-            return this.header;
-        }
-    }
-}
+    }*/
